@@ -1,0 +1,3 @@
+target
+Dockerfile
+src/main/resources.keys/*

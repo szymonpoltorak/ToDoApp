@@ -1,0 +1,28 @@
+version: "3.1"
+
+services:
+    todo-postgres:
+        env_file:
+            - .env
+        container_name: todo-postgres
+        image: postgres:alpine
+        environment:
+            - POSTGRES_USER=${_POSTGRES_USER}
+            - POSTGRES_PASSWORD=${_POSTGRES_PASSWORD}
+            - POSTGRES_DB=${_POSTGRES_DB}
+        ports:
+            - "83:5432"
+    todo-app-backend:
+        env_file:
+            - .env
+        container_name: todo-app-backend
+        image: todo-app-backend
+        depends_on:
+            - todo-postgres
+        environment:
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://todo-postgres:5432/todoapp
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "82:8080"
