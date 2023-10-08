@@ -5,4 +5,4 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = 'TodoApp'
+rootProject.name = 'todo-app-backend'
