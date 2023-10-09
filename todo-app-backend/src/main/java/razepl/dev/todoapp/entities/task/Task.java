@@ -14,13 +14,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import razepl.dev.todoapp.api.tasks.data.TaskResponse;
 import razepl.dev.todoapp.api.tasks.data.TaskUpdate;
+import razepl.dev.todoapp.entities.groups.Group;
 import razepl.dev.todoapp.entities.task.interfaces.Updatable;
 import razepl.dev.todoapp.entities.user.User;
 
 import java.time.LocalDate;
 
+import static razepl.dev.todoapp.entities.groups.constants.GroupConstants.GROUP_ID_COLUMN_NAME;
 import static razepl.dev.todoapp.entities.task.constants.TaskConstants.TASK_TABLE_NAME;
 import static razepl.dev.todoapp.entities.task.constants.TaskConstants.USER_ID_COLUMN_NAME;
 import static razepl.dev.todoapp.entities.task.constants.TaskConstraints.MAX_PRIORITY;
@@ -55,6 +56,10 @@ public class Task implements Updatable<TaskUpdate> {
     @ManyToOne
     @JoinColumn(name = USER_ID_COLUMN_NAME)
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = GROUP_ID_COLUMN_NAME)
+    private Group group;
 
     @Override
     public final void update(TaskUpdate updateData) {
