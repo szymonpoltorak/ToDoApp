@@ -2,6 +2,7 @@ package razepl.dev.todoapp.utils;
 
 import razepl.dev.todoapp.api.tasks.data.TaskRequest;
 import razepl.dev.todoapp.api.tasks.data.TaskResponse;
+import razepl.dev.todoapp.api.tasks.data.TaskUpdate;
 import razepl.dev.todoapp.entities.task.Task;
 import razepl.dev.todoapp.entities.user.User;
 
@@ -37,6 +38,13 @@ public class TestDataBuilder {
                 .dueDate("2021-01-01")
                 .taskId(taskId)
                 .build();
-        return new TaskTestData(newTask, user, taskRequest, taskResponse);
+        TaskUpdate taskUpdate = TaskUpdate
+                .builder()
+                .taskId(newTask.getTaskId())
+                .dueDate("2021-01-01")
+                .description("New note content")
+                .title("New note title")
+                .build();
+        return new TaskTestData(newTask, user, taskRequest, taskResponse, taskUpdate);
     }
 }

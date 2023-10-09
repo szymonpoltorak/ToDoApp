@@ -6,6 +6,5 @@ import razepl.dev.todoapp.entities.user.interfaces.Password;
 import java.time.LocalDate;
 
 @Builder
-public record RegisterRequest(String name, String surname, String username,
-                              @Password String password, LocalDate dateOfBirth) {
+public record RegisterRequest(String name, String surname, String username, @Password String password) {
 }
