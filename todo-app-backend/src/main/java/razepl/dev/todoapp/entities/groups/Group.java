@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.entities.groups;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +28,8 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long groupId;
 
-    private String name;
+    @Column(unique = true)
+    private String groupName;
 
     @ManyToOne
     @JoinColumn(name = USER_ID_COLUMN_NAME)

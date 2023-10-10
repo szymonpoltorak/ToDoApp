@@ -9,5 +9,5 @@ import razepl.dev.todoapp.entities.user.User;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    Page<Group> findGroupsByUserOrderByName(User user, Pageable pageable);
+    Page<Group> findGroupsByUserOrderByGroupName(User user, Pageable pageable);
 }
