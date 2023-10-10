@@ -11,6 +11,8 @@ public final class TasksMappings {
 
     public static final String UPDATE_TASK_MAPPING = "updateTask";
 
+    public static final String COMPLETE_TASK_MAPPING = "completeTask";
+
     private TasksMappings() {
     }
 }

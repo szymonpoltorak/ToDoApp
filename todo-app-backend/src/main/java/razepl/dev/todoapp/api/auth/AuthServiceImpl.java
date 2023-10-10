@@ -47,7 +47,6 @@ public class AuthServiceImpl implements AuthService {
                 .builder()
                 .name(registerRequest.name())
                 .username(registerRequest.username())
-                .dateOfBirth(registerRequest.dateOfBirth())
                 .surname(registerRequest.surname())
                 .password(passwordEncoder.encode(password))
                 .build();

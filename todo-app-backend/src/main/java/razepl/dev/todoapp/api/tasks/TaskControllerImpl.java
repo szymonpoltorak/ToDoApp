@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import razepl.dev.todoapp.api.tasks.data.TaskRequest;
 import razepl.dev.todoapp.api.tasks.data.TaskResponse;
+import razepl.dev.todoapp.api.tasks.data.TaskUpdate;
 import razepl.dev.todoapp.api.tasks.interfaces.TaskController;
 import razepl.dev.todoapp.api.tasks.interfaces.TasksService;
 import razepl.dev.todoapp.entities.user.User;
 
 import java.util.List;
 
+import static razepl.dev.todoapp.api.tasks.constants.TasksMappings.COMPLETE_TASK_MAPPING;
 import static razepl.dev.todoapp.api.tasks.constants.TasksMappings.CREATE_TASK_MAPPING;
 import static razepl.dev.todoapp.api.tasks.constants.TasksMappings.DELETE_TASK_MAPPING;
 import static razepl.dev.todoapp.api.tasks.constants.TasksMappings.GET_TASKS_MAPPING;
@@ -52,7 +54,13 @@ public class TaskControllerImpl implements TaskController {
 
     @Override
     @PatchMapping(value = UPDATE_TASK_MAPPING)
-    public final TaskResponse updateTask(@RequestBody TaskResponse updateData) {
+    public final TaskResponse updateTask(@RequestBody TaskUpdate updateData) {
         return tasksService.updateTask(updateData);
+    }
+
+    @Override
+    @PatchMapping(value = COMPLETE_TASK_MAPPING)
+    public final TaskResponse updateTaskCompletionStatus(@RequestParam long taskId) {
+        return tasksService.updateTaskCompletionStatus(taskId);
     }
 }

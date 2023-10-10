@@ -67,7 +67,6 @@ class AuthServiceTest {
                 .name("John")
                 .surname("Doe")
                 .username("john.doe@example.com")
-                .dateOfBirth(LocalDate.of(1990, 1, 1))
                 .password("hashedPassword")
                 .build();
 
@@ -75,7 +74,6 @@ class AuthServiceTest {
                 .name("John")
                 .surname("Doe")
                 .username("john.doe@example.com")
-                .dateOfBirth(LocalDate.of(1990, 1, 1))
                 .password("plinPword123123#?!")
                 .build();
 

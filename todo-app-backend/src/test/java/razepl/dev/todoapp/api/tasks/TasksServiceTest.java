@@ -106,7 +106,7 @@ class TasksServiceTest {
                 .thenReturn(expected);
 
         // when
-        TaskResponse actual = tasksService.updateTask(testData.taskResponse());
+        TaskResponse actual = tasksService.updateTask(testData.taskUpdate());
 
         // then
         assertEquals(expected, actual, "The updatedNote differs from the expected");

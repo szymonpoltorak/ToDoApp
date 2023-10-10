@@ -1,9 +1,5 @@
 package razepl.dev.todoapp.entities.user;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +16,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.annotate.JsonIgnore;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import razepl.dev.todoapp.entities.user.interfaces.ServiceUser;
 
@@ -35,13 +30,11 @@ import java.util.Collections;
 
 import static razepl.dev.todoapp.entities.user.constants.Constants.USERS_TABLE_NAME;
 import static razepl.dev.todoapp.entities.user.constants.Constants.USER_PACKAGE;
-import static razepl.dev.todoapp.entities.user.constants.UserValidation.DATE_PATTERN;
 import static razepl.dev.todoapp.entities.user.constants.UserValidation.EMAIL_MAX_LENGTH;
 import static razepl.dev.todoapp.entities.user.constants.UserValidation.EMAIL_MIN_LENGTH;
 import static razepl.dev.todoapp.entities.user.constants.UserValidation.NAME_MAX_LENGTH;
 import static razepl.dev.todoapp.entities.user.constants.UserValidation.NAME_MIN_LENGTH;
 import static razepl.dev.todoapp.entities.user.constants.UserValidation.NAME_PATTERN;
-import static razepl.dev.todoapp.entities.user.constants.UserValidationMessages.DATE_NULL_MESSAGE;
 import static razepl.dev.todoapp.entities.user.constants.UserValidationMessages.EMAIL_MESSAGE;
 import static razepl.dev.todoapp.entities.user.constants.UserValidationMessages.EMAIL_NULL_MESSAGE;
 import static razepl.dev.todoapp.entities.user.constants.UserValidationMessages.NAME_NULL_MESSAGE;
@@ -63,12 +56,6 @@ import static razepl.dev.todoapp.entities.user.constants.UserValidationMessages.
 public class User implements ServiceUser {
     @Serial
     private static final long serialVersionUID = 884980275324187578L;
-    
-    @NotNull(message = DATE_NULL_MESSAGE)
-    @DateTimeFormat(pattern = DATE_PATTERN)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate dateOfBirth;
 
     @NotNull(message = NAME_NULL_MESSAGE)
     @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH, message = NAME_SIZE_MESSAGE)
@@ -93,13 +80,6 @@ public class User implements ServiceUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long userId;
-
-    @Override
-    public final int getAge() {
-        log.info("Getting age of user : {}", userId);
-
-        return Period.between(LocalDate.now(), this.dateOfBirth).getYears();
-    }
 
     @Override
     public final String getFullName() {

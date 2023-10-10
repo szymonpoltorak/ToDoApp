@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.api.tasks.data.TaskRequest;
 import razepl.dev.todoapp.api.tasks.data.TaskResponse;
+import razepl.dev.todoapp.api.tasks.data.TaskUpdate;
 import razepl.dev.todoapp.api.tasks.interfaces.TaskMapper;
 import razepl.dev.todoapp.api.tasks.interfaces.TasksService;
 import razepl.dev.todoapp.entities.task.Task;
@@ -61,10 +62,8 @@ public class TasksServiceImpl implements TasksService {
 
     @Override
     public final TaskResponse deleteTask(long taskId) {
-        Task taskToDelete = taskRepository.findById(taskId)
-                .orElseThrow(() -> new TaskDoesNotExistException(
-                        String.format(TASK_ERROR_MESSAGE, taskId))
-                );
+        Task taskToDelete = getTaskFromRepository(taskId);
+
         log.info("Deleting task : {}", taskToDelete);
 
         taskRepository.delete(taskToDelete);
@@ -73,13 +72,11 @@ public class TasksServiceImpl implements TasksService {
     }
 
     @Override
-    public final TaskResponse updateTask(TaskResponse updateData) {
+    public final TaskResponse updateTask(TaskUpdate updateData) {
         log.info("Updating with data : {}", updateData);
 
-        Task taskToUpdate = taskRepository.findById(updateData.taskId())
-                .orElseThrow(() -> new TaskDoesNotExistException(
-                        String.format(TASK_ERROR_MESSAGE, updateData.taskId()))
-                );
+        Task taskToUpdate = getTaskFromRepository(updateData.taskId());
+
         log.info("Task to be updated : {}", taskToUpdate);
 
         taskToUpdate.update(updateData);
@@ -87,5 +84,27 @@ public class TasksServiceImpl implements TasksService {
         taskRepository.save(taskToUpdate);
 
         return taskMapper.toTaskResponse(taskToUpdate);
+    }
+
+    @Override
+    public final TaskResponse updateTaskCompletionStatus(long taskId) {
+        log.info("Task of id {} has been completed!", taskId);
+
+        Task taskToUpdate = getTaskFromRepository(taskId);
+
+        log.info("Was task completed ? : {}", taskToUpdate.isCompleted());
+
+        taskToUpdate.setCompleted(!taskToUpdate.isCompleted());
+
+        taskRepository.save(taskToUpdate);
+
+        return taskMapper.toTaskResponse(taskToUpdate);
+    }
+
+    private Task getTaskFromRepository(long taskId) {
+        return taskRepository.findById(taskId)
+                .orElseThrow(() -> new TaskDoesNotExistException(
+                        String.format(TASK_ERROR_MESSAGE, taskId))
+                );
     }
 }

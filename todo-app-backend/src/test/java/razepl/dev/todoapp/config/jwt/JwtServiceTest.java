@@ -40,7 +40,6 @@ class JwtServiceTest {
                 .name("john.doe")
                 .username("john.doe@gmail.com")
                 .password("password")
-                .dateOfBirth(LocalDate.now())
                 .build());
         String expectedUsername = "john.doe@gmail.com";
 
@@ -59,7 +58,6 @@ class JwtServiceTest {
                 .name("john.doe")
                 .username("john.doe@gmail.com")
                 .password("password")
-                .dateOfBirth(LocalDate.now())
                 .build();
 
         // when
@@ -77,7 +75,6 @@ class JwtServiceTest {
                 .name("john.doe")
                 .username("john.doe@gmail.com")
                 .password("password")
-                .dateOfBirth(LocalDate.now())
                 .build();
 
         // when
@@ -95,7 +92,6 @@ class JwtServiceTest {
                 .name("john.doe")
                 .username("john.doe@gmail.com")
                 .password("password")
-                .dateOfBirth(LocalDate.now())
                 .build();
         String token = jwtService.generateToken(userDetails);
 
