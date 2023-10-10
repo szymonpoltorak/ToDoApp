@@ -33,15 +33,10 @@ public class GroupsServiceImpl implements GroupsService {
         log.info("Finding groups for user : {}", user.getUsername());
         log.info("Found '{}' groups", groups.getTotalElements());
 
-        log.info(groups.toString());
-
-        var l = groups
+        return groups
                 .stream()
                 .map(groupMapper::toGroupResponse)
                 .toList();
-        log.info(l.toString());
-
-        return l;
     }
 
     @Override
