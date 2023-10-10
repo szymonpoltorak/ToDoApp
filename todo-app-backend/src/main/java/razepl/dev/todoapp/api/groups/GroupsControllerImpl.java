@@ -2,6 +2,7 @@ package razepl.dev.todoapp.api.groups;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import razepl.dev.todoapp.entities.user.User;
 import java.util.List;
 
 import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.ADD_NEW_GROUP_MAPPING;
+import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.DELETE_GROUP_MAPPING;
 import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.GET_LIST_OF_GROUPS_MAPPING;
 import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.GROUPS_MAPPING;
 
@@ -35,5 +37,12 @@ public class GroupsControllerImpl implements GroupsController {
     public final GroupResponse addNewGroup(@RequestParam String groupName,
                                            @AuthenticationPrincipal User user) {
         return groupsService.addNewGroup(groupName, user);
+    }
+
+    @Override
+    @DeleteMapping(value = DELETE_GROUP_MAPPING)
+    public final GroupResponse deleteGroup(@RequestParam long groupId,
+                                           @AuthenticationPrincipal User user) {
+        return groupsService.deleteGroup(groupId, user);
     }
 }

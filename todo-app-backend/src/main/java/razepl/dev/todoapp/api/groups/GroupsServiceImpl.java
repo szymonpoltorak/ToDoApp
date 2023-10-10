@@ -12,6 +12,7 @@ import razepl.dev.todoapp.entities.groups.Group;
 import razepl.dev.todoapp.entities.groups.interfaces.GroupMapper;
 import razepl.dev.todoapp.entities.groups.interfaces.GroupRepository;
 import razepl.dev.todoapp.entities.user.User;
+import razepl.dev.todoapp.exceptions.groups.GroupDoesNotExistException;
 
 import java.util.List;
 
@@ -49,6 +50,19 @@ public class GroupsServiceImpl implements GroupsService {
                 .user(user)
                 .build();
         group = groupRepository.save(group);
+
+        return groupMapper.toGroupResponse(group);
+    }
+
+    @Override
+    public final GroupResponse deleteGroup(long groupId, User user) {
+        log.info("Deleting group with id '{}' by user : {}", groupId, user.getUsername());
+
+        Group group = groupRepository.findByGroupIdAndUser(groupId, user)
+                .orElseThrow(() -> new GroupDoesNotExistException(
+                        String.format("Group with id '%d' does not exist", groupId)
+                ));
+        log.info("Group found in db : {}", group);
 
         return groupMapper.toGroupResponse(group);
     }

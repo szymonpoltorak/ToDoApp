@@ -7,6 +7,8 @@ public final class GroupsMappings {
 
     public static final String ADD_NEW_GROUP_MAPPING = "addNewGroup";
 
+    public static final String DELETE_GROUP_MAPPING = "deleteGroup";
+
     private GroupsMappings() {
     }
 }

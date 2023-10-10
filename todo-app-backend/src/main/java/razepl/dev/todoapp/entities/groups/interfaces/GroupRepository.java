@@ -7,7 +7,11 @@ import org.springframework.stereotype.Repository;
 import razepl.dev.todoapp.entities.groups.Group;
 import razepl.dev.todoapp.entities.user.User;
 
+import java.util.Optional;
+
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
     Page<Group> findGroupsByUserOrderByGroupName(User user, Pageable pageable);
+
+    Optional<Group> findByGroupIdAndUser(long groupId, User user);
 }
