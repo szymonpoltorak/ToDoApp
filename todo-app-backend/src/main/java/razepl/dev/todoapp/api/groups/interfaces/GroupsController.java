@@ -11,4 +11,6 @@ public interface GroupsController {
     GroupResponse addNewGroup(String groupName, User user);
 
     GroupResponse deleteGroup(long groupId, User user);
+
+    GroupResponse editGroupsName(GroupResponse newGroupData, User user);
 }

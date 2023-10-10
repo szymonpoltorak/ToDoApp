@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.ADD_NEW_GROUP_MAPPING;
 import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.DELETE_GROUP_MAPPING;
+import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.EDIT_GROUP_NAME_MAPPING;
 import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.GET_LIST_OF_GROUPS_MAPPING;
 import static razepl.dev.todoapp.api.groups.constants.GroupsMappings.GROUPS_MAPPING;
 
@@ -44,5 +47,12 @@ public class GroupsControllerImpl implements GroupsController {
     public final GroupResponse deleteGroup(@RequestParam long groupId,
                                            @AuthenticationPrincipal User user) {
         return groupsService.deleteGroup(groupId, user);
+    }
+
+    @Override
+    @PatchMapping(value = EDIT_GROUP_NAME_MAPPING)
+    public final GroupResponse editGroupsName(@RequestBody GroupResponse newGroupData,
+                                              @AuthenticationPrincipal User user) {
+        return groupsService.editGroupsName(newGroupData, user);
     }
 }

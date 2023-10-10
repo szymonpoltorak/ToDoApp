@@ -9,6 +9,8 @@ public final class GroupsMappings {
 
     public static final String DELETE_GROUP_MAPPING = "deleteGroup";
 
+    public static final String EDIT_GROUP_NAME_MAPPING = "editGroupName";
+
     private GroupsMappings() {
     }
 }

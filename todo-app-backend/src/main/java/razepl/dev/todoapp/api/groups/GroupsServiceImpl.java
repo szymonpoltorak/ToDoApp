@@ -58,12 +58,31 @@ public class GroupsServiceImpl implements GroupsService {
     public final GroupResponse deleteGroup(long groupId, User user) {
         log.info("Deleting group with id '{}' by user : {}", groupId, user.getUsername());
 
+        Group group = findGroupInRepository(groupId, user);
+
+        return groupMapper.toGroupResponse(group);
+    }
+
+    @Override
+    public final GroupResponse editGroupsName(GroupResponse newGroupData, User user) {
+        log.info("Editing group with id '{}' by user : {}", newGroupData.groupId(), user.getUsername());
+
+        Group group = findGroupInRepository(newGroupData.groupId(), user);
+
+        group.setGroupName(newGroupData.groupName());
+
+        group = groupRepository.save(group);
+
+        return groupMapper.toGroupResponse(group);
+    }
+
+    private Group findGroupInRepository(long groupId, User user) {
         Group group = groupRepository.findByGroupIdAndUser(groupId, user)
                 .orElseThrow(() -> new GroupDoesNotExistException(
                         String.format("Group with id '%d' does not exist", groupId)
                 ));
         log.info("Group found in db : {}", group);
 
-        return groupMapper.toGroupResponse(group);
+        return group;
     }
 }
