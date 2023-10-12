@@ -7,6 +7,10 @@ public final class CollaboratorMappings {
 
     public static final String GET_COLLABORATORS_OF_TASK = "collaboratorsOfTask";
 
+    public static final String ADD_USER_AS_COLLABORATOR = "addCollaborator";
+
+    public static final String ASSIGN_COLLABORATOR_TO_TASK = "assignToTask";
+
     private CollaboratorMappings() {
     }
 }

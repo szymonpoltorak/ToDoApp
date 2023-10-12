@@ -28,9 +28,7 @@ public class Collaborator {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long collaboratorId;
 
-    private String name;
-
-    private String surname;
+    private String fullName;
 
     @Column(unique = true)
     private String username;

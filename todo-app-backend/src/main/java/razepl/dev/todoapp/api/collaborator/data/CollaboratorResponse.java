@@ -1,4 +1,7 @@
 package razepl.dev.todoapp.api.collaborator.data;
 
-public record CollaboratorResponse() {
+import lombok.Builder;
+
+@Builder
+public record CollaboratorResponse(String fullName, String username, long collaboratorId) {
 }
