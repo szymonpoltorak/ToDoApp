@@ -22,7 +22,6 @@ import java.util.List;
 public class GroupsServiceImpl implements GroupsService {
     private static final int PAGE_SIZE = 10;
     private static final int PAGE_NUMBER = 0;
-
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
 
