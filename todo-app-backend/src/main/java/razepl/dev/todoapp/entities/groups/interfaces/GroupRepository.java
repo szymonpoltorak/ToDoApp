@@ -14,4 +14,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     Page<Group> findGroupsByUserOrderByGroupName(User user, Pageable pageable);
 
     Optional<Group> findByGroupIdAndUser(long groupId, User user);
+
+    Optional<Group> findByGroupName(String groupName);
 }

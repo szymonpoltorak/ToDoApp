@@ -11,6 +11,8 @@ import razepl.dev.todoapp.api.tasks.data.TaskResponse;
 import razepl.dev.todoapp.api.tasks.data.TaskUpdate;
 import razepl.dev.todoapp.api.tasks.interfaces.TaskMapper;
 import razepl.dev.todoapp.api.tasks.interfaces.TasksService;
+import razepl.dev.todoapp.entities.groups.Group;
+import razepl.dev.todoapp.entities.groups.interfaces.GroupRepository;
 import razepl.dev.todoapp.entities.task.Task;
 import razepl.dev.todoapp.entities.task.interfaces.TaskRepository;
 import razepl.dev.todoapp.entities.user.User;
@@ -18,6 +20,7 @@ import razepl.dev.todoapp.exceptions.tasks.TaskDoesNotExistException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static razepl.dev.todoapp.api.tasks.constants.Constants.PAGE_SIZE;
 
@@ -27,12 +30,18 @@ import static razepl.dev.todoapp.api.tasks.constants.Constants.PAGE_SIZE;
 public class TasksServiceImpl implements TasksService {
     private static final String TASK_ERROR_MESSAGE = "Task of id '%s' does not exist!";
     private final TaskRepository taskRepository;
+    private final GroupRepository groupRepository;
     private final TaskMapper taskMapper;
 
     @Override
     public final TaskResponse createNewTask(TaskRequest taskRequest, User taskAuthor) {
         log.info("Received request with data : {}", taskRequest);
         log.info("Request is from user : {}", taskAuthor.getUsername());
+
+        Group group = groupRepository.findByGroupName(taskRequest.groupName())
+                .orElseThrow(() -> new NoSuchElementException("Given group does not exist!"));
+
+        log.info("Group found in repository : {}", group);
 
         Task newTask = Task
                 .builder()
@@ -41,6 +50,7 @@ public class TasksServiceImpl implements TasksService {
                 .dueDate(LocalDate.parse(taskRequest.dueDate()))
                 .priority(taskRequest.priority())
                 .user(taskAuthor)
+                .group(group)
                 .build();
         Task repoTask = taskRepository.save(newTask);
 
