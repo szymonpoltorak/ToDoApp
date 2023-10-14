@@ -1,0 +1,11 @@
+version: "3.1"
+
+services:
+    todo-app-frontend:
+        container_name: todo-app-frontend
+        image: todo-app-frontend
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
