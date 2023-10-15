@@ -29,6 +29,12 @@
             ],
             "@environments/*": [
                 "./src/environments/*"
+            ],
+            "@enums/*": [
+                "./src/app/core/enums/*"
+            ],
+            "@core/*": [
+                "./src/app/core/*"
             ]
         }
     },
