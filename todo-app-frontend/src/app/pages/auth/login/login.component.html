@@ -1,37 +1,22 @@
-<form (ngSubmit)="submitForm()" class="login-form" [formGroup]="loginForm">
-    <h1 class="login-form-header">Login to ToDo App</h1>
+<div class="main-container">
+    <form (ngSubmit)="submitForm()" class="login-form" [formGroup]="loginForm">
+        <h1 class="email-header">Login to ToDo App</h1>
 
-    <mat-form-field class="full-width">
-        <mat-label>Email</mat-label>
+        <app-email-field [emailControl]="loginValidatorService.emailControl"
+                         formControlName="email"
+        >
+        </app-email-field>
 
-        <input type="email" matInput [formControl]="loginValidatorService.emailControl"
-               placeholder="name@example.com" formControlName="email">
+        <app-password-field [passwordControl]="loginValidatorService.passwordControl"
+                            [passwordLabel]="'Enter your password'"
+                            formControlName="password"
+        >
+        </app-password-field>
 
-        <mat-error *ngIf="loginValidatorService.emailControl.hasError('pattern')">
-            Please enter a valid email address
-        </mat-error>
+        <div class="button-bar">
+            <button class="my-button" type="button" mat-raised-button>Register</button>
 
-        <mat-error *ngIf="loginValidatorService.emailControl.hasError('required')">
-            Email is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-        <mat-label>Password</mat-label>
-
-        <input type="password" matInput [formControl]="loginValidatorService.passwordControl"
-               placeholder="Your password" formControlName="password">
-
-        <mat-error *ngIf="loginValidatorService.passwordControl.hasError('pattern')">
-            Please enter a valid password address
-        </mat-error>
-
-        <mat-error *ngIf="loginValidatorService.passwordControl.hasError('required')">
-            Password is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
-
-    <button type="button" mat-raised-button>Register</button>
-
-    <button type="submit" mat-raised-button>Login</button>
-</form>
+            <button class="my-button" type="submit" mat-raised-button>Login</button>
+        </div>
+    </form>
+</div>
