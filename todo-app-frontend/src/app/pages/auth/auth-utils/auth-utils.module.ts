@@ -5,17 +5,19 @@ import { EmailFieldComponent } from './email-field/email-field.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-
+import { NameFieldComponent } from './name-field/name-field.component';
 
 
 @NgModule({
     declarations: [
         PasswordFieldComponent,
-        EmailFieldComponent
+        EmailFieldComponent,
+        NameFieldComponent
     ],
     exports: [
         EmailFieldComponent,
-        PasswordFieldComponent
+        PasswordFieldComponent,
+        NameFieldComponent
     ],
     imports: [
         CommonModule,
@@ -25,4 +27,5 @@ import { MatInputModule } from "@angular/material/input";
         ReactiveFormsModule
     ]
 })
-export class AuthUtilsModule { }
+export class AuthUtilsModule {
+}

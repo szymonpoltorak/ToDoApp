@@ -2,21 +2,23 @@ import { Component, Input } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
-    selector: 'app-password-field',
-    templateUrl: './password-field.component.html',
-    styleUrls: ['./password-field.component.scss'],
+    selector: 'app-name-field',
+    templateUrl: './name-field.component.html',
+    styleUrls: ['./name-field.component.scss'],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: PasswordFieldComponent,
+            useExisting: NameFieldComponent,
             multi: true,
         }
     ]
 })
-export class PasswordFieldComponent implements ControlValueAccessor {
-    @Input() passwordLabel: string = "";
-    @Input() passwordPlaceholder: string = "";
-    @Input() passwordControl!: FormControl;
+export class NameFieldComponent implements ControlValueAccessor {
+    @Input() nameLabel: string = "";
+    @Input() nameControl !: FormControl;
+
+    constructor() {
+    }
 
     registerOnChange(onChange: any): void {
         this.onChange = onChange;
@@ -29,9 +31,9 @@ export class PasswordFieldComponent implements ControlValueAccessor {
     writeValue(obj: any): void {
     }
 
-    private onChange: any = (): void => {
+    private onChange = () => {
     };
 
-    private onTouched: any = (): void => {
+    private onTouched = () => {
     };
 }

@@ -1,0 +1,14 @@
+<mat-form-field class="full-width">
+    <mat-label>{{ nameLabel }}</mat-label>
+
+    <input [formControl]="nameControl" matInput placeholder="Your {{ nameLabel }}"
+           type="text">
+
+    <mat-error *ngIf="nameControl.hasError('pattern')">
+        Please enter a valid {{ nameLabel }}
+    </mat-error>
+
+    <mat-error *ngIf="nameControl.hasError('required')">
+        {{ nameLabel }} is <strong>required</strong>
+    </mat-error>
+</mat-form-field>

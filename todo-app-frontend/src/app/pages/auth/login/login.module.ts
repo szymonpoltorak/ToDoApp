@@ -20,8 +20,7 @@ import { AuthUtilsModule } from "../auth-utils/auth-utils.module";
         ReactiveFormsModule,
         AuthUtilsModule,
     ],
-    providers: [
-    ]
+    providers: []
 })
 export class LoginModule {
 }

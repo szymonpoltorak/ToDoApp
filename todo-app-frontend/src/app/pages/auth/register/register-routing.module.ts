@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RouterPaths } from "@enums/RouterPaths";
-import { LoginComponent } from "./login.component";
+import { RegisterComponent } from "./register.component";
 
 const routes: Routes = [
     {
         path: RouterPaths.CURRENT_PATH,
-        component: LoginComponent
+        component: RegisterComponent
     },
     {
-        path: RouterPaths.REGISTER_FULL_PATH,
-        loadChildren: () => import("../register/register.module")
-            .then(module => module.RegisterModule)
+        path: RouterPaths.LOGIN_FULL_PATH,
+        loadChildren: () => import("../login/login.module")
+            .then(module => module.LoginModule)
     }
 ];
 
@@ -19,5 +19,5 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class LoginRoutingModule {
+export class RegisterRoutingModule {
 }

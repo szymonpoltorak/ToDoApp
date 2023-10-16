@@ -12,11 +12,17 @@ const routes: Routes = [
         path: RouterPaths.LOGIN_AUTH_PATH,
         loadChildren: () => import('./login/login.module')
             .then(module => module.LoginModule),
+    },
+    {
+        path: RouterPaths.REGISTER_AUTH_PATH,
+        loadChildren: () => import("./register/register.module")
+            .then(module => module.RegisterModule)
     }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class AuthRoutingModule { }
+export class AuthRoutingModule {
+}

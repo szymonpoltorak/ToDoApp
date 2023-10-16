@@ -1,0 +1,47 @@
+<div class="main-container">
+    <form (ngSubmit)="submitForm()" [formGroup]="registerGroup" class="register-form">
+        <h1 class="register-header">ToDo</h1>
+
+        <div class="name-fields" formGroupName="nameInputs">
+            <app-name-field [nameControl]="formValidatorService.nameControl"
+                            [nameLabel]="'Name'"
+                            class="name-field"
+                            formControlName="firstName">
+            </app-name-field>
+
+            <app-name-field [nameControl]="formValidatorService.surnameControl"
+                            [nameLabel]="'Surname'"
+                            class="name-field"
+                            formControlName="lastName">
+            </app-name-field>
+        </div>
+
+        <app-email-field [emailControl]="formValidatorService.emailControl"
+                         formControlName="email">
+        </app-email-field>
+
+        <div formGroupName="passwordInputs">
+            <app-password-field [passwordControl]="formValidatorService.passwordControl"
+                                [passwordLabel]="'Password'"
+                                [passwordPlaceholder]="'Enter your password'"
+                                formControlName="userPassword">
+            </app-password-field>
+
+            <app-password-field [passwordControl]="formValidatorService.repeatPasswordControl"
+                                [passwordLabel]="'Repeat Password'"
+                                [passwordPlaceholder]="'Repeat your password'"
+                                formControlName="repeatPassword">
+            </app-password-field>
+        </div>
+
+        <div class="button-bar">
+            <button class="my-button" color="primary" mat-raised-button routerLink="/auth/login" type="button">
+                Return
+            </button>
+
+            <button class="my-button" color="primary" mat-raised-button type="submit">
+                Register
+            </button>
+        </div>
+    </form>
+</div>

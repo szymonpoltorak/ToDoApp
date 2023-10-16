@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from "@angular/forms";
-import { LoginValidatorService } from "@core/validators/login-validator.service";
+import { FormValidatorService } from "@core/validators/form-validator.service";
 
 @Component({
     selector: 'app-login',
@@ -10,7 +10,7 @@ import { LoginValidatorService } from "@core/validators/login-validator.service"
 export class LoginComponent implements OnInit {
     loginForm !: FormGroup;
 
-    constructor(public loginValidatorService: LoginValidatorService) {
+    constructor(public loginValidatorService: FormValidatorService) {
     }
 
     ngOnInit(): void {
