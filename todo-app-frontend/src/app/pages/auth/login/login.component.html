@@ -1,6 +1,6 @@
 <div class="main-container">
     <form (ngSubmit)="submitForm()" class="login-form" [formGroup]="loginForm">
-        <h1 class="email-header">Login to ToDo App</h1>
+        <h1 class="email-header">ToDo</h1>
 
         <app-email-field [emailControl]="loginValidatorService.emailControl"
                          formControlName="email"
@@ -8,13 +8,16 @@
         </app-email-field>
 
         <app-password-field [passwordControl]="loginValidatorService.passwordControl"
-                            [passwordLabel]="'Enter your password'"
+                            [passwordLabel]="'Password'"
+                            [passwordPlaceholder]="'Enter your password'"
                             formControlName="password"
         >
         </app-password-field>
 
         <div class="button-bar">
-            <button class="my-button" color="primary" type="button" mat-raised-button>Register</button>
+            <button class="my-button" color="primary" type="button" mat-raised-button routerLink="/auth/register">
+                Register
+            </button>
 
             <button class="my-button" color="primary" type="submit" mat-raised-button>Login</button>
         </div>

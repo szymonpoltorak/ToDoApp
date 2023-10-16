@@ -12,6 +12,11 @@ const routes: Routes = [
         path: RouterPaths.LOGIN_AUTH_PATH,
         loadChildren: () => import('./login/login.module')
             .then(module => module.LoginModule),
+    },
+    {
+        path: RouterPaths.REGISTER_AUTH_PATH,
+        loadChildren: () => import("./register/register.module")
+            .then(module => module.RegisterModule)
     }
 ];
 
