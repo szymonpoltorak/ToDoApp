@@ -1,5 +1,5 @@
 <div class="main-container">
-    <form (ngSubmit)="submitForm()" class="login-form" [formGroup]="loginForm">
+    <form (ngSubmit)="submitForm()" [formGroup]="loginForm" class="login-form">
         <h1 class="email-header">ToDo</h1>
 
         <app-email-field [emailControl]="loginValidatorService.emailControl"
@@ -15,11 +15,11 @@
         </app-password-field>
 
         <div class="button-bar">
-            <button class="my-button" color="primary" type="button" mat-raised-button routerLink="/auth/register">
+            <button class="my-button" color="primary" mat-raised-button routerLink="/auth/register" type="button">
                 Register
             </button>
 
-            <button class="my-button" color="primary" type="submit" mat-raised-button>Login</button>
+            <button class="my-button" color="primary" mat-raised-button type="submit">Login</button>
         </div>
     </form>
 </div>
