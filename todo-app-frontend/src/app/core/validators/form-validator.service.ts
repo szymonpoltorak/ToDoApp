@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { FormValidation } from "@enums/FormValidation";
+import { FormValidation } from "@enums/auth/FormValidation";
 import { PasswordValidatorService } from "@core/validators/password-validator.service";
 
 @Injectable({
