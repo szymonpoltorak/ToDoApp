@@ -1,9 +1,9 @@
-export interface RegisterRequest {
-    name: string;
+export class RegisterRequest {
+    name!: string;
 
-    surname: string;
+    surname!: string;
 
-    email: string;
+    username!: string;
 
-    password: string;
+    password!: string;
 }

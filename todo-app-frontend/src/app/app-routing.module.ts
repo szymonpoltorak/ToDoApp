@@ -4,9 +4,14 @@ import { RouterPaths } from "@enums/RouterPaths";
 
 const routes: Routes = [
     {
-        path: "auth",
+        path: RouterPaths.AUTH_PATH,
         loadChildren: () => import("./pages/auth/auth.module")
             .then(module => module.AuthModule)
+    },
+    {
+        path: RouterPaths.HOME_PATH,
+        loadChildren: () => import("./pages/home/home.module")
+            .then(module => module.HomeModule)
     },
     {
         path: RouterPaths.CURRENT_PATH,

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageInterface } from "@interfaces/auth/LocalStorageInterface";
-import { StorageKeys } from "@enums/StorageKeys";
+import { StorageKeys } from "@enums/auth/StorageKeys";
 
 @Injectable({
     providedIn: 'root'
 })
-export class LocalStorageService implements LocalStorageInterface {
+export class LocalStorageService {
     constructor() {
     }
 
@@ -20,13 +19,13 @@ export class LocalStorageService implements LocalStorageInterface {
     getKeyValueFromStorage(key: StorageKeys): string {
         const value: string | null = localStorage.getItem(key);
 
-        return value === null ? "" : `${ key }: ${ value }`;
+        return value == null ? "" : `${ key }: ${ value }`;
     }
 
     getValueFromStorage(key: StorageKeys): string {
         const value: string | null = localStorage.getItem(key);
 
-        return value === null ? "" : value;
+        return value == null ? "" : value;
     }
 
     clearStorage(): void {

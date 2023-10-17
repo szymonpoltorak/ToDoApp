@@ -4,4 +4,7 @@ export enum RouterPaths {
     REGISTER_AUTH_PATH = "register",
     REGISTER_FULL_PATH = "auth/register",
     LOGIN_FULL_PATH = "auth/login",
+    HOME_PATH = "home",
+    AUTH_PATH = "auth",
+    HOME_LOGIN_PATH = "/home",
 }

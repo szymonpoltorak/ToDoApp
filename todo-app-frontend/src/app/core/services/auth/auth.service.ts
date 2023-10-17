@@ -19,16 +19,6 @@ export class AuthService {
                 private utilService: UtilService) {
     }
 
-    isUserAuthenticated(): Observable<TokenResponse> {
-        const authToken: string = this.utilService.getKeyValuePairFromStorage(StorageKeys.AUTH_TOKEN);
-        const refreshToken: string = this.utilService.getKeyValuePairFromStorage(StorageKeys.REFRESH_TOKEN);
-
-        console.log(JSON.parse(`{${ authToken }, ${ refreshToken }}`));
-
-        return this.http.post<TokenResponse>(`${ environment.httpBackend }${ AuthApiCalls.IS_USER_AUTHENTICATED }`,
-            this.buildAuthRequest(authToken));
-    }
-
     logoutUser(): Observable<any> {
         return this.http.post(`${ environment.httpBackend }${ AuthApiCalls.LOGOUT_URL }`, {});
     }

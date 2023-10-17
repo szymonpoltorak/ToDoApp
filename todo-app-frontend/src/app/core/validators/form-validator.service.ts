@@ -48,7 +48,6 @@ export class FormValidatorService {
             Validators.pattern(FormValidation.PASSWORD_PATTERN),
         ]
     );
-
     private readonly passwordName: string = "userPassword";
     private readonly repeatPassword: string = "repeatPassword";
 
