@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { FormValidation } from "@enums/FormValidation";
+import { FormValidation } from "@enums/auth/FormValidation";
 import { PasswordValidatorService } from "@core/validators/password-validator.service";
 
 @Injectable({
@@ -48,7 +48,6 @@ export class FormValidatorService {
             Validators.pattern(FormValidation.PASSWORD_PATTERN),
         ]
     );
-
     private readonly passwordName: string = "userPassword";
     private readonly repeatPassword: string = "repeatPassword";
 
