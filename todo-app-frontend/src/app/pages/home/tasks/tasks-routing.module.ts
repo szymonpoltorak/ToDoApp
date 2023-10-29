@@ -1,17 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RouterPaths } from "@enums/RouterPaths";
+import { TasksComponent } from "./tasks.component";
 
 const routes: Routes = [
     {
         path: RouterPaths.CURRENT_PATH,
-        redirectTo: RouterPaths.TASKS_PATH,
-        pathMatch: "full"
-    },
-    {
-        path: RouterPaths.TASKS_PATH,
-        loadChildren: () => import("./tasks/tasks.module")
-            .then(module => module.TasksModule)
+        component: TasksComponent
     }
 ];
 
@@ -19,5 +14,5 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class HomeRoutingModule {
+export class TasksRoutingModule {
 }

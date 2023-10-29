@@ -1,0 +1,36 @@
+<mat-drawer-container autosize class="home-container">
+    <mat-drawer #drawer class="sidenav" mode="push">
+        <h1>Menu</h1>
+
+        <mat-divider></mat-divider>
+
+        <section class="button-column">
+            <button (click)="changeToProfileView()" class="menu-option" extended mat-fab>
+                <mat-icon>person</mat-icon>
+                Profile
+            </button>
+        </section>
+
+        <section class="button-column">
+            <button (click)="changeToGroupsView()" class="menu-option" extended mat-fab>
+                <mat-icon>list</mat-icon>
+                Groups
+            </button>
+        </section>
+
+        <section class="button-column">
+            <button (click)="logoutUser()" class="menu-option" extended mat-fab>
+                <mat-icon>logout</mat-icon>
+                Logout
+            </button>
+        </section>
+    </mat-drawer>
+
+    <mat-toolbar class="navbar" color="primary">
+        <button (click)="drawer.toggle()" aria-label="Menu button" class="menu-icon" mat-icon-button>
+            <mat-icon>menu</mat-icon>
+        </button>
+
+        <span>ToDo</span>
+    </mat-toolbar>
+</mat-drawer-container>

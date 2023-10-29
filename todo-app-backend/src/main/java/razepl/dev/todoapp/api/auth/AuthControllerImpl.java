@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.api.auth;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,7 @@ public class AuthControllerImpl implements AuthController {
     @Override
     @PostMapping(value = AuthMappings.REGISTER_MAPPING)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public final AuthResponse registerUser(@RequestBody RegisterRequest registerRequest) {
+    public final AuthResponse registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
         return authService.register(registerRequest);
     }
 
