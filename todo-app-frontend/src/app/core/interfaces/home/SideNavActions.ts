@@ -3,5 +3,9 @@ export interface SideNavActions {
 
     changeToGroupsView(): void;
 
+    changeToSearchView(): void;
+
+    changeToCollaboratorsView(): void;
+
     logoutUser(): void;
 }

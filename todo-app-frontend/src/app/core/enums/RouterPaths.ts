@@ -13,4 +13,8 @@ export enum RouterPaths {
     TASKS_PATH = "tasks",
     TASKS_DIRECT = "/home/tasks",
     GROUPS_PATH = "groups",
+    PROFILE_DIRECT = "/home/profile",
+    GROUPS_DIRECT = "/home/groups",
+    COLLABORATORS_DIRECT = "/home/collaborators",
+    SEARCH_DIRECT = "/home/search",
 }
