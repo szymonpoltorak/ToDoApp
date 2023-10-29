@@ -1,0 +1,27 @@
+@import "../sidebar";
+
+.paginator {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    height: 4em;
+}
+
+.grid-item {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    background-color: #424242;
+    color: white;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.separator {
+    height: 4em;
+}

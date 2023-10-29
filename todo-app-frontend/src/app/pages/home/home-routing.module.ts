@@ -5,13 +5,18 @@ import { RouterPaths } from "@enums/RouterPaths";
 const routes: Routes = [
     {
         path: RouterPaths.CURRENT_PATH,
-        redirectTo: RouterPaths.TASKS_PATH,
+        redirectTo: RouterPaths.GROUPS_PATH,
         pathMatch: "full"
     },
     {
         path: RouterPaths.TASKS_PATH,
         loadChildren: () => import("./tasks/tasks.module")
             .then(module => module.TasksModule)
+    },
+    {
+        path: RouterPaths.GROUPS_PATH,
+        loadChildren: () => import("./groups/groups.module")
+            .then(module => module.GroupsModule)
     }
 ];
 
