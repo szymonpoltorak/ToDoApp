@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
 
     @Override
-    public final AuthResponse register(@Valid RegisterRequest registerRequest) {
+    public final AuthResponse register(RegisterRequest registerRequest) {
         log.info("Registering user with data: \n{}", registerRequest);
 
         String password = validateUserRegisterData(registerRequest);

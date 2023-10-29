@@ -4,8 +4,17 @@ export enum RouterPaths {
     REGISTER_AUTH_PATH = "register",
     REGISTER_FULL_PATH = "auth/register",
     LOGIN_FULL_PATH = "auth/login",
+
     HOME_PATH = "home",
     AUTH_PATH = "auth",
     HOME_LOGIN_PATH = "/home",
     LOGIN_DIRECT = "/auth/login",
+
+    TASKS_PATH = "tasks",
+    TASKS_DIRECT = "/home/tasks",
+    GROUPS_PATH = "groups",
+    PROFILE_DIRECT = "/home/profile",
+    GROUPS_DIRECT = "/home/groups",
+    COLLABORATORS_DIRECT = "/home/collaborators",
+    SEARCH_DIRECT = "/home/search",
 }

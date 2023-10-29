@@ -1,0 +1,64 @@
+<mat-drawer-container autosize class="home-container">
+    <mat-drawer #drawer class="sidenav" mode="push">
+        <h1>Menu</h1>
+
+        <mat-divider></mat-divider>
+
+        <section class="button-column">
+            <button (click)="changeToProfileView()" class="menu-option" extended mat-fab>
+                <mat-icon>person</mat-icon>
+                Profile
+            </button>
+
+            <button (click)="changeToGroupsView()" class="menu-option" extended mat-fab>
+                <mat-icon>list</mat-icon>
+                Groups
+            </button>
+
+            <button (click)="changeToGroupsView()" class="menu-option" extended mat-fab>
+                <mat-icon>group</mat-icon>
+                Collaborators
+            </button>
+
+            <button (click)="changeToGroupsView()" class="menu-option" extended mat-fab>
+                <mat-icon>search</mat-icon>
+                Search
+            </button>
+
+            <button (click)="logoutUser()" class="menu-option" extended mat-fab>
+                <mat-icon>logout</mat-icon>
+                Logout
+            </button>
+        </section>
+    </mat-drawer>
+
+    <mat-toolbar class="navbar" color="primary">
+        <button (click)="drawer.toggle()" aria-label="Menu button" class="menu-icon" mat-icon-button>
+            <mat-icon>menu</mat-icon>
+        </button>
+
+        <span>Notes</span>
+    </mat-toolbar>
+
+    <mat-grid-list cols="4" rowHeight="224px">
+        <mat-grid-tile *ngFor="let group of groups$ | async" class="grid-item">
+            <app-group [group]="group"></app-group>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+    <button (click)="addNewGroup()" mat-fab color="accent" class="add-group-button">
+        <mat-icon>add</mat-icon>
+    </button>
+
+    <div class="separator"></div>
+
+    <div class="paginator">
+        <mat-divider></mat-divider>
+
+        <mat-paginator (page)="changePage($event)"
+                       [length]="(groups$ | async)?.length"
+                       [pageSize]="16"
+                       aria-label="Select page">
+        </mat-paginator>
+    </div>
+</mat-drawer-container>

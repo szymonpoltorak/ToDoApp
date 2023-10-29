@@ -1,12 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RouterPaths } from "@enums/RouterPaths";
-import { HomeComponent } from "./home.component";
 
 const routes: Routes = [
     {
         path: RouterPaths.CURRENT_PATH,
-        component: HomeComponent
+        redirectTo: RouterPaths.GROUPS_PATH,
+        pathMatch: "full"
+    },
+    {
+        path: RouterPaths.TASKS_PATH,
+        loadChildren: () => import("./tasks/tasks.module")
+            .then(module => module.TasksModule)
+    },
+    {
+        path: RouterPaths.GROUPS_PATH,
+        loadChildren: () => import("./groups/groups.module")
+            .then(module => module.GroupsModule)
     }
 ];
 

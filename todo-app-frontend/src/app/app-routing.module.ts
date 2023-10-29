@@ -19,6 +19,11 @@ const routes: Routes = [
         path: RouterPaths.CURRENT_PATH,
         redirectTo: "auth/login",
         pathMatch: 'full'
+    },
+    {
+        path: "**",
+        redirectTo: "/auth/login",
+        pathMatch: "full"
     }
 ];
 

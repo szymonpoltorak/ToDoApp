@@ -1,0 +1,35 @@
+@import "../sidebar";
+
+.paginator {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    height: 4em;
+    z-index: 999;
+}
+
+.add-group-button {
+    position: fixed;
+    bottom: 6em;
+    right: 4em;
+    z-index: 999;
+}
+
+.grid-item {
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    background-color: #424242;
+    color: white;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.separator {
+    height: 4em;
+}

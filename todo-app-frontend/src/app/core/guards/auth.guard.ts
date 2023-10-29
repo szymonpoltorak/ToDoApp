@@ -13,9 +13,9 @@ export class AuthGuard {
     }
 
     canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        if (!this.userService.isUserAuthenticated) {
-            return this.router.createUrlTree([RouterPaths.LOGIN_DIRECT]);
-        }
+        // if (!this.userService.isUserAuthenticated) {
+        //     return this.router.createUrlTree([RouterPaths.LOGIN_DIRECT]);
+        // }
         return true;
     }
 }
