@@ -17,7 +17,7 @@ export class GroupComponent {
     }
 
     navigateToGroupTasks(): void {
-        this.groupService.groupId = this.group.groupId;
+        this.groupService.group = this.group;
 
         this.utilService.navigate(RouterPaths.TASKS_DIRECT);
     }

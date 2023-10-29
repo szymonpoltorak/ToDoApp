@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
+import { Group } from "@core/data/Group";
 
 @Injectable({
     providedIn: 'root'
 })
 export class GroupService {
-    private _groupId: number = -1;
+    private _group !: Group;
 
-    constructor() {
+    get group() {
+        return this._group;
     }
 
-    get groupId() {
-        return this._groupId;
-    }
-
-    set groupId(groupId: number) {
-        this._groupId = groupId;
+    set group(group: Group) {
+        this._group = group;
     }
 }

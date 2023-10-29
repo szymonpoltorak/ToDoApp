@@ -5,6 +5,14 @@
     position: fixed;
     bottom: 0;
     height: 4em;
+    z-index: 999;
+}
+
+.add-group-button {
+    position: fixed;
+    bottom: 6em;
+    right: 4em;
+    z-index: 999;
 }
 
 .grid-item {
