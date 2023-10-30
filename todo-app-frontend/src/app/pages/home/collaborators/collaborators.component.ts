@@ -1,21 +1,19 @@
 import { Component } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
-import { SideMenuService } from "@core/services/home/side-menu.service";
-import { Observable, of, Subject, takeUntil } from "rxjs";
 import { AuthService } from "@core/services/auth/auth.service";
-import { User } from "@core/data/home/User";
+import { SideMenuService } from "@core/services/home/side-menu.service";
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss']
+    selector: 'app-collaborators',
+    templateUrl: './collaborators.component.html',
+    styleUrls: ['./collaborators.component.scss']
 })
-export class ProfileComponent implements SideMenuActions {
-    user$: Observable<User> = of({ name: "Jan", surname: "Kowalski", username: "jan@example.com" });
+export class CollaboratorsComponent implements SideMenuActions {
     private destroyLogout$: Subject<void> = new Subject<void>();
 
-    constructor(private sideMenuService: SideMenuService,
-                private authService: AuthService) {
+    constructor(private authService: AuthService,
+                private sideMenuService: SideMenuService) {
     }
 
     changeToGroupsView(): void {
@@ -40,7 +38,4 @@ export class ProfileComponent implements SideMenuActions {
             .subscribe(() => this.sideMenuService.logoutUser());
     }
 
-    closeAccount(): void {
-        console.log("Closing an account!");
-    }
 }

@@ -16,7 +16,7 @@ export class PasswordValidatorService {
             if (!userPassword || !repeatPassword) {
                 return null;
             }
-            return userPassword.value !== repeatPassword.value ? {'passwordMatch': true} : null;
+            return userPassword.value !== repeatPassword.value ? { 'passwordMatch': true } : null;
         };
     }
 }

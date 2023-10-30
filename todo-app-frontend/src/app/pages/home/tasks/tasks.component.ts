@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { SideNavActions } from "@core/interfaces/home/SideNavActions";
+import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { GroupService } from "@core/services/home/group.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { AuthService } from "@core/services/auth/auth.service";
 import { Subject, takeUntil } from "rxjs";
 
 @Component({
-  selector: 'app-tasks',
-  templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.scss']
+    selector: 'app-tasks',
+    templateUrl: './tasks.component.html',
+    styleUrls: ['./tasks.component.scss']
 })
-export class TasksComponent implements SideNavActions, OnInit {
+export class TasksComponent implements SideMenuActions, OnInit {
     private destroyLogout$: Subject<void> = new Subject<void>();
 
     constructor(private groupService: GroupService,

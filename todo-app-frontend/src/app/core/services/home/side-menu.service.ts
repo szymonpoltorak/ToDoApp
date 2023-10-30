@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { UtilService } from "@core/services/utils/util.service";
 import { RouterPaths } from "@enums/RouterPaths";
-import { SideNavActions } from "@core/interfaces/home/SideNavActions";
+import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 
 @Injectable({
     providedIn: 'root'
 })
-export class SideMenuService implements SideNavActions {
+export class SideMenuService implements SideMenuActions {
     constructor(private utilService: UtilService) {
     }
 

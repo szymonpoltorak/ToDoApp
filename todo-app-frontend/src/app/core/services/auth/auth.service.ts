@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { catchError, Observable, of, tap } from "rxjs";
 import { environment } from "@environments/environment";
-import { TokenResponse } from "@core/data/auth/token-response";
 import { UtilService } from "@core/services/utils/util.service";
 import { StorageKeys } from "@enums/auth/StorageKeys";
 import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
@@ -20,22 +19,22 @@ export class AuthService {
     }
 
     logoutUser(): Observable<any> {
-        return this.http.post(`${ environment.httpBackend }${ AuthApiCalls.LOGOUT_URL }`, {});
+        return this.http.post(`${environment.httpBackend}${AuthApiCalls.LOGOUT_URL}`, {});
     }
 
     registerUser(registerRequest: RegisterRequest): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${ environment.httpBackend }${ AuthApiCalls.REGISTER_URL }`,
+        return this.http.post<AuthResponse>(`${environment.httpBackend}${AuthApiCalls.REGISTER_URL}`,
             registerRequest)
             .pipe(catchError(() => of(JSON.parse(AuthApiCalls.ERROR_FOUND))));
     }
 
     loginUser(loginRequest: LoginRequest): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${ environment.httpBackend }${ AuthApiCalls.LOGIN_URL }`, loginRequest)
+        return this.http.post<AuthResponse>(`${environment.httpBackend}${AuthApiCalls.LOGIN_URL}`, loginRequest)
             .pipe(catchError(() => of(JSON.parse(AuthApiCalls.ERROR_FOUND))));
     }
 
     refreshUsersToken(refreshToken: string): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${ environment.httpBackend }${ AuthApiCalls.REFRESH_URL }`,
+        return this.http.post<AuthResponse>(`${environment.httpBackend}${AuthApiCalls.REFRESH_URL}`,
             this.buildRefreshToken(refreshToken)).pipe(tap((response: AuthResponse) => {
             this.saveData(response);
         }));
@@ -52,12 +51,12 @@ export class AuthService {
     }
 
     private buildAuthRequest(authToken: string) {
-        console.log(JSON.parse(`{${ authToken }}`));
+        console.log(JSON.parse(`{${authToken}}`));
 
-        return JSON.parse(`{${ authToken }}`);
+        return JSON.parse(`{${authToken}}`);
     }
 
     private buildRefreshToken(refreshToken: string) {
-        return JSON.parse(`{"refreshToken": "${ refreshToken }"}`);
+        return JSON.parse(`{"refreshToken": "${refreshToken}"}`);
     }
 }

@@ -5,9 +5,9 @@ import { UtilService } from "@core/services/utils/util.service";
 import { RouterPaths } from "@enums/RouterPaths";
 
 @Component({
-  selector: 'app-group',
-  templateUrl: './group.component.html',
-  styleUrls: ['./group.component.scss']
+    selector: 'app-group',
+    templateUrl: './group.component.html',
+    styleUrls: ['./group.component.scss']
 })
 export class GroupComponent {
     @Input() group !: Group;
