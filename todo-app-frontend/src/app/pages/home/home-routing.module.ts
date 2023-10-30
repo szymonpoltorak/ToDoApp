@@ -14,6 +14,11 @@ const routes: Routes = [
             .then(module => module.TasksModule)
     },
     {
+        path: RouterPaths.PROFILE_PATH,
+        loadChildren: () => import("./profile/profile.module")
+            .then(module => module.ProfileModule)
+    },
+    {
         path: RouterPaths.GROUPS_PATH,
         loadChildren: () => import("./groups/groups.module")
             .then(module => module.GroupsModule)

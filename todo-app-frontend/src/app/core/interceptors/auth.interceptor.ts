@@ -13,7 +13,7 @@ import { UserService } from "@core/services/utils/user.service";
 import { UtilService } from "@core/services/utils/util.service";
 import { AuthService } from "@core/services/auth/auth.service";
 import { StorageKeys } from "@enums/auth/StorageKeys";
-import { AuthResponse } from "@core/data/auth-response";
+import { AuthResponse } from "@core/data/auth/auth-response";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
