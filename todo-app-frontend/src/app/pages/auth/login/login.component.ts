@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from "@angular/forms";
 import { FormValidatorService } from "@core/validators/form-validator.service";
-import { LoginRequest } from "@core/data/login-request";
+import { LoginRequest } from "@core/data/auth/login-request";
 import { AuthService } from "@core/services/auth/auth.service";
 import { Subject, takeUntil } from "rxjs";
-import { AuthResponse } from "@core/data/auth-response";
+import { AuthResponse } from "@core/data/auth/auth-response";
 import { AuthConstants } from "@enums/auth/AuthConstants";
 import { StorageKeys } from "@enums/auth/StorageKeys";
 import { UtilService } from "@core/services/utils/util.service";

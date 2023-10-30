@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Group } from "@core/data/Group";
+import { Group } from "@core/data/home/Group";
 
 @Injectable({
     providedIn: 'root'

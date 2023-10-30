@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SideNavActions } from "@core/interfaces/home/SideNavActions";
 import { PageEvent } from "@angular/material/paginator";
 import { Observable, of, Subject, takeUntil } from "rxjs";
-import { Group } from "@core/data/Group";
+import { Group } from "@core/data/home/Group";
 import { GroupService } from "@core/services/home/group.service";
 import { UtilService } from "@core/services/utils/util.service";
 import { RouterPaths } from "@enums/RouterPaths";

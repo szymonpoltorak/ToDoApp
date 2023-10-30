@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormValidatorService } from "@core/validators/form-validator.service";
 import { AbstractControl, FormGroup } from "@angular/forms";
-import { RegisterRequest } from "@core/data/register-request";
+import { RegisterRequest } from "@core/data/auth/register-request";
 import { Subject, takeUntil } from "rxjs";
-import { AuthResponse } from "@core/data/auth-response";
+import { AuthResponse } from "@core/data/auth/auth-response";
 import { AuthConstants } from "@enums/auth/AuthConstants";
 import { FormFieldNames } from "@enums/auth/FormFieldNames";
 import { StorageKeys } from "@enums/auth/StorageKeys";

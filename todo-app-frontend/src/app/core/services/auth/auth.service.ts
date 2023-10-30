@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { catchError, Observable, of, tap } from "rxjs";
 import { environment } from "@environments/environment";
-import { TokenResponse } from "@core/data/token-response";
+import { TokenResponse } from "@core/data/auth/token-response";
 import { UtilService } from "@core/services/utils/util.service";
 import { StorageKeys } from "@enums/auth/StorageKeys";
 import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
-import { RegisterRequest } from "@core/data/register-request";
-import { AuthResponse } from "@core/data/auth-response";
-import { LoginRequest } from "@core/data/login-request";
+import { RegisterRequest } from "@core/data/auth/register-request";
+import { AuthResponse } from "@core/data/auth/auth-response";
+import { LoginRequest } from "@core/data/auth/login-request";
 import { AuthConstants } from "@enums/auth/AuthConstants";
 
 @Injectable({

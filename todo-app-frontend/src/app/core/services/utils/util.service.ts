@@ -5,7 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "@environments/environment";
 import { StorageKeys } from "@enums/auth/StorageKeys";
-import { AuthResponse } from "@core/data/auth-response";
+import { AuthResponse } from "@core/data/auth/auth-response";
 
 @Injectable({
     providedIn: 'root'

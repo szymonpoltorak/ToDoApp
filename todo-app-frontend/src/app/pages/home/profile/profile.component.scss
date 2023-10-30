@@ -1,0 +1,26 @@
+@import "../sidebar";
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 5em;
+    width: 600px;
+    height: 500px;
+}
+
+.profile-title {
+    font-size: 30px;
+}
+
+.profile-section-separator {
+    margin-bottom: 20px;
+}
+
+.profile-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
