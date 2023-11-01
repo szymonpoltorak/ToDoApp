@@ -40,5 +40,17 @@
         <span>ToDo</span>
     </mat-toolbar>
 
+    <div class="center-container">
+        <mat-card class="collaborators-container">
+            <mat-card-title class="collaborators-title">Collaborators</mat-card-title>
 
+            <mat-divider class="collaborators-separator"></mat-divider>
+
+            <mat-list>
+                <app-collaborator *ngFor="let collaborator of collaborators$ | async"
+                                  [collaborator]="collaborator">
+                </app-collaborator>
+            </mat-list>
+        </mat-card>
+    </div>
 </mat-drawer-container>

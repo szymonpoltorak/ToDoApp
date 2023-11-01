@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
-import { Subject, takeUntil } from "rxjs";
+import { Observable, of, Subject, takeUntil } from "rxjs";
+import { Collaborator } from "@core/data/home/Collaborator";
 
 @Component({
     selector: 'app-collaborators',
     templateUrl: './collaborators.component.html',
     styleUrls: ['./collaborators.component.scss']
 })
-export class CollaboratorsComponent implements SideMenuActions {
+export class CollaboratorsComponent implements SideMenuActions, OnInit {
     private destroyLogout$: Subject<void> = new Subject<void>();
+    collaborators$ !: Observable<Collaborator[]>;
 
     constructor(private authService: AuthService,
                 private sideMenuService: SideMenuService) {
@@ -38,4 +40,16 @@ export class CollaboratorsComponent implements SideMenuActions {
             .subscribe(() => this.sideMenuService.logoutUser());
     }
 
+    ngOnInit(): void {
+        const collaborators: Collaborator[] = [];
+
+        for (let i = 0; i < 10; i++) {
+            collaborators.push({
+               fullName: `Name-${i} Surname-${i}`,
+               username: `name${i}@mail.com`,
+               collaboratorId: i
+            });
+        }
+        this.collaborators$ = of(collaborators);
+    }
 }

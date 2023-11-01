@@ -10,11 +10,15 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatCardModule } from "@angular/material/card";
+import { CollaboratorComponent } from "./collaborator/collaborator.component";
+import { MatListModule } from "@angular/material/list";
 
 
 @NgModule({
     declarations: [
-        CollaboratorsComponent
+        CollaboratorsComponent,
+        CollaboratorComponent
     ],
     imports: [
         CommonModule,
@@ -25,7 +29,9 @@ import { MatToolbarModule } from "@angular/material/toolbar";
         MatIconModule,
         MatPaginatorModule,
         MatSidenavModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatCardModule,
+        MatListModule
     ]
 })
 export class CollaboratorsModule {
