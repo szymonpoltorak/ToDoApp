@@ -24,4 +24,5 @@ export enum RouterPaths {
     COLLABORATORS_DIRECT = "/home/collaborators",
 
     SEARCH_DIRECT = "/home/search",
+    SEARCH_PATH = "search",
 }

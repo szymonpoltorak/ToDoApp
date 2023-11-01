@@ -20,7 +20,7 @@
                 Collaborators
             </button>
 
-            <button (click)="changeToSearchView()" class="menu-option" extended mat-fab>
+            <button (click)="changeToGroupsView()" class="menu-option" extended mat-fab>
                 <mat-icon>search</mat-icon>
                 Search
             </button>
@@ -40,25 +40,11 @@
         <span>ToDo</span>
     </mat-toolbar>
 
-    <mat-grid-list cols="4" rowHeight="224px">
-        <mat-grid-tile *ngFor="let group of groups$ | async" class="grid-item">
-            <app-group [group]="group"></app-group>
-        </mat-grid-tile>
-    </mat-grid-list>
+    <div class="center-container">
+        <mat-form-field>
+            <mat-label>Find Collaborators</mat-label>
 
-    <button (click)="addNewGroup()" class="add-group-button" color="accent" mat-fab>
-        <mat-icon>add</mat-icon>
-    </button>
-
-    <div class="separator"></div>
-
-    <div class="paginator">
-        <mat-divider></mat-divider>
-
-        <mat-paginator (page)="changePage($event)"
-                       [length]="(groups$ | async)?.length"
-                       [pageSize]="16"
-                       aria-label="Select page">
-        </mat-paginator>
+            <input matInput placeholder="Example Name">
+        </mat-form-field>
     </div>
 </mat-drawer-container>
