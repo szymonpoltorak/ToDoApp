@@ -14,6 +14,11 @@ const routes: Routes = [
             .then(module => module.TasksModule)
     },
     {
+        path: RouterPaths.COLLABORATORS_PATH,
+        loadChildren: () => import("./collaborators/collaborators.module")
+            .then(module => module.CollaboratorsModule)
+    },
+    {
         path: RouterPaths.PROFILE_PATH,
         loadChildren: () => import("./profile/profile.module")
             .then(module => module.ProfileModule)

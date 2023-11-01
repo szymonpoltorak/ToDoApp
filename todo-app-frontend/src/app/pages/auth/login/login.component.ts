@@ -18,8 +18,8 @@ import { FormFieldNames } from "@enums/auth/FormFieldNames";
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-    private loginDestroy$: Subject<any> = new Subject<any>();
     loginForm !: FormGroup;
+    private loginDestroy$: Subject<any> = new Subject<any>();
 
     constructor(public loginValidatorService: FormValidatorService,
                 private authService: AuthService,

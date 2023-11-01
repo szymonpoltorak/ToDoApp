@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SideNavActions } from "@core/interfaces/home/SideNavActions";
+import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { PageEvent } from "@angular/material/paginator";
 import { Observable, of, Subject, takeUntil } from "rxjs";
 import { Group } from "@core/data/home/Group";
@@ -14,9 +14,9 @@ import { SideMenuService } from "@core/services/home/side-menu.service";
     templateUrl: './groups.component.html',
     styleUrls: ['./groups.component.scss']
 })
-export class GroupsComponent implements SideNavActions, OnInit, OnDestroy {
-    private destroyLogout$: Subject<void> = new Subject<void>();
+export class GroupsComponent implements SideMenuActions, OnInit, OnDestroy {
     groups$ !: Observable<Group[]>;
+    private destroyLogout$: Subject<void> = new Subject<void>();
 
     constructor(private groupService: GroupService,
                 private authService: AuthService,

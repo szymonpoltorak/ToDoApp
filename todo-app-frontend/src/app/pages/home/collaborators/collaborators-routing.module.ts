@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RouterPaths } from "@enums/RouterPaths";
-import { GroupsComponent } from "./groups.component";
+import { CollaboratorsComponent } from "./collaborators.component";
 
 const routes: Routes = [
     {
         path: RouterPaths.CURRENT_PATH,
-        component: GroupsComponent
+        component: CollaboratorsComponent
     }
 ];
 
@@ -14,5 +14,5 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class GroupsRoutingModule {
+export class CollaboratorsRoutingModule {
 }

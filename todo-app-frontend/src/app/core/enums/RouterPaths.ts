@@ -20,6 +20,8 @@ export enum RouterPaths {
     PROFILE_DIRECT = "/home/profile",
     PROFILE_PATH = "profile",
 
+    COLLABORATORS_PATH = "collaborators",
     COLLABORATORS_DIRECT = "/home/collaborators",
+
     SEARCH_DIRECT = "/home/search",
 }

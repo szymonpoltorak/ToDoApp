@@ -1,4 +1,4 @@
-export interface SideNavActions {
+export interface SideMenuActions {
     changeToProfileView(): void;
 
     changeToGroupsView(): void;

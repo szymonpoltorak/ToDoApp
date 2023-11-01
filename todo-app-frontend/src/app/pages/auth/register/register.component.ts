@@ -18,8 +18,8 @@ import { RouterPaths } from "@enums/RouterPaths";
     styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-    private destroyRegister$: Subject<void> = new Subject<void>();
     registerForm !: FormGroup;
+    private destroyRegister$: Subject<void> = new Subject<void>();
 
     constructor(public formValidatorService: FormValidatorService,
                 private authService: AuthService,

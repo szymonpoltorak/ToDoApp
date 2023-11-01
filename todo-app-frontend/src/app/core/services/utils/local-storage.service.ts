@@ -19,7 +19,7 @@ export class LocalStorageService {
     getKeyValueFromStorage(key: StorageKeys): string {
         const value: string | null = localStorage.getItem(key);
 
-        return value == null ? "" : `${ key }: ${ value }`;
+        return value == null ? "" : `${key}: ${value}`;
     }
 
     getValueFromStorage(key: StorageKeys): string {

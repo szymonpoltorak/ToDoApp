@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
-import { SideNavActions } from "@core/interfaces/home/SideNavActions";
+import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { Observable, of, Subject, takeUntil } from "rxjs";
 import { AuthService } from "@core/services/auth/auth.service";
 import { User } from "@core/data/home/User";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements SideNavActions {
+export class ProfileComponent implements SideMenuActions {
+    user$: Observable<User> = of({ name: "Jan", surname: "Kowalski", username: "jan@example.com" });
     private destroyLogout$: Subject<void> = new Subject<void>();
-    user$: Observable<User> = of({name: "Jan", surname: "Kowalski", username: "jan@example.com"});
 
     constructor(private sideMenuService: SideMenuService,
                 private authService: AuthService) {
