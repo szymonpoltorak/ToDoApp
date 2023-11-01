@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
-import { Observable, of, Subject, takeUntil } from "rxjs";
+import { map, Observable, of, Subject, takeUntil } from "rxjs";
 import { Collaborator } from "@core/data/home/Collaborator";
 
 @Component({
@@ -51,5 +51,11 @@ export class CollaboratorsComponent implements SideMenuActions, OnInit {
             });
         }
         this.collaborators$ = of(collaborators);
+    }
+
+    removeCollaborator(event: number): void {
+        this.collaborators$ = this.collaborators$.pipe(
+            map((collaborators: Collaborator[]) => collaborators.filter(c => c.collaboratorId !== event))
+        );
     }
 }
