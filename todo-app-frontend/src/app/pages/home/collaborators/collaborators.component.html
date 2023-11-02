@@ -49,6 +49,7 @@
             <mat-list>
                 <app-collaborator *ngFor="let collaborator of collaborators$ | async"
                                   (removeCollaboratorEvent)="removeCollaborator($event)"
+                                  [isAlreadyCollaborator]="true"
                                   [collaborator]="collaborator">
                 </app-collaborator>
             </mat-list>

@@ -11,6 +11,9 @@ import { MatListModule } from "@angular/material/list";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatInputModule } from "@angular/material/input";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { ReactiveFormsModule } from "@angular/forms";
+import { CollaboratorsModule } from "../collaborators/collaborators.module";
 
 
 @NgModule({
@@ -27,7 +30,10 @@ import { MatInputModule } from "@angular/material/input";
         MatListModule,
         MatSidenavModule,
         MatToolbarModule,
-        MatInputModule
+        MatInputModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        CollaboratorsModule
     ]
 })
 export class SearchModule {

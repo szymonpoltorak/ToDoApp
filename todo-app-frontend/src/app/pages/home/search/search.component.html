@@ -41,10 +41,40 @@
     </mat-toolbar>
 
     <div class="center-container">
-        <mat-form-field>
-            <mat-label>Find Collaborators</mat-label>
+        <mat-card class="search-container">
+            <div class="search-bar">
+                <mat-form-field class="search-input">
+                    <mat-label>Find Collaborators</mat-label>
 
-            <input matInput placeholder="Example Name">
-        </mat-form-field>
+                    <input matInput
+                           placeholder="Example Name"
+                           type="text"
+                           [formControl]="suggestionControl"
+                           [matAutocomplete]="searchSuggestions">
+
+                    <mat-autocomplete autoActiveFirstOption #searchSuggestions="matAutocomplete">
+                        <mat-option *ngFor="let suggestion of suggestions$ | async" [value]="suggestion">
+                            {{ suggestion }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <button (click)="findCollaboratorByName()"
+                        type="submit"
+                        class="search-submit-button"
+                        color="primary"
+                        mat-mini-fab>
+                    <mat-icon>search</mat-icon>
+                </button>
+            </div>
+
+            <mat-list>
+                <app-collaborator *ngFor="let collaborator of visibleCollaborators$ | async"
+                                  (addCollaboratorEvent)="addNewCollaborator($event)"
+                                  [isAlreadyCollaborator]="false"
+                                  [collaborator]="collaborator">
+                </app-collaborator>
+            </mat-list>
+        </mat-card>
     </div>
 </mat-drawer-container>
