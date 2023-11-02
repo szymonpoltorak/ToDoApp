@@ -32,6 +32,9 @@ import { MatListModule } from "@angular/material/list";
         MatToolbarModule,
         MatCardModule,
         MatListModule
+    ],
+    exports: [
+        CollaboratorComponent
     ]
 })
 export class CollaboratorsModule {

@@ -8,9 +8,15 @@ import { Collaborator } from "@core/data/home/Collaborator";
 })
 export class CollaboratorComponent {
     @Input() collaborator !: Collaborator;
+    @Input() isAlreadyCollaborator: boolean = false;
+    @Output() readonly addCollaboratorEvent: EventEmitter<Collaborator> = new EventEmitter<Collaborator>();
     @Output() readonly removeCollaboratorEvent: EventEmitter<number> = new EventEmitter<number>();
 
     emitRemoveCollaboratorEvent(): void {
         this.removeCollaboratorEvent.emit(this.collaborator.collaboratorId);
+    }
+
+    emitAddCollaboratorEvent(): void {
+        this.addCollaboratorEvent.emit(this.collaborator);
     }
 }

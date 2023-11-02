@@ -1,0 +1,23 @@
+@import "../sidebar";
+
+.search-container {
+    margin-top: 3em;
+    margin-bottom: 3em;
+    min-width: 60em;
+    min-height: 50em;
+    padding: 2em;
+}
+
+.search-input {
+    width: 100%;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 2em;
+}
+
+.search-submit-button {
+    margin-top: 0.5em;
+}

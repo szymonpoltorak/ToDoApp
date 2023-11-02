@@ -19,6 +19,11 @@ const routes: Routes = [
             .then(module => module.CollaboratorsModule)
     },
     {
+        path: RouterPaths.SEARCH_PATH,
+        loadChildren: () => import("./search/search.module")
+            .then(module => module.SearchModule)
+    },
+    {
         path: RouterPaths.PROFILE_PATH,
         loadChildren: () => import("./profile/profile.module")
             .then(module => module.ProfileModule)
