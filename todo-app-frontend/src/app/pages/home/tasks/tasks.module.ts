@@ -8,6 +8,8 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatExpansionModule } from "@angular/material/expansion";
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { MatButtonModule } from "@angular/material/button";
         MatDividerModule,
         MatIconModule,
         MatToolbarModule,
-        MatButtonModule
+        MatButtonModule,
+        MatCardModule,
+        MatExpansionModule
     ]
 })
 export class TasksModule {

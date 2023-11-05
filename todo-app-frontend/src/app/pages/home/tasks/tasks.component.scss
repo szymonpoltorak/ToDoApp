@@ -1,1 +1,36 @@
 @import "../sidebar";
+
+.tasks-container {
+    margin-top: 3em;
+    min-width: 60em;
+    min-height: 55em;
+    padding: 2em;
+}
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-divider {
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+}
+
+mat-expansion-panel {
+    margin-bottom: 0.2em;
+}
+
+.completed-header {
+    text-decoration: line-through;
+}
+
+.headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}

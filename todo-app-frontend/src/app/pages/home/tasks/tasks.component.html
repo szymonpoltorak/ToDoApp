@@ -39,4 +39,61 @@
 
         <span>ToDo</span>
     </mat-toolbar>
+
+    <div class="center-container">
+        <mat-card class="tasks-container">
+            <div class="group-header">
+                <mat-card-title>{{ group.groupName }}</mat-card-title>
+
+                <button mat-mini-fab color="primary">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+
+            <mat-divider class="container-divider"></mat-divider>
+
+            <mat-accordion class="headers-align">
+                <mat-expansion-panel *ngFor="let task of notCompletedTasks$ | async">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{ task.title }}
+                        </mat-panel-title>
+
+                        <mat-panel-description>
+                            {{ task.dueDate }}
+                            <mat-icon>task</mat-icon>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <mat-panel-description>
+                        {{ task.description }}
+                    </mat-panel-description>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <mat-divider class="container-divider"></mat-divider>
+
+            <h3>Completed</h3>
+
+            <mat-accordion class="headers-align">
+                <mat-expansion-panel *ngFor="let task of notCompletedTasks$ | async">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="completed-header">
+                            {{ task.title }}
+                        </mat-panel-title>
+
+                        <mat-panel-description>
+                            <span class="completed-header">{{ task.dueDate }}</span>
+
+                            <mat-icon>task</mat-icon>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <mat-panel-description>
+                        {{ task.description }}
+                    </mat-panel-description>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-card>
+    </div>
 </mat-drawer-container>
