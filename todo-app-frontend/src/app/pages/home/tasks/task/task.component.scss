@@ -1,0 +1,12 @@
+.mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+mat-expansion-panel {
+    margin-bottom: 0.2em;
+}
+
+.completed-header {
+    text-decoration: line-through;
+}

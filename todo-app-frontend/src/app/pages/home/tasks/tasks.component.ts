@@ -15,6 +15,7 @@ import { Task } from "@core/data/home/Task";
 export class TasksComponent implements SideMenuActions, OnInit {
     private destroyLogout$: Subject<void> = new Subject<void>();
     protected notCompletedTasks$ !: Observable<Task[]>;
+    protected completedTasks$ !: Observable<Task[]>;
     protected group !: Group;
 
     constructor(private groupService: GroupService,
@@ -41,10 +42,11 @@ export class TasksComponent implements SideMenuActions, OnInit {
 
         this.group = this.groupService.group;
 
-        const tasks: Task[] = [];
+        const notCompleted: Task[] = [];
+        const completed: Task[] = [];
 
         for (let i = 0; i < 5; i++) {
-            tasks.push(
+            notCompleted.push(
                 {
                     taskId: i,
                     title: `Task ${i}`,
@@ -54,8 +56,19 @@ export class TasksComponent implements SideMenuActions, OnInit {
                     dueDate: "11-11-2023"
                 }
             );
+            completed.push(
+                {
+                    taskId: i + 5,
+                    title: `Task ${i + 5}`,
+                    description: `Long task description that you really need to see!`,
+                    isCompleted: true,
+                    priority: 0,
+                    dueDate: "11-11-2023"
+                }
+            );
         }
-        this.notCompletedTasks$ = of(tasks);
+        this.notCompletedTasks$ = of(notCompleted);
+        this.completedTasks$ = of(completed);
 
         console.log(this.group);
     }

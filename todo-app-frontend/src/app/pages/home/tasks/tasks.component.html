@@ -53,22 +53,9 @@
             <mat-divider class="container-divider"></mat-divider>
 
             <mat-accordion class="headers-align">
-                <mat-expansion-panel *ngFor="let task of notCompletedTasks$ | async">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            {{ task.title }}
-                        </mat-panel-title>
-
-                        <mat-panel-description>
-                            {{ task.dueDate }}
-                            <mat-icon>task</mat-icon>
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-
-                    <mat-panel-description>
-                        {{ task.description }}
-                    </mat-panel-description>
-                </mat-expansion-panel>
+                <app-task *ngFor="let notCompletedTask of notCompletedTasks$ | async"
+                          [task]="notCompletedTask">
+                </app-task>
             </mat-accordion>
 
             <mat-divider class="container-divider"></mat-divider>
@@ -76,23 +63,9 @@
             <h3>Completed</h3>
 
             <mat-accordion class="headers-align">
-                <mat-expansion-panel *ngFor="let task of notCompletedTasks$ | async">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title class="completed-header">
-                            {{ task.title }}
-                        </mat-panel-title>
-
-                        <mat-panel-description>
-                            <span class="completed-header">{{ task.dueDate }}</span>
-
-                            <mat-icon>task</mat-icon>
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
-
-                    <mat-panel-description>
-                        {{ task.description }}
-                    </mat-panel-description>
-                </mat-expansion-panel>
+                <app-task *ngFor="let completedTask of completedTasks$ | async"
+                          [task]="completedTask">
+                </app-task>
             </mat-accordion>
         </mat-card>
     </div>

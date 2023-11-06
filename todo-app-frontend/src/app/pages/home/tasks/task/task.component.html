@@ -1,0 +1,23 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            <span *ngIf="task.isCompleted" class="completed-header">{{ task.title }}</span>
+
+            <span *ngIf="!task.isCompleted">{{ task.title }}</span>
+        </mat-panel-title>
+
+        <mat-panel-description>
+            <span *ngIf="task.isCompleted" class="completed-header">{{ task.dueDate }}</span>
+
+            <span *ngIf="!task.isCompleted">{{ task.dueDate }}</span>
+
+            <mat-icon>task</mat-icon>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-panel-description>
+        <span *ngIf="task.isCompleted" class="completed-header">{{ task.description }}</span>
+
+        <span *ngIf="!task.isCompleted">{{ task.description }}</span>
+    </mat-panel-description>
+</mat-expansion-panel>

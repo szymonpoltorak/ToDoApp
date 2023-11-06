@@ -17,20 +17,7 @@
     margin-top: 1.5em;
 }
 
-mat-expansion-panel {
-    margin-bottom: 0.2em;
-}
-
-.completed-header {
-    text-decoration: line-through;
-}
-
-.headers-align .mat-expansion-panel-header-description {
-    justify-content: space-between;
-    align-items: center;
-}
-
-.example-headers-align .mat-expansion-panel-header-description {
+.headers-align {
     justify-content: space-between;
     align-items: center;
 }
