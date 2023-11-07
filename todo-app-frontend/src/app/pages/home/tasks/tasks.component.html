@@ -54,6 +54,8 @@
 
             <mat-accordion class="headers-align">
                 <app-task *ngFor="let notCompletedTask of notCompletedTasks$ | async"
+                          (completeEvent)="completeEvent($event)"
+                          [group]="group"
                           [task]="notCompletedTask">
                 </app-task>
             </mat-accordion>
@@ -64,6 +66,8 @@
 
             <mat-accordion class="headers-align">
                 <app-task *ngFor="let completedTask of completedTasks$ | async"
+                          (completeEvent)="completeEvent($event)"
+                          [group]="group"
                           [task]="completedTask">
                 </app-task>
             </mat-accordion>

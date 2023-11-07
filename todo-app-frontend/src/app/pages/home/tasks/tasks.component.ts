@@ -3,7 +3,7 @@ import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { GroupService } from "@core/services/home/group.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { AuthService } from "@core/services/auth/auth.service";
-import { Observable, of, Subject, takeUntil } from "rxjs";
+import { filter, map, Observable, of, Subject, takeUntil } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { Task } from "@core/data/home/Task";
 
@@ -39,7 +39,6 @@ export class TasksComponent implements SideMenuActions, OnInit {
 
     ngOnInit(): void {
         this.groupService.group = { groupName: "GroupName", groupId: 1 };
-
         this.group = this.groupService.group;
 
         const notCompleted: Task[] = [];
@@ -79,5 +78,27 @@ export class TasksComponent implements SideMenuActions, OnInit {
 
     changeToSearchView(): void {
         this.sideMenuService.changeToSearchView();
+    }
+
+    completeEvent(event: Task): void {
+        if (event.isCompleted) {
+            this.completedTasks$ = this.completedTasks$.pipe(
+                map((tasks: Task[]) => tasks.filter(task => task !== event))
+            );
+            event.isCompleted = !event.isCompleted;
+
+            this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
+                map(tasks => [...tasks, event])
+            );
+        } else {
+            this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
+                map((tasks: Task[]) => tasks.filter(task => task !== event))
+            );
+            event.isCompleted = !event.isCompleted;
+
+            this.completedTasks$ = this.completedTasks$.pipe(
+                map(tasks => [...tasks, event])
+            );
+        }
     }
 }

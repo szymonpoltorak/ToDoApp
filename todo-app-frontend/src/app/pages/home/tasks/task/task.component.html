@@ -11,13 +11,66 @@
 
             <span *ngIf="!task.isCompleted">{{ task.dueDate }}</span>
 
-            <mat-icon>task</mat-icon>
+            <div class="task-complete-box">
+                <mat-checkbox (change)="changeCompletionStatus()" [checked]="task.isCompleted"></mat-checkbox>
+
+                <mat-icon>task</mat-icon>
+            </div>
         </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <mat-panel-description>
-        <span *ngIf="task.isCompleted" class="completed-header">{{ task.description }}</span>
+    <form (ngSubmit)="submitTask()" [formGroup]="taskGroup">
+        <div class="header-inputs">
+            <mat-form-field class="task-input" color="primary">
+                <mat-label>Task name</mat-label>
 
-        <span *ngIf="!task.isCompleted">{{ task.description }}</span>
-    </mat-panel-description>
+                <mat-error *ngIf="taskNameControl.hasError('required')">
+                    Title is <strong>required</strong>
+                </mat-error>
+
+                <input matInput formControlName="taskName">
+            </mat-form-field>
+
+            <mat-form-field class="task-input" color="primary">
+                <mat-label>Due date</mat-label>
+
+                <input formControlName="date"
+                       matInput [matDatepicker]="datePicker"
+                       placeholder="MM/DD/YYYY">
+
+                <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+
+                <mat-datepicker #datePicker color="primary"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="priority-select">
+                <mat-label>Select Priority</mat-label>
+
+                <mat-select [(value)]="task.priority">
+                    <mat-option [value]="priority" *ngFor="let priority of priorities">{{ priority }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field class="task-description">
+            <mat-label>Enter Task Description</mat-label>
+
+            <textarea formControlName="description"
+                      matInput
+                      placeholder="Enter your task description here...">
+            </textarea>
+        </mat-form-field>
+
+        <div class="action-buttons">
+            <button type="submit" mat-raised-button color="primary">
+                <mat-icon>add</mat-icon>
+                Submit
+            </button>
+
+            <button (click)="deleteTask()" type="button" mat-raised-button color="warn">
+                <mat-icon>delete</mat-icon>
+                Delete
+            </button>
+        </div>
+    </form>
 </mat-expansion-panel>
