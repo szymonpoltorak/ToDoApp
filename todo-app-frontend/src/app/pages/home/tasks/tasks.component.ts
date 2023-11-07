@@ -101,4 +101,8 @@ export class TasksComponent implements SideMenuActions, OnInit {
             );
         }
     }
+
+    removeCurrentGroup(): void {
+        console.log("Removing group!");
+    }
 }
