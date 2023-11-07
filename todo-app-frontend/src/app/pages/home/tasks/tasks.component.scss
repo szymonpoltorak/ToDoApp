@@ -22,6 +22,22 @@
     align-items: center;
 }
 
+.group-header-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.edit-name-input {
+    width: 40em;
+}
+
+.edit-group-name-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .remove-group-button {
     position: fixed;
     bottom: 4em;

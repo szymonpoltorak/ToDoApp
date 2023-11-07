@@ -3,9 +3,10 @@ import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { GroupService } from "@core/services/home/group.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { AuthService } from "@core/services/auth/auth.service";
-import { filter, map, Observable, of, Subject, takeUntil } from "rxjs";
+import { map, Observable, of, Subject, takeUntil } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { Task } from "@core/data/home/Task";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 
 @Component({
     selector: 'app-tasks',
@@ -16,10 +17,15 @@ export class TasksComponent implements SideMenuActions, OnInit {
     private destroyLogout$: Subject<void> = new Subject<void>();
     protected notCompletedTasks$ !: Observable<Task[]>;
     protected completedTasks$ !: Observable<Task[]>;
+    protected isEditingGroupName: boolean = false;
     protected group !: Group;
+    protected readonly editGroupControl: FormControl = new FormControl("", [
+        Validators.required
+    ]);
 
     constructor(private groupService: GroupService,
                 private authService: AuthService,
+                private formBuilder: FormBuilder,
                 private sideMenuService: SideMenuService) {
     }
 
@@ -104,5 +110,18 @@ export class TasksComponent implements SideMenuActions, OnInit {
 
     removeCurrentGroup(): void {
         console.log("Removing group!");
+    }
+
+    editGroupName(): void {
+        this.isEditingGroupName = !this.isEditingGroupName;
+    }
+
+    submitNewGroupName(): void {
+        if (this.editGroupControl.invalid) {
+            return;
+        }
+        this.group.groupName = this.editGroupControl.value;
+        this.groupService.group = this.group;
+        this.isEditingGroupName = !this.isEditingGroupName;
     }
 }

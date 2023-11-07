@@ -42,12 +42,30 @@
 
     <div class="center-container">
         <mat-card class="tasks-container">
-            <div class="group-header">
-                <mat-card-title>{{ group.groupName }}</mat-card-title>
+            <div class="group-header-container">
+                <div class="group-header">
+                    <mat-card-title>{{ group.groupName }}</mat-card-title>
 
-                <button mat-mini-fab color="primary">
-                    <mat-icon>edit</mat-icon>
-                </button>
+                    <button (click)="editGroupName()" mat-mini-fab color="primary">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+
+                <form *ngIf="isEditingGroupName" class="edit-group-name-container" (ngSubmit)="submitNewGroupName()">
+                    <mat-form-field class="edit-name-input">
+                        <mat-label>Your new group name</mat-label>
+
+                        <mat-error *ngIf="editGroupControl.hasError('required')">
+                            NewName is <strong>required</strong>
+                        </mat-error>
+
+                        <input [formControl]="editGroupControl" matInput>
+                    </mat-form-field>
+
+                    <button type="submit" mat-mini-fab color="primary">
+                        <mat-icon>check</mat-icon>
+                    </button>
+                </form>
             </div>
 
             <mat-divider class="container-divider"></mat-divider>

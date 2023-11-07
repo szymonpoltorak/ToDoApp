@@ -14,7 +14,7 @@ import { TaskComponent } from './task/task.component';
 import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSelectModule } from "@angular/material/select";
 
@@ -39,7 +39,8 @@ import { MatSelectModule } from "@angular/material/select";
         MatNativeDateModule,
         ReactiveFormsModule,
         MatCheckboxModule,
-        MatSelectModule
+        MatSelectModule,
+        FormsModule
     ]
 })
 export class TasksModule {
