@@ -73,6 +73,7 @@
             <mat-accordion class="headers-align">
                 <app-task *ngFor="let notCompletedTask of notCompletedTasks$ | async"
                           (completeEvent)="completeEvent($event)"
+                          (updateTask)="editNotCompletedTask($event)"
                           [group]="group"
                           [task]="notCompletedTask">
                 </app-task>
@@ -90,6 +91,24 @@
                 </app-task>
             </mat-accordion>
         </mat-card>
+    </div>
+
+    <div class="center-container">
+        <form (ngSubmit)="addNewTask()" class="new-task-form-container">
+            <mat-form-field class="new-task-input">
+                <mat-label>Enter new task</mat-label>
+
+                <input [formControl]="newTaskControl" matInput placeholder="Your task name">
+
+                <mat-error *ngIf="newTaskControl.hasError('required')">
+                    Task title is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <button type="submit" mat-mini-fab color="primary">
+                <mat-icon>add</mat-icon>
+            </button>
+        </form>
     </div>
 
     <button (click)="removeCurrentGroup()" class="remove-group-button" color="warn" mat-fab>

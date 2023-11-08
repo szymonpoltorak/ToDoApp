@@ -1,21 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Task } from "@core/data/home/Task";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { TaskRequest } from "@core/data/home/TaskRequest";
 import { Group } from "@core/data/home/Group";
+import { TaskUpdate } from "@core/data/home/TaskUpdate";
 
-const MY_DATE_FORMATS = {
-    parse: {
-        dateInput: 'MM-DD-YYYY',
-    },
-    display: {
-        dateInput: 'MM-DD-YYYY',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
-    },
-};
 
 @Component({
     selector: 'app-task',
@@ -26,6 +15,7 @@ export class TaskComponent implements OnInit {
     @Input() task !: Task;
     @Input() group !: Group;
     @Output() readonly completeEvent: EventEmitter<Task> = new EventEmitter<Task>();
+    @Output() readonly updateTask: EventEmitter<TaskUpdate> = new EventEmitter<TaskUpdate>();
     protected descriptionControl !: FormControl;
     protected taskGroup !: FormGroup;
     protected taskNameControl !: FormControl;
@@ -50,14 +40,14 @@ export class TaskComponent implements OnInit {
     }
 
     submitTask(): void {
-        const taskRequest: TaskRequest = {
+        const taskUpdate: TaskUpdate = {
+            taskId: this.task.taskId,
             title: this.taskNameControl.value,
             description: this.descriptionControl.value,
             dueDate: this.dateControl.value!.toLocaleDateString().replaceAll("/", "-"),
-            groupName: this.group.groupName,
             priority: this.task.priority
         }
-        console.log(taskRequest);
+        this.updateTask.emit(taskUpdate);
     }
 
     changeCompletionStatus(): void {

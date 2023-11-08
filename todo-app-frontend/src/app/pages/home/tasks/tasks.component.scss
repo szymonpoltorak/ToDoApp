@@ -3,7 +3,7 @@
 .tasks-container {
     margin-top: 2em;
     min-width: 70em;
-    min-height: 55em;
+    min-height: 52em;
     padding: 2em;
 }
 
@@ -43,4 +43,21 @@
     bottom: 4em;
     right: 4em;
     z-index: 999;
+}
+
+.new-task-input {
+    width: 40em;
+}
+
+.new-task-form-container {
+    background-color: #424242;
+    border-radius: 0.5em;
+    position: fixed;
+    bottom: 1em;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em;
+    min-width: 50em;
+    border: #565756 1px solid;
 }

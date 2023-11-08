@@ -3,10 +3,12 @@ import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { GroupService } from "@core/services/home/group.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { AuthService } from "@core/services/auth/auth.service";
-import { map, Observable, of, Subject, takeUntil } from "rxjs";
+import { combineLatest, map, mergeMap, Observable, of, Subject, takeUntil } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { Task } from "@core/data/home/Task";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
+import { TaskRequest } from "@core/data/home/TaskRequest";
+import { TaskUpdate } from "@core/data/home/TaskUpdate";
 
 @Component({
     selector: 'app-tasks',
@@ -20,6 +22,9 @@ export class TasksComponent implements SideMenuActions, OnInit {
     protected isEditingGroupName: boolean = false;
     protected group !: Group;
     protected readonly editGroupControl: FormControl = new FormControl("", [
+        Validators.required
+    ]);
+    protected readonly newTaskControl: FormControl<string | null> = new FormControl("", [
         Validators.required
     ]);
 
@@ -123,5 +128,50 @@ export class TasksComponent implements SideMenuActions, OnInit {
         this.group.groupName = this.editGroupControl.value;
         this.groupService.group = this.group;
         this.isEditingGroupName = !this.isEditingGroupName;
+    }
+
+    addNewTask(): void {
+        const newTask: TaskRequest = {
+            title: this.newTaskControl.value!,
+            description: "",
+            priority: 0,
+            dueDate: "",
+            groupName: this.group.groupName
+        };
+        console.log(newTask);
+
+        // TODO REMOVE IT
+        const task: Task = {
+            title: newTask.title,
+            description: newTask.description,
+            priority: newTask.priority,
+            dueDate: newTask.dueDate,
+            taskId: 10,
+            isCompleted: false
+        };
+
+        this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
+            map(tasks => [...tasks, task])
+        );
+    }
+
+    editNotCompletedTask(event: TaskUpdate): void {
+        const task: Task = {
+            taskId: 5,
+            title: `Task ${99}`,
+            description: `Long task description that you really need to see!`,
+            isCompleted: false,
+            priority: 0,
+            dueDate: "22-22-2025"
+        };
+        console.log("Entering!");
+
+        this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
+            mergeMap(tasks => {
+                return of(task).pipe(
+                    map(task => tasks.concat([task]))
+                );
+            })
+        );
     }
 }
