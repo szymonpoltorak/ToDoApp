@@ -2,19 +2,15 @@ version: "3.1"
 
 services:
     todo-postgres:
-        env_file:
-            - .env
         container_name: todo-postgres
         image: postgres:alpine
         environment:
-            - POSTGRES_USER=${_POSTGRES_USER}
-            - POSTGRES_PASSWORD=${_POSTGRES_PASSWORD}
-            - POSTGRES_DB=${_POSTGRES_DB}
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=none
+            - POSTGRES_DB=todoapp
         ports:
-            - "83:5432"
+            - "5000:5432"
     todo-app-backend:
-        env_file:
-            - .env
         container_name: todo-app-backend
         image: todo-app-backend
         depends_on:
@@ -25,4 +21,4 @@ services:
             context: .
             dockerfile: Dockerfile
         ports:
-            - "82:8080"
+            - "8080:8080"
