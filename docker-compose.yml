@@ -1,0 +1,40 @@
+version: "3.1"
+
+services:
+    note-postgres:
+        container_name: note-postgres
+        image: postgres:alpine
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=none
+            - POSTGRES_DB=noteapp
+        ports:
+            - "5100:5432"
+    note-backend:
+        container_name: note-backend
+        image: note-backend
+        depends_on:
+            - note-postgres
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=none
+            - POSTGRES_DB=noteapp
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://note-postgres:5432/noteapp
+            - FRONTEND_URL=note-frontend
+            - GOOGLE_CLIENT_ID=none
+            - GOOGLE_CLIENT_SECRET=none
+        build:
+            context: note-app-backend
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+    note-frontend:
+        container_name: note-frontend
+        image: note-frontend
+        depends_on:
+            - note-backend
+        build:
+            context: note-app-frontend
+            dockerfile: Dockerfile
+        ports:
+            - "4200:80"

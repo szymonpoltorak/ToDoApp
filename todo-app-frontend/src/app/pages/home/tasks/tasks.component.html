@@ -39,4 +39,79 @@
 
         <span>ToDo</span>
     </mat-toolbar>
+
+    <div class="center-container">
+        <mat-card class="tasks-container">
+            <div class="group-header-container">
+                <div class="group-header">
+                    <mat-card-title>{{ group.groupName }}</mat-card-title>
+
+                    <button (click)="editGroupName()" mat-mini-fab color="primary">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+
+                <form *ngIf="isEditingGroupName" class="edit-group-name-container" (ngSubmit)="submitNewGroupName()">
+                    <mat-form-field class="edit-name-input">
+                        <mat-label>Your new group name</mat-label>
+
+                        <mat-error *ngIf="editGroupControl.hasError('required')">
+                            NewName is <strong>required</strong>
+                        </mat-error>
+
+                        <input [formControl]="editGroupControl" matInput>
+                    </mat-form-field>
+
+                    <button type="submit" mat-mini-fab color="primary">
+                        <mat-icon>check</mat-icon>
+                    </button>
+                </form>
+            </div>
+
+            <mat-divider class="container-divider"></mat-divider>
+
+            <mat-accordion class="headers-align">
+                <app-task *ngFor="let notCompletedTask of notCompletedTasks$ | async"
+                          (completeEvent)="completeEvent($event)"
+                          (updateTask)="editNotCompletedTask($event)"
+                          [group]="group"
+                          [task]="notCompletedTask">
+                </app-task>
+            </mat-accordion>
+
+            <mat-divider class="container-divider"></mat-divider>
+
+            <h3>Completed</h3>
+
+            <mat-accordion class="headers-align">
+                <app-task *ngFor="let completedTask of completedTasks$ | async"
+                          (completeEvent)="completeEvent($event)"
+                          [group]="group"
+                          [task]="completedTask">
+                </app-task>
+            </mat-accordion>
+        </mat-card>
+    </div>
+
+    <div class="center-container">
+        <form (ngSubmit)="addNewTask()" class="new-task-form-container">
+            <mat-form-field class="new-task-input">
+                <mat-label>Enter new task</mat-label>
+
+                <input [formControl]="newTaskControl" matInput placeholder="Your task name">
+
+                <mat-error *ngIf="newTaskControl.hasError('required')">
+                    Task title is <strong>required</strong>
+                </mat-error>
+            </mat-form-field>
+
+            <button type="submit" mat-mini-fab color="primary">
+                <mat-icon>add</mat-icon>
+            </button>
+        </form>
+    </div>
+
+    <button (click)="removeCurrentGroup()" class="remove-group-button" color="warn" mat-fab>
+        <mat-icon>delete</mat-icon>
+    </button>
 </mat-drawer-container>

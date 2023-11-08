@@ -1,1 +1,63 @@
 @import "../sidebar";
+
+.tasks-container {
+    margin-top: 2em;
+    min-width: 70em;
+    min-height: 52em;
+    padding: 2em;
+}
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-divider {
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+}
+
+.headers-align {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.group-header-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.edit-name-input {
+    width: 40em;
+}
+
+.edit-group-name-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.remove-group-button {
+    position: fixed;
+    bottom: 4em;
+    right: 4em;
+    z-index: 999;
+}
+
+.new-task-input {
+    width: 40em;
+}
+
+.new-task-form-container {
+    background-color: #424242;
+    border-radius: 0.5em;
+    position: fixed;
+    bottom: 1em;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5em;
+    min-width: 50em;
+    border: #565756 1px solid;
+}

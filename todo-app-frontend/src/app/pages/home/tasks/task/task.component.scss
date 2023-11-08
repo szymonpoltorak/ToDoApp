@@ -1,0 +1,43 @@
+.mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+mat-expansion-panel {
+    margin-bottom: 0.2em;
+}
+
+.completed-header {
+    text-decoration: line-through;
+}
+
+.header-inputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-input {
+    width: 20em;
+}
+
+.task-complete-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.priority-select {
+    width: 10em;
+}
+
+.task-description {
+    width: 100%;
+    height: 20em;
+}
