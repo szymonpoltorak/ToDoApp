@@ -1,6 +1,6 @@
 FROM node:18.15-alpine as node
 
-WORKDIR /app
+WORKDIR /todo-app-frontend
 
 COPY package*.json ./
 
@@ -14,6 +14,6 @@ FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=node /app/dist/social-app-frontend /usr/share/nginx/html
+COPY --from=node /todo-app-frontend/dist/todo-app-frontend /usr/share/nginx/html
 
 EXPOSE 80

@@ -4,12 +4,12 @@ server:
 spring:
     datasource:
         url: ${SPRING_DATASOURCE_URL}
-        username: ${_POSTGRES_USER}
-        password: ${_POSTGRES_PASSWORD}
+        username: ${POSTGRES_USER}
+        password: ${POSTGRES_PASSWORD}
 
     jpa:
         hibernate:
-            ddl-auto: create-drop
+            ddl-auto: update
         show-sql: true
         properties:
             hibernate:

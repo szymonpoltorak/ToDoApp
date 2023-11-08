@@ -11,6 +11,10 @@ public final class CollaboratorMappings {
 
     public static final String ASSIGN_COLLABORATOR_TO_TASK = "assignToTask";
 
+    public static final String FIND_COLLABORATORS_BY_PATTERN = "find";
+
+    public static final String REMOVE_USER_FROM_COLLABORATORS = "deleteCollaborator";
+
     private CollaboratorMappings() {
     }
 }

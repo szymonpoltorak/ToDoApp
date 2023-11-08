@@ -1,40 +1,36 @@
 version: "3.1"
 
 services:
-    note-postgres:
-        container_name: note-postgres
+    todo-postgres:
+        container_name: todo-postgres
         image: postgres:alpine
         environment:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=none
-            - POSTGRES_DB=noteapp
+            - POSTGRES_DB=todoapp
         ports:
-            - "5100:5432"
-    note-backend:
-        container_name: note-backend
-        image: note-backend
+            - "5000:5432"
+    todo-app-backend:
+        container_name: todo-app-backend
+        image: todo-app-backend
         depends_on:
-            - note-postgres
+            - todo-postgres
         environment:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=none
-            - POSTGRES_DB=noteapp
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://note-postgres:5432/noteapp
-            - FRONTEND_URL=note-frontend
-            - GOOGLE_CLIENT_ID=none
-            - GOOGLE_CLIENT_SECRET=none
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://todo-postgres:5432/todoapp
         build:
-            context: note-app-backend
+            context: todo-app-backend
             dockerfile: Dockerfile
         ports:
             - "8080:8080"
-    note-frontend:
-        container_name: note-frontend
-        image: note-frontend
+    todo-app-frontend:
+        container_name: todo-app-frontend
+        image: todo-app-frontend
         depends_on:
-            - note-backend
+            - todo-app-backend
         build:
-            context: note-app-frontend
+            context: todo-app-frontend
             dockerfile: Dockerfile
         ports:
             - "4200:80"

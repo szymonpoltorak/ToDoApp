@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.api.collaborator.data.CollaboratorRequest;
 import razepl.dev.todoapp.api.collaborator.data.CollaboratorResponse;
+import razepl.dev.todoapp.api.collaborator.data.CollaboratorSuggestion;
 import razepl.dev.todoapp.api.collaborator.interfaces.CollaboratorMapper;
 import razepl.dev.todoapp.api.collaborator.interfaces.CollaboratorService;
 import razepl.dev.todoapp.entities.collaborator.Collaborator;
@@ -22,6 +23,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CollaboratorServiceImpl implements CollaboratorService {
+    private static final String FOUND_COLLABORATORS = "Found '{}' collaborators";
+    private static final String FOUND_COLLABORATOR = "Found collaborator : {}";
     private final CollaboratorRepository collaboratorRepository;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
@@ -32,7 +35,7 @@ public class CollaboratorServiceImpl implements CollaboratorService {
         List<Collaborator> collaborators = collaboratorRepository.findCollaboratorsByUser(user);
 
         log.info("Finding collaborators for User : {}", user.getUsername());
-        log.info("Found '{}' collaborators", collaborators.size());
+        log.info(FOUND_COLLABORATORS, collaborators.size());
 
         return collaborators
                 .stream()
@@ -91,7 +94,7 @@ public class CollaboratorServiceImpl implements CollaboratorService {
 
         Collaborator collaborator = collaboratorRepository.findByUsername(collaboratorRequest.collaboratorUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Collaborator does not exist!"));
-        log.info("Found collaborator : {}", collaborator);
+        log.info(FOUND_COLLABORATOR, collaborator);
         log.info("Number of collaborators before : {}", task.getCollaborator().size());
 
         task.getCollaborator().add(collaborator);
@@ -99,6 +102,33 @@ public class CollaboratorServiceImpl implements CollaboratorService {
         task = taskRepository.save(task);
 
         log.info("Number of collaborators after : {}", task.getCollaborator().size());
+
+        return collaboratorMapper.toCollaboratorResponse(collaborator);
+    }
+
+    @Override
+    public final List<CollaboratorSuggestion> findCollaboratorsByPattern(String searchPattern) {
+        log.info("Searching for collaborators by pattern : {}", searchPattern);
+
+        List<User> users = userRepository.findUsersByFullNameContaining(searchPattern);
+
+        log.info("Found '{}' users", users.size());
+
+        return users
+                .stream()
+                .map(collaboratorMapper::toCollaboratorSuggestion)
+                .toList();
+    }
+
+    @Override
+    public final CollaboratorResponse removeUserFromCollaborators(long collaboratorId) {
+        log.info("Removing collaborator of id : {}", collaboratorId);
+
+        Collaborator collaborator = collaboratorRepository.findById(collaboratorId)
+                .orElseThrow(() -> new UsernameNotFoundException("Collaborator does not exist!"));
+        log.info(FOUND_COLLABORATOR, collaborator);
+
+        collaboratorRepository.deleteById(collaboratorId);
 
         return collaboratorMapper.toCollaboratorResponse(collaborator);
     }
