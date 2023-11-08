@@ -8,6 +8,7 @@ import { UtilService } from "@core/services/utils/util.service";
 import { RouterPaths } from "@enums/RouterPaths";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
+import { group } from "@angular/animations";
 
 @Component({
     selector: 'app-groups',
@@ -47,26 +48,21 @@ export class GroupsComponent implements SideMenuActions, OnInit, OnDestroy {
     }
 
     changePage(event: PageEvent): void {
+        this.groups$ = this.groupService.getListOfGroups(event.pageIndex);
     }
 
     ngOnInit(): void {
-        const groups: Group[] = [];
-
-        for (let i = 0; i < 16; i++) {
-            groups.push({
-                groupId: i,
-                groupName: `Group ${i}`
-            });
-        }
-        this.groups$ = of(groups);
+        this.groups$ = this.groupService.getListOfGroups(0);
     }
 
     addNewGroup(): void {
-        this.groupService.group = {
-            groupName: "New Group",
-            groupId: -1
-        };
-        this.utilService.navigate(RouterPaths.TASKS_DIRECT);
+        this.groupService.createNewGroup().subscribe((newGroup: Group): void => {
+            this.groupService.group = newGroup;
+
+            console.log(newGroup);
+
+            this.utilService.navigate(RouterPaths.TASKS_DIRECT);
+        });
     }
 
     ngOnDestroy(): void {

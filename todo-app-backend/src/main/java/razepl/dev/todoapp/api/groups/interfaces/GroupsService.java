@@ -6,7 +6,7 @@ import razepl.dev.todoapp.entities.user.User;
 import java.util.List;
 
 public interface GroupsService {
-    List<GroupResponse> getListOfGroups(User user);
+    List<GroupResponse> getListOfGroups(int numOfPage, User user);
     GroupResponse addNewGroup(String groupName, User user);
 
     GroupResponse deleteGroup(long groupId, User user);

@@ -21,13 +21,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GroupsServiceImpl implements GroupsService {
     private static final int PAGE_SIZE = 10;
-    private static final int PAGE_NUMBER = 0;
     private final GroupRepository groupRepository;
     private final GroupMapper groupMapper;
 
     @Override
-    public final List<GroupResponse> getListOfGroups(User user) {
-        Pageable pageable = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
+    public final List<GroupResponse> getListOfGroups(int numOfPage, User user) {
+        Pageable pageable = PageRequest.of(numOfPage, PAGE_SIZE);
         Page<Group> groups = groupRepository.findGroupsByUserOrderByGroupName(user, pageable);
 
         log.info("Finding groups for user : {}", user.getUsername());

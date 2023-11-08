@@ -31,8 +31,9 @@ public class GroupsControllerImpl implements GroupsController {
 
     @Override
     @GetMapping(value = GET_LIST_OF_GROUPS_MAPPING)
-    public final List<GroupResponse> getListOfGroups(@AuthenticationPrincipal User user) {
-        return groupsService.getListOfGroups(user);
+    public final List<GroupResponse> getListOfGroups(@RequestParam int numOfPage,
+                                                     @AuthenticationPrincipal User user) {
+        return groupsService.getListOfGroups(numOfPage, user);
     }
 
     @Override
