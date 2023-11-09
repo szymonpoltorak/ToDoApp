@@ -16,6 +16,7 @@ export class TaskComponent implements OnInit {
     @Input() group !: Group;
     @Output() readonly completeEvent: EventEmitter<Task> = new EventEmitter<Task>();
     @Output() readonly updateTask: EventEmitter<TaskUpdate> = new EventEmitter<TaskUpdate>();
+    @Output() readonly deleteTaskEvent: EventEmitter<Task> = new EventEmitter<Task>();
     protected descriptionControl !: FormControl;
     protected taskGroup !: FormGroup;
     protected taskNameControl !: FormControl;
@@ -55,6 +56,6 @@ export class TaskComponent implements OnInit {
     }
 
     deleteTask(): void {
-        console.log("Delete task !");
+        this.deleteTaskEvent.emit(this.task);
     }
 }

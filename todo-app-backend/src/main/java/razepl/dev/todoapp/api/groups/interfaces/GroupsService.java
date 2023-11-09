@@ -12,5 +12,5 @@ public interface GroupsService {
 
     GroupResponse deleteGroup(long groupId, User user);
 
-    GroupResponse editGroupsName(GroupResponse newGroupData, User user);
+    GroupResponse editGroupsName(String groupName, String newGroupName, User user);
 }

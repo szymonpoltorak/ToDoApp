@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import razepl.dev.todoapp.entities.groups.Group;
 import razepl.dev.todoapp.entities.task.Task;
 import razepl.dev.todoapp.entities.user.User;
 
@@ -18,4 +19,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     """)
     Page<Task> findTasksByUserAndIsCompleted(@Param("user") User user, @Param("isCompleted") boolean isCompleted,
                                              @Param("groupId") long groupId, Pageable pageable);
+
+    void deleteAllByGroup(Group group);
 }

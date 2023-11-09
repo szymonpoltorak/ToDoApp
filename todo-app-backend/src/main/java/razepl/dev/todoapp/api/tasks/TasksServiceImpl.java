@@ -77,7 +77,7 @@ public class TasksServiceImpl implements TasksService {
 
         log.info("Deleting task : {}", taskToDelete);
 
-        taskRepository.delete(taskToDelete);
+        taskRepository.deleteById(taskToDelete.getTaskId());
 
         return taskMapper.toTaskResponse(taskToDelete);
     }

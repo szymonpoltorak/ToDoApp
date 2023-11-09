@@ -37,10 +37,19 @@ export class GroupService {
         });
     }
 
-    editGroupsName(groupName: string): Observable<Group> {
+    editGroupsName(oldGroupName: string, newGroupName: string): Observable<Group> {
         return this.httpClient.patch<Group>(`${environment.httpBackend}/api/groups/editGroupName`, {}, {
             params: {
-                groupName: groupName
+                oldGroupName: oldGroupName,
+                newGroupName: newGroupName
+            }
+        });
+    }
+
+    removeGroup(group: Group): Observable<Group>{
+        return this.httpClient.delete<Group>(`${environment.httpBackend}/api/groups/deleteGroup`, {
+            params: {
+                groupId: group.groupId
             }
         });
     }

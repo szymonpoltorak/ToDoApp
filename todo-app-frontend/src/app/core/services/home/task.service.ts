@@ -39,4 +39,12 @@ export class TaskService {
     editNotCompletedTask(taskUpdate: TaskUpdate): Observable<Task> {
         return this.httpClient.patch<Task>(`${environment.httpBackend}/api/tasks/updateTask`, taskUpdate);
     }
+
+    deleteTask(taskId: number): Observable<Task> {
+        return this.httpClient.delete<Task>(`${environment.httpBackend}/api/tasks/deleteTask`, {
+            params: {
+                taskId: taskId
+            }
+        });
+    }
 }

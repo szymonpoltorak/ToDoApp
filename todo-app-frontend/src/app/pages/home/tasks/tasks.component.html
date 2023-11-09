@@ -73,6 +73,7 @@
             <mat-accordion class="headers-align">
                 <app-task *ngFor="let notCompletedTask of notCompletedTasks"
                           (completeEvent)="completeEvent($event)"
+                          (deleteTaskEvent)="deleteTaskFromNotCompleted($event)"
                           (updateTask)="editNotCompletedTask($event)"
                           [group]="group"
                           [task]="notCompletedTask">
@@ -86,6 +87,7 @@
             <mat-accordion class="headers-align">
                 <app-task *ngFor="let completedTask of completedTasks"
                           (completeEvent)="unCompleteEvent($event)"
+                          (deleteTaskEvent)="deleteTaskFromCompleted($event)"
                           [group]="group"
                           [task]="completedTask">
                 </app-task>

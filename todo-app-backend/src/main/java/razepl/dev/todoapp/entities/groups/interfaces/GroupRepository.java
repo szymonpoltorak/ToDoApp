@@ -17,6 +17,8 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     Optional<Group> findByGroupIdAndUser(long groupId, User user);
 
+    Optional<Group> findGroupByGroupName(String groupName);
+
     @Query("SELECT g FROM Group g WHERE g.groupName = :groupName")
     Optional<Group> findByGroupName(@Param("groupName") String groupName);
 }

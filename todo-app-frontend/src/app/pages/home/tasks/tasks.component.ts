@@ -10,6 +10,8 @@ import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { TaskRequest } from "@core/data/home/TaskRequest";
 import { TaskUpdate } from "@core/data/home/TaskUpdate";
 import { TaskService } from "@core/services/home/task.service";
+import { UtilService } from "@core/services/utils/util.service";
+import { RouterPaths } from "@enums/RouterPaths";
 
 @Component({
     selector: 'app-tasks',
@@ -33,6 +35,7 @@ export class TasksComponent implements SideMenuActions, OnInit {
     constructor(private groupService: GroupService,
                 private authService: AuthService,
                 private formBuilder: FormBuilder,
+                private utilService: UtilService,
                 private taskService: TaskService,
                 private sideMenuService: SideMenuService) {
     }
@@ -57,15 +60,11 @@ export class TasksComponent implements SideMenuActions, OnInit {
         this.getTaskList(false)
             .pipe(take(1))
             .subscribe(data => {
-                console.log(data);
-
                 this.notCompletedTasks = data;
             });
         this.getTaskList(true)
             .pipe(take(1))
             .subscribe(data => {
-                console.log(data);
-
                 this.completedTasks = data;
             });
     }
@@ -111,7 +110,14 @@ export class TasksComponent implements SideMenuActions, OnInit {
     }
 
     removeCurrentGroup(): void {
-        console.log("Removing group!");
+        this.groupService
+            .removeGroup(this.group)
+            .pipe(take(1))
+            .subscribe(data => {
+                console.log(data);
+
+                this.utilService.navigate(RouterPaths.GROUPS_DIRECT);
+            });
     }
 
     editGroupName(): void {
@@ -122,7 +128,7 @@ export class TasksComponent implements SideMenuActions, OnInit {
         if (this.editGroupControl.invalid) {
             return;
         }
-        this.groupService.editGroupsName(this.editGroupControl.value!)
+        this.groupService.editGroupsName(this.group.groupName, this.editGroupControl.value!)
             .pipe(take(1))
             .subscribe(data => {
                 this.group = data;
@@ -152,6 +158,22 @@ export class TasksComponent implements SideMenuActions, OnInit {
                 this.notCompletedTasks = this.notCompletedTasks.filter(task => task.taskId !== data.taskId);
 
                 this.notCompletedTasks.push(data);
+            });
+    }
+
+    deleteTaskFromNotCompleted(event: Task): void {
+        this.taskService.deleteTask(event.taskId)
+            .pipe(take(1))
+            .subscribe(() => {
+                this.notCompletedTasks = this.notCompletedTasks.filter(task => task !== event);
+            });
+    }
+
+    deleteTaskFromCompleted(event: Task): void {
+        this.taskService.deleteTask(event.taskId)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.completedTasks = this.completedTasks.filter(task => task !== event);
             });
     }
 }
