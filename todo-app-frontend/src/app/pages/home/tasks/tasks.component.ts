@@ -52,14 +52,13 @@ export class TasksComponent implements SideMenuActions, OnInit {
     }
 
     ngOnInit(): void {
-        this.groupService.group = { groupName: "GroupName", groupId: 1 };
         this.group = this.groupService.group;
 
         this.getTaskList(false)
             .pipe(take(1))
             .subscribe(data => {
                 console.log(data);
-                
+
                 this.notCompletedTasks = data;
             });
         this.getTaskList(true)
@@ -83,9 +82,6 @@ export class TasksComponent implements SideMenuActions, OnInit {
         this.updateTaskList(event)
             .pipe(take(1))
             .subscribe(data => {
-                console.log(`Event : ${JSON.stringify(event)}`)
-                console.log(`Data : ${JSON.stringify(data)}`);
-
                 this.notCompletedTasks = this.notCompletedTasks.filter(task => task !== event);
 
                 this.completedTasks.push(data);
@@ -96,9 +92,6 @@ export class TasksComponent implements SideMenuActions, OnInit {
         this.updateTaskList(event)
             .pipe(take(1))
             .subscribe(data => {
-                console.log(`Event : ${JSON.stringify(event)}`)
-                console.log(`Data : ${JSON.stringify(data)}`);
-
                 this.completedTasks = this.completedTasks.filter(task => task !== event);
 
                 this.notCompletedTasks.push(data);
@@ -129,9 +122,13 @@ export class TasksComponent implements SideMenuActions, OnInit {
         if (this.editGroupControl.invalid) {
             return;
         }
-        this.group.groupName = this.editGroupControl.value;
-        this.groupService.group = this.group;
-        this.isEditingGroupName = !this.isEditingGroupName;
+        this.groupService.editGroupsName(this.editGroupControl.value!)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.group = data;
+                this.groupService.group = data;
+                this.isEditingGroupName = !this.isEditingGroupName;
+            });
     }
 
     addNewTask(): void {
@@ -142,40 +139,19 @@ export class TasksComponent implements SideMenuActions, OnInit {
             dueDate: "",
             groupName: this.group.groupName
         };
-        console.log(newTask);
 
-        // TODO REMOVE IT
-        const task: Task = {
-            title: newTask.title,
-            description: newTask.description,
-            priority: newTask.priority,
-            dueDate: newTask.dueDate,
-            taskId: 10,
-            isCompleted: false
-        };
-
-        // this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-        //     map(tasks => [...tasks, task])
-        // );
+        this.taskService.addNewTask(newTask)
+            .pipe(take(1))
+            .subscribe(data => this.notCompletedTasks.push(data));
     }
 
     editNotCompletedTask(event: TaskUpdate): void {
-        const task: Task = {
-            taskId: 5,
-            title: `Task ${99}`,
-            description: `Long task description that you really need to see!`,
-            isCompleted: false,
-            priority: 0,
-            dueDate: "22-22-2025"
-        };
-        console.log("Entering!");
+        this.taskService.editNotCompletedTask(event)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.notCompletedTasks = this.notCompletedTasks.filter(task => task.taskId !== data.taskId);
 
-        // this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-        //     mergeMap(tasks => {
-        //         return of(task).pipe(
-        //             map(task => tasks.concat([task]))
-        //         );
-        //     })
-        // );
+                this.notCompletedTasks.push(data);
+            });
     }
 }

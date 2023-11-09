@@ -36,4 +36,12 @@ export class GroupService {
             }
         });
     }
+
+    editGroupsName(groupName: string): Observable<Group> {
+        return this.httpClient.patch<Group>(`${environment.httpBackend}/api/groups/editGroupName`, {}, {
+            params: {
+                groupName: groupName
+            }
+        });
+    }
 }

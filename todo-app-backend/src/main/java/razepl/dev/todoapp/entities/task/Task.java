@@ -49,7 +49,7 @@ public class Task implements Updatable<TaskUpdate> {
 
     private String description;
 
-    private LocalDate dueDate;
+    private String dueDate;
 
     private boolean isCompleted;
 
@@ -73,7 +73,7 @@ public class Task implements Updatable<TaskUpdate> {
     public final void update(TaskUpdate updateData) {
         this.title = updateData.title();
         this.description = updateData.description();
-        this.dueDate = LocalDate.parse(updateData.dueDate());
+        this.dueDate = updateData.dueDate();
         this.priority = updateData.priority();
     }
 }

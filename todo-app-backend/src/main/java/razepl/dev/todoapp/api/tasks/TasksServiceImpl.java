@@ -47,7 +47,7 @@ public class TasksServiceImpl implements TasksService {
                 .builder()
                 .title(taskRequest.title())
                 .description(taskRequest.description())
-                .dueDate(LocalDate.parse(taskRequest.dueDate()))
+                .dueDate(taskRequest.dueDate())
                 .priority(taskRequest.priority())
                 .user(taskAuthor)
                 .group(group)
@@ -113,11 +113,7 @@ public class TasksServiceImpl implements TasksService {
 
         log.info("Returning updated task : {}", newTask);
 
-        var xd = taskMapper.toTaskResponse(newTask);
-
-        log.error(xd.toString());
-
-        return xd;
+        return taskMapper.toTaskResponse(newTask);
     }
 
     private Task getTaskFromRepository(long taskId) {
