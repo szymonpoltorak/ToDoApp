@@ -3,12 +3,13 @@ import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { GroupService } from "@core/services/home/group.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { AuthService } from "@core/services/auth/auth.service";
-import { combineLatest, map, mergeMap, Observable, of, Subject, takeUntil } from "rxjs";
+import { Observable, Subject, take, takeUntil } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { Task } from "@core/data/home/Task";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { TaskRequest } from "@core/data/home/TaskRequest";
 import { TaskUpdate } from "@core/data/home/TaskUpdate";
+import { TaskService } from "@core/services/home/task.service";
 
 @Component({
     selector: 'app-tasks',
@@ -17,8 +18,9 @@ import { TaskUpdate } from "@core/data/home/TaskUpdate";
 })
 export class TasksComponent implements SideMenuActions, OnInit {
     private destroyLogout$: Subject<void> = new Subject<void>();
-    protected notCompletedTasks$ !: Observable<Task[]>;
-    protected completedTasks$ !: Observable<Task[]>;
+    private numOfPage: number = 0;
+    protected notCompletedTasks!: Task[];
+    protected completedTasks !: Task[];
     protected isEditingGroupName: boolean = false;
     protected group !: Group;
     protected readonly editGroupControl: FormControl = new FormControl("", [
@@ -31,6 +33,7 @@ export class TasksComponent implements SideMenuActions, OnInit {
     constructor(private groupService: GroupService,
                 private authService: AuthService,
                 private formBuilder: FormBuilder,
+                private taskService: TaskService,
                 private sideMenuService: SideMenuService) {
     }
 
@@ -52,35 +55,20 @@ export class TasksComponent implements SideMenuActions, OnInit {
         this.groupService.group = { groupName: "GroupName", groupId: 1 };
         this.group = this.groupService.group;
 
-        const notCompleted: Task[] = [];
-        const completed: Task[] = [];
+        this.getTaskList(false)
+            .pipe(take(1))
+            .subscribe(data => {
+                console.log(data);
+                
+                this.notCompletedTasks = data;
+            });
+        this.getTaskList(true)
+            .pipe(take(1))
+            .subscribe(data => {
+                console.log(data);
 
-        for (let i = 0; i < 5; i++) {
-            notCompleted.push(
-                {
-                    taskId: i,
-                    title: `Task ${i}`,
-                    description: `Long task description that you really need to see!`,
-                    isCompleted: false,
-                    priority: 0,
-                    dueDate: "11-11-2023"
-                }
-            );
-            completed.push(
-                {
-                    taskId: i + 5,
-                    title: `Task ${i + 5}`,
-                    description: `Long task description that you really need to see!`,
-                    isCompleted: true,
-                    priority: 0,
-                    dueDate: "11-11-2023"
-                }
-            );
-        }
-        this.notCompletedTasks$ = of(notCompleted);
-        this.completedTasks$ = of(completed);
-
-        console.log(this.group);
+                this.completedTasks = data;
+            });
     }
 
     changeToCollaboratorsView(): void {
@@ -92,25 +80,41 @@ export class TasksComponent implements SideMenuActions, OnInit {
     }
 
     completeEvent(event: Task): void {
-        if (event.isCompleted) {
-            this.completedTasks$ = this.completedTasks$.pipe(
-                map((tasks: Task[]) => tasks.filter(task => task !== event))
-            );
-            event.isCompleted = !event.isCompleted;
+        this.updateTaskList(event)
+            .pipe(take(1))
+            .subscribe(data => {
+                console.log(`Event : ${JSON.stringify(event)}`)
+                console.log(`Data : ${JSON.stringify(data)}`);
 
-            this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-                map(tasks => [...tasks, event])
-            );
-        } else {
-            this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-                map((tasks: Task[]) => tasks.filter(task => task !== event))
-            );
-            event.isCompleted = !event.isCompleted;
+                this.notCompletedTasks = this.notCompletedTasks.filter(task => task !== event);
 
-            this.completedTasks$ = this.completedTasks$.pipe(
-                map(tasks => [...tasks, event])
-            );
-        }
+                this.completedTasks.push(data);
+            });
+    }
+
+    unCompleteEvent(event: Task): void {
+        this.updateTaskList(event)
+            .pipe(take(1))
+            .subscribe(data => {
+                console.log(`Event : ${JSON.stringify(event)}`)
+                console.log(`Data : ${JSON.stringify(data)}`);
+
+                this.completedTasks = this.completedTasks.filter(task => task !== event);
+
+                this.notCompletedTasks.push(data);
+            });
+    }
+
+    private updateTaskList(oldTask: Task): Observable<Task> {
+        return this.taskService.updateCompleteStatus(oldTask.taskId);
+    }
+
+    private getTaskList(isCompleted: boolean): Observable<Task[]> {
+        return this.taskService.getListOfTasks({
+            pageNumber: this.numOfPage,
+            isCompleted: isCompleted,
+            groupId: this.group.groupId
+        });
     }
 
     removeCurrentGroup(): void {
@@ -150,9 +154,9 @@ export class TasksComponent implements SideMenuActions, OnInit {
             isCompleted: false
         };
 
-        this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-            map(tasks => [...tasks, task])
-        );
+        // this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
+        //     map(tasks => [...tasks, task])
+        // );
     }
 
     editNotCompletedTask(event: TaskUpdate): void {
@@ -166,12 +170,12 @@ export class TasksComponent implements SideMenuActions, OnInit {
         };
         console.log("Entering!");
 
-        this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-            mergeMap(tasks => {
-                return of(task).pipe(
-                    map(task => tasks.concat([task]))
-                );
-            })
-        );
+        // this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
+        //     mergeMap(tasks => {
+        //         return of(task).pipe(
+        //             map(task => tasks.concat([task]))
+        //         );
+        //     })
+        // );
     }
 }

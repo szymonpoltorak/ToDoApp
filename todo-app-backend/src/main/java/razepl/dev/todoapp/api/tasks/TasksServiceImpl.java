@@ -58,11 +58,12 @@ public class TasksServiceImpl implements TasksService {
     }
 
     @Override
-    public final List<TaskResponse> getTasksFromPage(int pageNumber, User taskAuthor) {
+    public final List<TaskResponse> getTasksFromPage(int pageNumber, boolean isCompleted, long groupId, User taskAuthor) {
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
-        Page<Task> tasks = taskRepository.findTasksByUserOrderByDueDateDesc(taskAuthor, pageable);
+        Page<Task> tasks = taskRepository.findTasksByUserAndIsCompleted(taskAuthor, isCompleted, groupId, pageable);
 
-        log.info("Found '{}' tasks for user '{}' on page '{}'", tasks.getTotalElements(), taskAuthor.getUsername(), pageNumber);
+        log.info("Found '{}' tasks for user '{}' on page '{}'", tasks.getTotalElements(),
+                taskAuthor.getUsername(), pageNumber);
 
         return tasks
                 .stream()
@@ -106,9 +107,17 @@ public class TasksServiceImpl implements TasksService {
 
         taskToUpdate.setCompleted(!taskToUpdate.isCompleted());
 
-        taskRepository.save(taskToUpdate);
+        log.info("Is task completed now ? : {}", taskToUpdate.isCompleted());
 
-        return taskMapper.toTaskResponse(taskToUpdate);
+        Task newTask = taskRepository.save(taskToUpdate);
+
+        log.info("Returning updated task : {}", newTask);
+
+        var xd = taskMapper.toTaskResponse(newTask);
+
+        log.error(xd.toString());
+
+        return xd;
     }
 
     private Task getTaskFromRepository(long taskId) {

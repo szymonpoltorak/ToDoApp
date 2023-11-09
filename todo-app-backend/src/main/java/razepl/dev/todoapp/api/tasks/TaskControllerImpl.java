@@ -41,9 +41,9 @@ public class TaskControllerImpl implements TaskController {
 
     @Override
     @GetMapping(value = GET_TASKS_MAPPING)
-    public final List<TaskResponse> getTasksFromPage(@RequestParam int pageNumber,
-                                                     @AuthenticationPrincipal User user) {
-        return tasksService.getTasksFromPage(pageNumber, user);
+    public final List<TaskResponse> getTasksFromPage(@RequestParam int pageNumber, @RequestParam boolean isCompleted,
+                                                     @RequestParam long groupId, @AuthenticationPrincipal User user) {
+        return tasksService.getTasksFromPage(pageNumber, isCompleted, groupId, user);
     }
 
     @Override

@@ -22,7 +22,6 @@ import razepl.dev.todoapp.exceptions.auth.InvalidTokenException;
 import razepl.dev.todoapp.exceptions.auth.TokensUserNotFoundException;
 import razepl.dev.todoapp.exceptions.auth.UserAlreadyExistsException;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;

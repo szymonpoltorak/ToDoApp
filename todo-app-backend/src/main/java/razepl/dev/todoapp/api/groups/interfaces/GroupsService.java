@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface GroupsService {
     List<GroupResponse> getListOfGroups(int numOfPage, User user);
+
     GroupResponse addNewGroup(String groupName, User user);
 
     GroupResponse deleteGroup(long groupId, User user);
