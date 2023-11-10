@@ -1,3 +1,5 @@
+import { Collaborator } from "@core/data/home/Collaborator";
+
 export interface Task {
     taskId: number;
 
@@ -10,4 +12,6 @@ export interface Task {
     priority: number;
 
     isCompleted: boolean;
+
+    collaborators: Collaborator[];
 }

@@ -31,4 +31,12 @@ export class CollaboratorService {
             }
         });
     }
+
+    addCollaborator(username: string): Observable<Collaborator> {
+        return this.httpClient.post<Collaborator>(`${environment.httpBackend}/api/collaborator/addCollaborator`, {}, {
+            params: {
+                collaboratorUsername: username
+            }
+        });
+    }
 }

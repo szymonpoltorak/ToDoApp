@@ -37,8 +37,6 @@ export class LoginComponent implements OnInit {
         }
         const request: LoginRequest = this.buildLoginRequest();
 
-        console.log(request);
-
         this.authService.loginUser(request)
             .pipe(takeUntil(this.loginDestroy$))
             .subscribe((data: AuthResponse): void => {

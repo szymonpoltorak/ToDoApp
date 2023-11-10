@@ -17,6 +17,7 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSelectModule } from "@angular/material/select";
+import { MatListModule } from "@angular/material/list";
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { MatSelectModule } from "@angular/material/select";
         ReactiveFormsModule,
         MatCheckboxModule,
         MatSelectModule,
-        FormsModule
+        FormsModule,
+        MatListModule
     ]
 })
 export class TasksModule {

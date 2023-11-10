@@ -69,11 +69,11 @@
             </div>
 
             <mat-list>
-                <app-collaborator *ngFor="let collaborator of visibleCollaborators$ | async"
-                                  (addCollaboratorEvent)="addNewCollaborator($event)"
-                                  [isAlreadyCollaborator]="false"
-                                  [collaborator]="collaborator">
-                </app-collaborator>
+                <app-collaborator-suggestion *ngFor="let collaborator of visibleCollaborators$ | async"
+                                             (addCollaboratorEvent)="addNewCollaborator($event)"
+                                             [isAlreadyCollaborator]="false"
+                                             [collaborator]="collaborator">
+                </app-collaborator-suggestion>
             </mat-list>
         </mat-card>
     </div>

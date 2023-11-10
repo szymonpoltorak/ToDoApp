@@ -5,10 +5,10 @@ import {
     distinctUntilChanged,
     map,
     Observable,
-    of,
     startWith,
     Subject,
     switchMap,
+    take,
     takeUntil
 } from "rxjs";
 import { AuthService } from "@core/services/auth/auth.service";
@@ -25,10 +25,9 @@ import { CollaboratorService } from "@core/services/home/collaborator.service";
 })
 export class SearchComponent implements SideMenuActions, OnInit {
     private destroyLogout$: Subject<void> = new Subject<void>();
-    private options !: string[];
     suggestionControl: FormControl = new FormControl<any>("");
     suggestions$ !: Observable<string[]>;
-    visibleCollaborators$ !: Observable<Collaborator[]>;
+    visibleCollaborators$ !: Observable<CollaboratorSuggestion[]>;
 
     constructor(private authService: AuthService,
                 private collaboratorService: CollaboratorService,
@@ -81,30 +80,17 @@ export class SearchComponent implements SideMenuActions, OnInit {
         );
     }
 
-    private filterValues(value: string): string[] {
-        const filterValue: string = value.toLowerCase();
-
-        return this.options.filter((option: string) => option.toLowerCase().includes(filterValue));
-    }
-
     findCollaboratorByName(): void {
-        let i: number = 0;
-
-        const collaborators: Collaborator[] = this.filterValues(this.suggestionControl.value).map(
-            (name: string): Collaborator => {
-                return {
-                    fullName: name,
-                    username: `${name.replace(" ", "").toLowerCase()}@mail.com`,
-                    collaboratorId: i++
-                };
-            }
-        );
-        console.log(collaborators);
-
-        this.visibleCollaborators$ = of(collaborators);
+        this.visibleCollaborators$ = this.collaboratorService.getSuggestions(this.suggestionControl.value);
     }
 
-    addNewCollaborator(event: Collaborator): void {
-        console.log(event);
+    addNewCollaborator(event: CollaboratorSuggestion): void {
+        this.collaboratorService.addCollaborator(event.username)
+            .pipe(take(1))
+            .subscribe((data: Collaborator) => {
+                this.visibleCollaborators$ = this.visibleCollaborators$.pipe(
+                    map(c => c.filter(item => item.username !== data.username))
+                );
+            });
     }
 }

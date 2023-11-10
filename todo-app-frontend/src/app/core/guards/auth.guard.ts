@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserService } from "@core/services/utils/user.service";
+import { RouterPaths } from "@enums/RouterPaths";
 
 @Injectable({
     providedIn: 'root'
@@ -12,9 +13,9 @@ export class AuthGuard {
     }
 
     canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        // if (!this.userService.isUserAuthenticated) {
-        //     return this.router.createUrlTree([RouterPaths.LOGIN_DIRECT]);
-        // }
+        if (!this.userService.isUserAuthenticated) {
+            return this.router.createUrlTree([RouterPaths.LOGIN_DIRECT]);
+        }
         return true;
     }
 }

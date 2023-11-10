@@ -78,7 +78,7 @@ export class TasksComponent implements SideMenuActions, OnInit {
     }
 
     completeEvent(event: Task): void {
-        this.updateTaskList(event)
+        this.taskService.updateCompleteStatus(event.taskId)
             .pipe(take(1))
             .subscribe(data => {
                 this.notCompletedTasks = this.notCompletedTasks.filter(task => task !== event);
@@ -88,17 +88,13 @@ export class TasksComponent implements SideMenuActions, OnInit {
     }
 
     unCompleteEvent(event: Task): void {
-        this.updateTaskList(event)
+        this.taskService.updateCompleteStatus(event.taskId)
             .pipe(take(1))
             .subscribe(data => {
                 this.completedTasks = this.completedTasks.filter(task => task !== event);
 
                 this.notCompletedTasks.push(data);
             });
-    }
-
-    private updateTaskList(oldTask: Task): Observable<Task> {
-        return this.taskService.updateCompleteStatus(oldTask.taskId);
     }
 
     private getTaskList(isCompleted: boolean): Observable<Task[]> {
@@ -114,8 +110,6 @@ export class TasksComponent implements SideMenuActions, OnInit {
             .removeGroup(this.group)
             .pipe(take(1))
             .subscribe(data => {
-                console.log(data);
-
                 this.utilService.navigate(RouterPaths.GROUPS_DIRECT);
             });
     }

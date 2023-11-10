@@ -11,6 +11,8 @@ import razepl.dev.todoapp.api.tasks.data.TaskResponse;
 import razepl.dev.todoapp.api.tasks.data.TaskUpdate;
 import razepl.dev.todoapp.api.tasks.interfaces.TaskMapper;
 import razepl.dev.todoapp.api.tasks.interfaces.TasksService;
+import razepl.dev.todoapp.entities.collaborator.Collaborator;
+import razepl.dev.todoapp.entities.collaborator.interfaces.CollaboratorRepository;
 import razepl.dev.todoapp.entities.groups.Group;
 import razepl.dev.todoapp.entities.groups.interfaces.GroupRepository;
 import razepl.dev.todoapp.entities.task.Task;
@@ -18,7 +20,7 @@ import razepl.dev.todoapp.entities.task.interfaces.TaskRepository;
 import razepl.dev.todoapp.entities.user.User;
 import razepl.dev.todoapp.exceptions.tasks.TaskDoesNotExistException;
 
-import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -31,6 +33,7 @@ public class TasksServiceImpl implements TasksService {
     private static final String TASK_ERROR_MESSAGE = "Task of id '%s' does not exist!";
     private final TaskRepository taskRepository;
     private final GroupRepository groupRepository;
+    private final CollaboratorRepository collaboratorRepository;
     private final TaskMapper taskMapper;
 
     @Override
@@ -49,6 +52,7 @@ public class TasksServiceImpl implements TasksService {
                 .description(taskRequest.description())
                 .dueDate(taskRequest.dueDate())
                 .priority(taskRequest.priority())
+                .collaborator(Collections.emptyList())
                 .user(taskAuthor)
                 .group(group)
                 .build();
@@ -87,10 +91,13 @@ public class TasksServiceImpl implements TasksService {
         log.info("Updating with data : {}", updateData);
 
         Task taskToUpdate = getTaskFromRepository(updateData.taskId());
+        List<Collaborator> collaborators = collaboratorRepository
+                .findCollaboratorsByUsernameIn(updateData.collaboratorUsernames());
 
         log.info("Task to be updated : {}", taskToUpdate);
 
         taskToUpdate.update(updateData);
+        taskToUpdate.setCollaborator(collaborators);
 
         taskRepository.save(taskToUpdate);
 

@@ -59,8 +59,6 @@ export class GroupsComponent implements SideMenuActions, OnInit, OnDestroy {
         this.groupService.createNewGroup().subscribe((newGroup: Group): void => {
             this.groupService.group = newGroup;
 
-            console.log(newGroup);
-
             this.utilService.navigate(RouterPaths.TASKS_DIRECT);
         });
     }

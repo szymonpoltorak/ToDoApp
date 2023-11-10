@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Task } from "@core/data/home/Task";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { TaskRequest } from "@core/data/home/TaskRequest";
 import { Group } from "@core/data/home/Group";
 import { TaskUpdate } from "@core/data/home/TaskUpdate";
+import { Collaborator } from "@core/data/home/Collaborator";
+import { CollaboratorService } from "@core/services/home/collaborator.service";
+import { Observable } from "rxjs";
 
 
 @Component({
@@ -22,8 +24,11 @@ export class TaskComponent implements OnInit {
     protected taskNameControl !: FormControl;
     protected dateControl !: FormControl<Date | null>;
     protected priorities : number[] = Array.from({ length: 11 }, (_, i) => i);
+    collaboratorsControl !: FormControl<string[] | null>;
+    collaborators$ !: Observable<Collaborator[]>;
 
-    constructor(private formBuilder: FormBuilder) {
+    constructor(private formBuilder: FormBuilder,
+                private collaboratorService: CollaboratorService) {
     }
 
     ngOnInit(): void {
@@ -32,6 +37,8 @@ export class TaskComponent implements OnInit {
             Validators.required
         ]);
         this.dateControl = new FormControl<Date>(new Date(this.task.dueDate), []);
+        this.collaboratorsControl = new FormControl<string[]>(this.task.collaborators.map(c => c.username));
+        this.collaborators$ = this.collaboratorService.getListOfCollaborators();
 
         this.taskGroup = this.formBuilder.group({
             taskName: this.taskNameControl,
@@ -46,7 +53,8 @@ export class TaskComponent implements OnInit {
             title: this.taskNameControl.value,
             description: this.descriptionControl.value,
             dueDate: this.dateControl.value!.toLocaleDateString().replaceAll("/", "-"),
-            priority: this.task.priority
+            priority: this.task.priority,
+            collaboratorUsernames: this.collaboratorsControl.value!
         }
         this.updateTask.emit(taskUpdate);
     }
