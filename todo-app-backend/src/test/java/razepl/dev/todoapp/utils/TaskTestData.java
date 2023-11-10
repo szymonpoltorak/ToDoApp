@@ -6,5 +6,6 @@ import razepl.dev.todoapp.api.tasks.data.TaskUpdate;
 import razepl.dev.todoapp.entities.task.Task;
 import razepl.dev.todoapp.entities.user.User;
 
-public record TaskTestData(Task newTask, User noteAuthor, TaskRequest taskRequest, TaskResponse taskResponse, TaskUpdate taskUpdate) {
+public record TaskTestData(Task newTask, User noteAuthor, TaskRequest taskRequest, TaskResponse taskResponse,
+                           TaskUpdate taskUpdate) {
 }

@@ -14,11 +14,13 @@ import { MatInputModule } from "@angular/material/input";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { ReactiveFormsModule } from "@angular/forms";
 import { CollaboratorsModule } from "../collaborators/collaborators.module";
+import { CollaboratorSuggestionComponent } from './collaborator-suggestion/collaborator-suggestion.component';
 
 
 @NgModule({
     declarations: [
-        SearchComponent
+        SearchComponent,
+        CollaboratorSuggestionComponent
     ],
     imports: [
         CommonModule,

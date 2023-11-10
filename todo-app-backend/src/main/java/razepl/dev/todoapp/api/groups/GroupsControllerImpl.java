@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,8 +30,9 @@ public class GroupsControllerImpl implements GroupsController {
 
     @Override
     @GetMapping(value = GET_LIST_OF_GROUPS_MAPPING)
-    public final List<GroupResponse> getListOfGroups(@AuthenticationPrincipal User user) {
-        return groupsService.getListOfGroups(user);
+    public final List<GroupResponse> getListOfGroups(@RequestParam int numOfPage,
+                                                     @AuthenticationPrincipal User user) {
+        return groupsService.getListOfGroups(numOfPage, user);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class GroupsControllerImpl implements GroupsController {
 
     @Override
     @PatchMapping(value = EDIT_GROUP_NAME_MAPPING)
-    public final GroupResponse editGroupsName(@RequestBody GroupResponse newGroupData,
+    public final GroupResponse editGroupsName(@RequestParam String oldGroupName, @RequestParam String newGroupName,
                                               @AuthenticationPrincipal User user) {
-        return groupsService.editGroupsName(newGroupData, user);
+        return groupsService.editGroupsName(oldGroupName, newGroupName, user);
     }
 }

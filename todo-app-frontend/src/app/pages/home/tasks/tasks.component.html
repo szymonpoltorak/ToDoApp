@@ -71,8 +71,9 @@
             <mat-divider class="container-divider"></mat-divider>
 
             <mat-accordion class="headers-align">
-                <app-task *ngFor="let notCompletedTask of notCompletedTasks$ | async"
+                <app-task *ngFor="let notCompletedTask of notCompletedTasks"
                           (completeEvent)="completeEvent($event)"
+                          (deleteTaskEvent)="deleteTaskFromNotCompleted($event)"
                           (updateTask)="editNotCompletedTask($event)"
                           [group]="group"
                           [task]="notCompletedTask">
@@ -84,8 +85,9 @@
             <h3>Completed</h3>
 
             <mat-accordion class="headers-align">
-                <app-task *ngFor="let completedTask of completedTasks$ | async"
-                          (completeEvent)="completeEvent($event)"
+                <app-task *ngFor="let completedTask of completedTasks"
+                          (completeEvent)="unCompleteEvent($event)"
+                          (deleteTaskEvent)="deleteTaskFromCompleted($event)"
                           [group]="group"
                           [task]="completedTask">
                 </app-task>

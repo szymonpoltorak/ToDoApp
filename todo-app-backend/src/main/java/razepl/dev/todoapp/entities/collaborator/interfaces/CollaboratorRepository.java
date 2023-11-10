@@ -13,4 +13,6 @@ public interface CollaboratorRepository extends JpaRepository<Collaborator, Long
     List<Collaborator> findCollaboratorsByUser(User user);
 
     Optional<Collaborator> findByUsername(String username);
+
+    List<Collaborator> findCollaboratorsByUsernameIn(List<String> usernames);
 }

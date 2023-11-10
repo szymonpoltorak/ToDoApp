@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CollaboratorServiceImpl implements CollaboratorService {
     private static final String FOUND_COLLABORATORS = "Found '{}' collaborators";
-    private static final String FOUND_COLLABORATOR = "Found collaborator : {}";
+    private static final String FOUND_COLLABORATOR = "Found collaborators : {}";
     private final CollaboratorRepository collaboratorRepository;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
@@ -64,9 +64,9 @@ public class CollaboratorServiceImpl implements CollaboratorService {
         if (collaboratorUsername.equals(user.getUsername())) {
             log.error("Username : {}", collaboratorUsername);
 
-            throw new UsernameNotFoundException("User cannot add himself as collaborator!");
+            throw new UsernameNotFoundException("User cannot add himself as collaborators!");
         }
-        log.info("Adding user : {} as collaborator for user : {}", collaboratorUsername, user.getUsername());
+        log.info("Adding user : {} as collaborators for user : {}", collaboratorUsername, user.getUsername());
 
         User collaboratorUser = userRepository.findByUsername(collaboratorUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("User does not exist!"));
@@ -79,7 +79,7 @@ public class CollaboratorServiceImpl implements CollaboratorService {
                 .build();
         collaborator = collaboratorRepository.save(collaborator);
 
-        log.info("Mapping to respone collaborator: {}", collaborator);
+        log.info("Mapping to respone collaborators: {}", collaborator);
 
         return collaboratorMapper.toCollaboratorResponse(collaborator);
     }
@@ -122,7 +122,7 @@ public class CollaboratorServiceImpl implements CollaboratorService {
 
     @Override
     public final CollaboratorResponse removeUserFromCollaborators(long collaboratorId) {
-        log.info("Removing collaborator of id : {}", collaboratorId);
+        log.info("Removing collaborators of id : {}", collaboratorId);
 
         Collaborator collaborator = collaboratorRepository.findById(collaboratorId)
                 .orElseThrow(() -> new UsernameNotFoundException("Collaborator does not exist!"));

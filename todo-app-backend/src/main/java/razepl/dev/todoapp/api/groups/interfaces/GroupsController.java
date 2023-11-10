@@ -6,11 +6,11 @@ import razepl.dev.todoapp.entities.user.User;
 import java.util.List;
 
 public interface GroupsController {
-    List<GroupResponse> getListOfGroups(User user);
+    List<GroupResponse> getListOfGroups(int numOfPage, User user);
 
     GroupResponse addNewGroup(String groupName, User user);
 
     GroupResponse deleteGroup(long groupId, User user);
 
-    GroupResponse editGroupsName(GroupResponse newGroupData, User user);
+    GroupResponse editGroupsName(String groupName, String newGroupName, User user);
 }

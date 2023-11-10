@@ -3,12 +3,15 @@ import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { GroupService } from "@core/services/home/group.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { AuthService } from "@core/services/auth/auth.service";
-import { combineLatest, map, mergeMap, Observable, of, Subject, takeUntil } from "rxjs";
+import { Observable, Subject, take, takeUntil } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { Task } from "@core/data/home/Task";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { TaskRequest } from "@core/data/home/TaskRequest";
 import { TaskUpdate } from "@core/data/home/TaskUpdate";
+import { TaskService } from "@core/services/home/task.service";
+import { UtilService } from "@core/services/utils/util.service";
+import { RouterPaths } from "@enums/RouterPaths";
 
 @Component({
     selector: 'app-tasks',
@@ -17,8 +20,9 @@ import { TaskUpdate } from "@core/data/home/TaskUpdate";
 })
 export class TasksComponent implements SideMenuActions, OnInit {
     private destroyLogout$: Subject<void> = new Subject<void>();
-    protected notCompletedTasks$ !: Observable<Task[]>;
-    protected completedTasks$ !: Observable<Task[]>;
+    private numOfPage: number = 0;
+    protected notCompletedTasks!: Task[];
+    protected completedTasks !: Task[];
     protected isEditingGroupName: boolean = false;
     protected group !: Group;
     protected readonly editGroupControl: FormControl = new FormControl("", [
@@ -31,6 +35,8 @@ export class TasksComponent implements SideMenuActions, OnInit {
     constructor(private groupService: GroupService,
                 private authService: AuthService,
                 private formBuilder: FormBuilder,
+                private utilService: UtilService,
+                private taskService: TaskService,
                 private sideMenuService: SideMenuService) {
     }
 
@@ -49,38 +55,18 @@ export class TasksComponent implements SideMenuActions, OnInit {
     }
 
     ngOnInit(): void {
-        this.groupService.group = { groupName: "GroupName", groupId: 1 };
         this.group = this.groupService.group;
 
-        const notCompleted: Task[] = [];
-        const completed: Task[] = [];
-
-        for (let i = 0; i < 5; i++) {
-            notCompleted.push(
-                {
-                    taskId: i,
-                    title: `Task ${i}`,
-                    description: `Long task description that you really need to see!`,
-                    isCompleted: false,
-                    priority: 0,
-                    dueDate: "11-11-2023"
-                }
-            );
-            completed.push(
-                {
-                    taskId: i + 5,
-                    title: `Task ${i + 5}`,
-                    description: `Long task description that you really need to see!`,
-                    isCompleted: true,
-                    priority: 0,
-                    dueDate: "11-11-2023"
-                }
-            );
-        }
-        this.notCompletedTasks$ = of(notCompleted);
-        this.completedTasks$ = of(completed);
-
-        console.log(this.group);
+        this.getTaskList(false)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.notCompletedTasks = data;
+            });
+        this.getTaskList(true)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.completedTasks = data;
+            });
     }
 
     changeToCollaboratorsView(): void {
@@ -92,29 +78,40 @@ export class TasksComponent implements SideMenuActions, OnInit {
     }
 
     completeEvent(event: Task): void {
-        if (event.isCompleted) {
-            this.completedTasks$ = this.completedTasks$.pipe(
-                map((tasks: Task[]) => tasks.filter(task => task !== event))
-            );
-            event.isCompleted = !event.isCompleted;
+        this.taskService.updateCompleteStatus(event.taskId)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.notCompletedTasks = this.notCompletedTasks.filter(task => task !== event);
 
-            this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-                map(tasks => [...tasks, event])
-            );
-        } else {
-            this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-                map((tasks: Task[]) => tasks.filter(task => task !== event))
-            );
-            event.isCompleted = !event.isCompleted;
+                this.completedTasks.push(data);
+            });
+    }
 
-            this.completedTasks$ = this.completedTasks$.pipe(
-                map(tasks => [...tasks, event])
-            );
-        }
+    unCompleteEvent(event: Task): void {
+        this.taskService.updateCompleteStatus(event.taskId)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.completedTasks = this.completedTasks.filter(task => task !== event);
+
+                this.notCompletedTasks.push(data);
+            });
+    }
+
+    private getTaskList(isCompleted: boolean): Observable<Task[]> {
+        return this.taskService.getListOfTasks({
+            pageNumber: this.numOfPage,
+            isCompleted: isCompleted,
+            groupId: this.group.groupId
+        });
     }
 
     removeCurrentGroup(): void {
-        console.log("Removing group!");
+        this.groupService
+            .removeGroup(this.group)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.utilService.navigate(RouterPaths.GROUPS_DIRECT);
+            });
     }
 
     editGroupName(): void {
@@ -125,9 +122,13 @@ export class TasksComponent implements SideMenuActions, OnInit {
         if (this.editGroupControl.invalid) {
             return;
         }
-        this.group.groupName = this.editGroupControl.value;
-        this.groupService.group = this.group;
-        this.isEditingGroupName = !this.isEditingGroupName;
+        this.groupService.editGroupsName(this.group.groupName, this.editGroupControl.value!)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.group = data;
+                this.groupService.group = data;
+                this.isEditingGroupName = !this.isEditingGroupName;
+            });
     }
 
     addNewTask(): void {
@@ -138,40 +139,35 @@ export class TasksComponent implements SideMenuActions, OnInit {
             dueDate: "",
             groupName: this.group.groupName
         };
-        console.log(newTask);
 
-        // TODO REMOVE IT
-        const task: Task = {
-            title: newTask.title,
-            description: newTask.description,
-            priority: newTask.priority,
-            dueDate: newTask.dueDate,
-            taskId: 10,
-            isCompleted: false
-        };
-
-        this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-            map(tasks => [...tasks, task])
-        );
+        this.taskService.addNewTask(newTask)
+            .pipe(take(1))
+            .subscribe(data => this.notCompletedTasks.push(data));
     }
 
     editNotCompletedTask(event: TaskUpdate): void {
-        const task: Task = {
-            taskId: 5,
-            title: `Task ${99}`,
-            description: `Long task description that you really need to see!`,
-            isCompleted: false,
-            priority: 0,
-            dueDate: "22-22-2025"
-        };
-        console.log("Entering!");
+        this.taskService.editNotCompletedTask(event)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.notCompletedTasks = this.notCompletedTasks.filter(task => task.taskId !== data.taskId);
 
-        this.notCompletedTasks$ = this.notCompletedTasks$.pipe(
-            mergeMap(tasks => {
-                return of(task).pipe(
-                    map(task => tasks.concat([task]))
-                );
-            })
-        );
+                this.notCompletedTasks.push(data);
+            });
+    }
+
+    deleteTaskFromNotCompleted(event: Task): void {
+        this.taskService.deleteTask(event.taskId)
+            .pipe(take(1))
+            .subscribe(() => {
+                this.notCompletedTasks = this.notCompletedTasks.filter(task => task !== event);
+            });
+    }
+
+    deleteTaskFromCompleted(event: Task): void {
+        this.taskService.deleteTask(event.taskId)
+            .pipe(take(1))
+            .subscribe(data => {
+                this.completedTasks = this.completedTasks.filter(task => task !== event);
+            });
     }
 }

@@ -8,4 +8,6 @@ export interface TaskUpdate {
     dueDate: string;
 
     priority: number;
+
+    collaboratorUsernames: string[];
 }

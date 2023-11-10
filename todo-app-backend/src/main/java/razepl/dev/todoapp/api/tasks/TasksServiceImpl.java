@@ -11,6 +11,8 @@ import razepl.dev.todoapp.api.tasks.data.TaskResponse;
 import razepl.dev.todoapp.api.tasks.data.TaskUpdate;
 import razepl.dev.todoapp.api.tasks.interfaces.TaskMapper;
 import razepl.dev.todoapp.api.tasks.interfaces.TasksService;
+import razepl.dev.todoapp.entities.collaborator.Collaborator;
+import razepl.dev.todoapp.entities.collaborator.interfaces.CollaboratorRepository;
 import razepl.dev.todoapp.entities.groups.Group;
 import razepl.dev.todoapp.entities.groups.interfaces.GroupRepository;
 import razepl.dev.todoapp.entities.task.Task;
@@ -18,7 +20,7 @@ import razepl.dev.todoapp.entities.task.interfaces.TaskRepository;
 import razepl.dev.todoapp.entities.user.User;
 import razepl.dev.todoapp.exceptions.tasks.TaskDoesNotExistException;
 
-import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -31,6 +33,7 @@ public class TasksServiceImpl implements TasksService {
     private static final String TASK_ERROR_MESSAGE = "Task of id '%s' does not exist!";
     private final TaskRepository taskRepository;
     private final GroupRepository groupRepository;
+    private final CollaboratorRepository collaboratorRepository;
     private final TaskMapper taskMapper;
 
     @Override
@@ -47,8 +50,9 @@ public class TasksServiceImpl implements TasksService {
                 .builder()
                 .title(taskRequest.title())
                 .description(taskRequest.description())
-                .dueDate(LocalDate.parse(taskRequest.dueDate()))
+                .dueDate(taskRequest.dueDate())
                 .priority(taskRequest.priority())
+                .collaborator(Collections.emptyList())
                 .user(taskAuthor)
                 .group(group)
                 .build();
@@ -58,11 +62,12 @@ public class TasksServiceImpl implements TasksService {
     }
 
     @Override
-    public final List<TaskResponse> getTasksFromPage(int pageNumber, User taskAuthor) {
+    public final List<TaskResponse> getTasksFromPage(int pageNumber, boolean isCompleted, long groupId, User taskAuthor) {
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
-        Page<Task> tasks = taskRepository.findTasksByUserOrderByDueDateDesc(taskAuthor, pageable);
+        Page<Task> tasks = taskRepository.findTasksByUserAndIsCompleted(taskAuthor, isCompleted, groupId, pageable);
 
-        log.info("Found '{}' tasks for user '{}' on page '{}'", tasks.getTotalElements(), taskAuthor.getUsername(), pageNumber);
+        log.info("Found '{}' tasks for user '{}' on page '{}'", tasks.getTotalElements(),
+                taskAuthor.getUsername(), pageNumber);
 
         return tasks
                 .stream()
@@ -76,7 +81,7 @@ public class TasksServiceImpl implements TasksService {
 
         log.info("Deleting task : {}", taskToDelete);
 
-        taskRepository.delete(taskToDelete);
+        taskRepository.deleteById(taskToDelete.getTaskId());
 
         return taskMapper.toTaskResponse(taskToDelete);
     }
@@ -86,10 +91,13 @@ public class TasksServiceImpl implements TasksService {
         log.info("Updating with data : {}", updateData);
 
         Task taskToUpdate = getTaskFromRepository(updateData.taskId());
+        List<Collaborator> collaborators = collaboratorRepository
+                .findCollaboratorsByUsernameIn(updateData.collaboratorUsernames());
 
         log.info("Task to be updated : {}", taskToUpdate);
 
         taskToUpdate.update(updateData);
+        taskToUpdate.setCollaborator(collaborators);
 
         taskRepository.save(taskToUpdate);
 
@@ -106,9 +114,13 @@ public class TasksServiceImpl implements TasksService {
 
         taskToUpdate.setCompleted(!taskToUpdate.isCompleted());
 
-        taskRepository.save(taskToUpdate);
+        log.info("Is task completed now ? : {}", taskToUpdate.isCompleted());
 
-        return taskMapper.toTaskResponse(taskToUpdate);
+        Task newTask = taskRepository.save(taskToUpdate);
+
+        log.info("Returning updated task : {}", newTask);
+
+        return taskMapper.toTaskResponse(newTask);
     }
 
     private Task getTaskFromRepository(long taskId) {

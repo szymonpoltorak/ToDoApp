@@ -10,7 +10,7 @@ import java.util.List;
 public interface TaskController {
     TaskResponse createNewTask(TaskRequest taskRequest, User user);
 
-    List<TaskResponse> getTasksFromPage(int pageNumber, User user);
+    List<TaskResponse> getTasksFromPage(int pageNumber, boolean isCompleted, long groupId, User user);
 
     TaskResponse deleteTask(long taskId);
 

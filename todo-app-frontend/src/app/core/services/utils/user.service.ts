@@ -16,8 +16,6 @@ export class UserService {
 
         this.isAuthenticated = authToken !== "undefined" && authToken !== "";
 
-        console.log(this.isAuthenticated);
-
         return this.isAuthenticated;
     }
 

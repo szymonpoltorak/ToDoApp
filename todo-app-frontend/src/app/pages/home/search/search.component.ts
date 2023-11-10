@@ -1,24 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
-import { map, Observable, of, startWith, Subject, takeUntil } from "rxjs";
+import {
+    debounceTime,
+    distinctUntilChanged,
+    map,
+    Observable,
+    startWith,
+    Subject,
+    switchMap,
+    take,
+    takeUntil
+} from "rxjs";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { FormControl } from "@angular/forms";
 import { Collaborator } from "@core/data/home/Collaborator";
+import { CollaboratorSuggestion } from "@core/data/home/CollaboratorSuggestion";
+import { CollaboratorService } from "@core/services/home/collaborator.service";
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements SideMenuActions, OnInit {
     private destroyLogout$: Subject<void> = new Subject<void>();
-    private options !: string[];
     suggestionControl: FormControl = new FormControl<any>("");
     suggestions$ !: Observable<string[]>;
-    visibleCollaborators$ !: Observable<Collaborator[]>;
+    visibleCollaborators$ !: Observable<CollaboratorSuggestion[]>;
 
     constructor(private authService: AuthService,
+                private collaboratorService: CollaboratorService,
                 private sideMenuService: SideMenuService) {
     }
 
@@ -45,38 +57,40 @@ export class SearchComponent implements SideMenuActions, OnInit {
     }
 
     ngOnInit(): void {
-        this.options = ["Szymon Kowalski", "Janusz Balcerzak", "Tomasz Kopernik", "Jacek Krakowski", "Szymon Wlodarczyk"];
-
         this.suggestions$ = this.suggestionControl.valueChanges.pipe(
             startWith(""),
-            map((option: string) => this.filterValues(option || ""))
+            debounceTime(300),
+            distinctUntilChanged(),
+            switchMap((option: string) => this.fetchSuggestions(option))
         );
     }
 
-    private filterValues(value: string): string[] {
-        const filterValue: string = value.toLowerCase();
+    private fetchSuggestions(option: string): Observable<string[]> {
+        const options$: Observable<CollaboratorSuggestion[]> = this.collaboratorService.getSuggestions(option);
 
-        return this.options.filter((option: string) => option.toLowerCase().includes(filterValue));
+        return options$.pipe(
+            map(suggestions => {
+                const options: string[] = [];
+
+                for (let suggestion of suggestions) {
+                    options.push(suggestion.fullName);
+                }
+                return options;
+            })
+        );
     }
 
     findCollaboratorByName(): void {
-        let i: number = 0;
-
-        const collaborators: Collaborator[] = this.filterValues(this.suggestionControl.value).map(
-            (name: string): Collaborator => {
-                return {
-                  fullName: name,
-                  username: `${name.replace(" ", "").toLowerCase()}@mail.com`,
-                  collaboratorId: i++
-                };
-            }
-        );
-        console.log(collaborators);
-
-        this.visibleCollaborators$ = of(collaborators);
+        this.visibleCollaborators$ = this.collaboratorService.getSuggestions(this.suggestionControl.value);
     }
 
-    addNewCollaborator(event: Collaborator): void {
-        console.log(event);
+    addNewCollaborator(event: CollaboratorSuggestion): void {
+        this.collaboratorService.addCollaborator(event.username)
+            .pipe(take(1))
+            .subscribe((data: Collaborator) => {
+                this.visibleCollaborators$ = this.visibleCollaborators$.pipe(
+                    map(c => c.filter(item => item.username !== data.username))
+                );
+            });
     }
 }

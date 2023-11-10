@@ -25,16 +25,13 @@ import static razepl.dev.todoapp.api.tasks.constants.Constants.PAGE_SIZE;
 
 @SpringBootTest
 class TasksServiceTest {
+    private final TaskTestData testData = TestDataBuilder.buildNoteTestData();
     @InjectMocks
     private TasksServiceImpl tasksService;
-
     @Mock
     private TaskRepository taskRepository;
-
     @Mock
     private TaskMapper taskMapper;
-
-    private final TaskTestData testData = TestDataBuilder.buildNoteTestData();
 
     @Test
     final void test_createNewTask_shouldCreateTask() {
@@ -56,16 +53,19 @@ class TasksServiceTest {
     final void test_getTasksFromPage_shouldCorrectlyReturnTask() {
         // given
         final int pageNumber = 0;
+        final long groupId = 1L;
+        boolean isCompleted = true;
         Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
         List<TaskResponse> expected = List.of(testData.taskResponse());
 
-        when(taskRepository.findTasksByUserOrderByDueDateDesc(testData.noteAuthor(), pageable))
+        when(taskRepository.findTasksByUserAndIsCompleted(testData.noteAuthor(), isCompleted,
+                groupId, pageable))
                 .thenReturn(new PageImpl<>(List.of(testData.newTask())));
         when(taskMapper.toTaskResponse(testData.newTask()))
                 .thenReturn(testData.taskResponse());
 
         // when
-        List<TaskResponse> actual = tasksService.getTasksFromPage(pageNumber, testData.noteAuthor());
+        List<TaskResponse> actual = tasksService.getTasksFromPage(pageNumber, isCompleted, groupId, testData.noteAuthor());
 
         // then
         assertEquals(expected, actual, "List of notes for the user differed from the expected");

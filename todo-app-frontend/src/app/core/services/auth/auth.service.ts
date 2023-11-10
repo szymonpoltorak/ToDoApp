@@ -41,19 +41,11 @@ export class AuthService {
     }
 
     saveData(data: AuthResponse): void {
-        console.log(data);
-
         if (data.authToken === AuthConstants.NO_TOKEN || data.refreshToken === AuthConstants.NO_TOKEN) {
             return;
         }
         this.utilService.addValueToStorage(StorageKeys.AUTH_TOKEN, data.authToken);
         this.utilService.addValueToStorage(StorageKeys.REFRESH_TOKEN, data.refreshToken);
-    }
-
-    private buildAuthRequest(authToken: string) {
-        console.log(JSON.parse(`{${authToken}}`));
-
-        return JSON.parse(`{${authToken}}`);
     }
 
     private buildRefreshToken(refreshToken: string) {
