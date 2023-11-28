@@ -32,7 +32,7 @@ public class JwtToken {
     private long tokenId;
 
     @NotNull
-    @Column(unique = true)
+    @Column(unique = true, length = 1000)
     private String token;
 
     @NotNull
