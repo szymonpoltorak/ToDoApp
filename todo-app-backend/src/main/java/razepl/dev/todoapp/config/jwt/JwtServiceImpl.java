@@ -168,9 +168,10 @@ public class JwtServiceImpl implements JwtService {
     private PrivateKey deserializePrivateKey(String serializedPublicKey) {
         try {
             byte[] encodedKey = Base64.getDecoder().decode(serializedPublicKey);
+
             return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 }
