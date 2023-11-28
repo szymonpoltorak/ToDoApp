@@ -3,7 +3,6 @@ package razepl.dev.todoapp.config.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +15,7 @@ import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
 
 import java.security.Key;
+import java.security.KeyPair;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -24,9 +24,6 @@ import java.util.function.Function;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    @Value(Properties.ENCODING_KEY_PROPERTY)
-    private String encodingKey;
-
     @Value(Properties.EXPIRATION_PROPERTY)
     private long expirationTime;
 
@@ -103,7 +100,7 @@ public class JwtServiceImpl implements JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(time))
                 .setExpiration(new Date(time + expiration))
-                .signWith(buildSignInKey(), SignatureAlgorithm.HS256)
+                .signWith(buildSignInKey(), SignatureAlgorithm.ES512)
                 .compact();
     }
 
@@ -121,8 +118,8 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Key buildSignInKey() {
-        byte[] decodedKey = Decoders.BASE64.decode(encodingKey);
+        KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.ES512);
 
-        return Keys.hmacShaKeyFor(decodedKey);
+        return keyPair.getPrivate();
     }
 }

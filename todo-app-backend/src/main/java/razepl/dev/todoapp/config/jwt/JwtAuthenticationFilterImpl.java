@@ -33,22 +33,11 @@ public class JwtAuthenticationFilterImpl extends OncePerRequestFilter implements
                                        @NonNull FilterChain filterChain) throws ServletException, IOException {
         Optional<String> token = jwtService.getJwtToken(request);
 
-        if (token.isEmpty()) {
-            filterChain.doFilter(request, response);
+        token.ifPresent(authToken -> {
+            Optional<String> usernameOptional = jwtService.getUsernameFromToken(authToken);
 
-            return;
-        }
-        String authToken = token.get();
-        Optional<String> usernameOptional = jwtService.getUsernameFromToken(authToken);
-
-        if (usernameOptional.isEmpty()) {
-            filterChain.doFilter(request, response);
-
-            return;
-        }
-        String username = usernameOptional.get();
-
-        setTokenForNotAuthenticatedUser(authToken, username, request);
+            usernameOptional.ifPresent(username -> setTokenForNotAuthenticatedUser(authToken, username, request));
+        });
 
         filterChain.doFilter(request, response);
     }
