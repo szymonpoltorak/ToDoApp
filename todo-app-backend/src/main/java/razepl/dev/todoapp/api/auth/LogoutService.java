@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
+import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
 import razepl.dev.todoapp.entities.token.JwtToken;
 import razepl.dev.todoapp.entities.token.interfaces.TokenRepository;
 import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
@@ -25,6 +26,7 @@ import static razepl.dev.todoapp.config.constants.Headers.TOKEN_START_INDEX;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
     private final TokenRepository tokenRepository;
+    private final TokenManagerService tokenManager;
 
     @Override
     public final void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -32,6 +34,8 @@ public class LogoutService implements LogoutHandler {
 
         if (authHeader == null || !authHeader.startsWith(TOKEN_HEADER)) {
             log.warn("Auth header is null or it does not contain Bearer token");
+
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
             return;
         }
@@ -42,10 +46,7 @@ public class LogoutService implements LogoutHandler {
         );
         log.info("Jwt in header : {}\nToken is not null", jwt);
 
-        token.setExpired(true);
-        token.setRevoked(true);
-
-        tokenRepository.save(token);
+        tokenManager.revokeUserTokens(token.getUser());
 
         SecurityContextHolder.clearContext();
     }

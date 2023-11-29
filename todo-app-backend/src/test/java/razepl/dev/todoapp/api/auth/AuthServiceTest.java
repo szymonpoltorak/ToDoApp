@@ -14,6 +14,7 @@ import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
 import razepl.dev.todoapp.api.auth.data.TokenRequest;
+import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
 import razepl.dev.todoapp.entities.user.User;
@@ -90,7 +91,7 @@ class AuthServiceTest {
         // when and then
         assertThrows(UserAlreadyExistsException.class, () -> authService.register(registerUserRequest));
         verify(userRepository, never()).save(any(User.class));
-        verify(tokenManager, never()).buildTokensIntoResponse(any(User.class), anyBoolean());
+        verify(tokenManager, never()).buildTokensIntoResponse(any(User.class), TokenRevokeStatus.NOT_TO_REVOKE);
     }
 
     @Test
@@ -98,7 +99,7 @@ class AuthServiceTest {
         // given
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(authenticationManager.authenticate(any(Authentication.class))).thenReturn(null);
-        when(tokenManager.buildTokensIntoResponse(any(User.class), anyBoolean())).thenReturn(AuthResponse.builder().build());
+        when(tokenManager.buildTokensIntoResponse(any(User.class), TokenRevokeStatus.NOT_TO_REVOKE)).thenReturn(AuthResponse.builder().build());
 
         // when
         AuthResponse authResponse = authService.login(loginUserRequest);
@@ -106,7 +107,7 @@ class AuthServiceTest {
         // then
         assertNotNull(authResponse);
         verify(authenticationManager).authenticate(any(Authentication.class));
-        verify(tokenManager).buildTokensIntoResponse(any(User.class), eq(true));
+        verify(tokenManager).buildTokensIntoResponse(any(User.class), eq(TokenRevokeStatus.TO_REVOKE));
     }
 
     @Test
@@ -118,7 +119,7 @@ class AuthServiceTest {
 
         // then
         assertThrows(UsernameNotFoundException.class, () -> authService.login(loginUserRequest));
-        verify(tokenManager, never()).buildTokensIntoResponse(any(User.class), anyBoolean());
+        verify(tokenManager, never()).buildTokensIntoResponse(any(User.class), TokenRevokeStatus.TO_REVOKE);
     }
 
     @Test

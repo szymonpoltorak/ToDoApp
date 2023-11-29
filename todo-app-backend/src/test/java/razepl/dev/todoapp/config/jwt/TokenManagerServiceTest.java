@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import razepl.dev.todoapp.api.auth.data.AuthResponse;
+import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
 import razepl.dev.todoapp.entities.token.JwtToken;
@@ -42,7 +43,7 @@ class TokenManagerServiceTest {
     @BeforeEach
     final void setUp() {
         MockitoAnnotations.openMocks(this);
-        tokenManagerService = new TokenManagerServiceImpl(mockTokenRepository, mockJwtService, mockUserRepository);
+        tokenManagerService = new TokenManagerServiceImpl(mockTokenRepository, mockJwtService);
     }
 
     @Test
@@ -84,7 +85,7 @@ class TokenManagerServiceTest {
         when(mockJwtService.generateToken(user)).thenReturn(authToken);
         when(mockJwtService.generateRefreshToken(user)).thenReturn(refreshToken);
 
-        AuthResponse authResponse = tokenManagerService.buildTokensIntoResponse(user, true);
+        AuthResponse authResponse = tokenManagerService.buildTokensIntoResponse(user, TokenRevokeStatus.TO_REVOKE);
 
         // then
         assertNotNull(authResponse);

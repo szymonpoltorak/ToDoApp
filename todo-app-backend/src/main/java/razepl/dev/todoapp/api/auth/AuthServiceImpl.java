@@ -14,6 +14,7 @@ import razepl.dev.todoapp.api.auth.data.RegisterRequest;
 import razepl.dev.todoapp.api.auth.data.TokenRequest;
 import razepl.dev.todoapp.api.auth.data.TokenResponse;
 import razepl.dev.todoapp.api.auth.interfaces.AuthService;
+import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
 import razepl.dev.todoapp.entities.user.User;
@@ -50,11 +51,11 @@ public class AuthServiceImpl implements AuthService {
                 .surname(registerRequest.surname())
                 .password(passwordEncoder.encode(password))
                 .build();
-        createUserWithEncodedPassword(user);
+        userRepository.save(user);
 
         log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, user);
 
-        return tokenManager.buildTokensIntoResponse(user, false);
+        return tokenManager.buildTokensIntoResponse(user, TokenRevokeStatus.NOT_TO_REVOKE);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
         );
         log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, user);
 
-        return tokenManager.buildTokensIntoResponse(user, true);
+        return tokenManager.buildTokensIntoResponse(user, TokenRevokeStatus.TO_REVOKE);
     }
 
     @Override
@@ -105,10 +106,6 @@ public class AuthServiceImpl implements AuthService {
                 .builder()
                 .isAuthTokenValid(isAuthTokenValid)
                 .build();
-    }
-
-    private void createUserWithEncodedPassword(@Valid User user) {
-        userRepository.save(user);
     }
 
     private String validateUserRegisterData(RegisterRequest registerRequest) {
