@@ -3,9 +3,9 @@ package razepl.dev.todoapp.config.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,23 +15,42 @@ import razepl.dev.todoapp.config.constants.Properties;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.ECPrivateKey;
+import java.security.spec.ECParameterSpec;
+import java.security.spec.ECPrivateKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 public class JwtServiceImpl implements JwtService {
-    @Value(Properties.ENCODING_KEY_PROPERTY)
-    private String encodingKey;
-
     @Value(Properties.EXPIRATION_PROPERTY)
     private long expirationTime;
 
     @Value(Properties.REFRESH_PROPERTY)
     private long refreshTime;
+
+    private Key privateKey;
 
     @Override
     public final Optional<String> getUsernameFromToken(String jwtToken) {
@@ -101,9 +120,10 @@ public class JwtServiceImpl implements JwtService {
         return Jwts.builder()
                 .setClaims(additionalClaims)
                 .setSubject(userDetails.getUsername())
+                .setHeader(Map.of("type", "JWT"))
                 .setIssuedAt(new Date(time))
                 .setExpiration(new Date(time + expiration))
-                .signWith(buildSignInKey(), SignatureAlgorithm.HS256)
+                .signWith(buildSignInKey(), SignatureAlgorithm.RS512)
                 .compact();
     }
 
@@ -121,8 +141,37 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Key buildSignInKey() {
-        byte[] decodedKey = Decoders.BASE64.decode(encodingKey);
+        if (privateKey == null) {
+            privateKey = buildPrivateKey();
+        }
+        return privateKey;
+    }
 
-        return Keys.hmacShaKeyFor(decodedKey);
+    private Key buildPrivateKey() {
+        String privateKeyString = readPrivateKey();
+
+        return deserializePrivateKey(privateKeyString);
+    }
+
+    private String readPrivateKey() {
+        try {
+            return Files
+                    .readString(Path.of("src/main/resources/private.pem"))
+                    .replace("-----BEGIN PRIVATE KEY-----\n", "")
+                    .replace("-----END PRIVATE KEY-----\n", "")
+                    .replace("\n", "");
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    private PrivateKey deserializePrivateKey(String serializedPublicKey) {
+        try {
+            byte[] encodedKey = Base64.getDecoder().decode(serializedPublicKey);
+
+            return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

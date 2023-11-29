@@ -21,5 +21,7 @@ public interface TokenRepository extends JpaRepository<JwtToken, Long> {
             """)
     List<JwtToken> findAllValidTokensByUserId(@Param("id") Long id);
 
+    Optional<JwtToken> findByUser(User user);
+
     void deleteAllByUser(User user);
 }
