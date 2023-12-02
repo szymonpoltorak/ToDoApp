@@ -6,7 +6,7 @@ mvnw
 mvnw.cmd
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+*.p12
 ### STS ###
 .apt_generated
 .classpath
