@@ -21,18 +21,7 @@ public class TokenManagerServiceImpl implements TokenManagerService {
 
     @Override
     public final void saveUsersToken(String jwtToken, User user) {
-        JwtToken newJwtToken = buildToken(jwtToken, user);
-
-        tokenRepository
-                .findByUser(user)
-                .ifPresentOrElse(
-                        token -> {
-                            tokenRepository.deleteById(token.getTokenId());
-
-                            tokenRepository.save(newJwtToken);
-                        },
-                        () -> tokenRepository.save(newJwtToken)
-                );
+        tokenRepository.save(buildToken(jwtToken, user));
     }
 
     @Override
@@ -57,15 +46,15 @@ public class TokenManagerServiceImpl implements TokenManagerService {
     public final void revokeUserTokens(User user) {
         List<JwtToken> userTokens = tokenRepository.findAllValidTokensByUserId(user.getUserId());
 
-        if (userTokens.size() > 1) {
-            throw new IllegalStateException(String.format("User '%s' has more than one valid token!", user.getUsername()));
+        if (userTokens.isEmpty()) {
+            return;
         }
-        JwtToken jwtToken = userTokens.get(0);
 
-        jwtToken.setRevoked(true);
-        jwtToken.setExpired(true);
-
-        tokenRepository.save(jwtToken);
+        userTokens.forEach(token -> {
+            token.setRevoked(true);
+            token.setExpired(true);
+        });
+        tokenRepository.saveAll(userTokens);
     }
 
     private AuthResponse buildResponse(String authToken, String refreshToken) {

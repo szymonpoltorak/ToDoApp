@@ -29,7 +29,7 @@ import static razepl.dev.todoapp.config.constants.Headers.AUTH_HEADER;
 @RequiredArgsConstructor
 @Configuration
 public class AppConfigurationImpl implements AppConfiguration {
-    private static final int BCRYPT_STRENGTH = 10;
+    private static final int BCRYPT_STRENGTH = 15;
     private final UserRepository userRepository;
 
     @Bean
@@ -68,7 +68,8 @@ public class AppConfigurationImpl implements AppConfiguration {
     @Bean
     @Override
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(BCRYPT_STRENGTH, new SecureRandom(SecureRandom.getSeed(BCRYPT_STRENGTH)));
+        return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y,
+                BCRYPT_STRENGTH, new SecureRandom(SecureRandom.getSeed(BCRYPT_STRENGTH)));
     }
 
     @Bean
