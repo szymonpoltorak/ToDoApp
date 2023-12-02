@@ -1,6 +1,7 @@
 package razepl.dev.todoapp.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import razepl.dev.todoapp.config.constants.Properties;
 import razepl.dev.todoapp.config.interfaces.SecurityConfiguration;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtAuthenticationFilter;
 
@@ -28,6 +30,8 @@ import static razepl.dev.todoapp.config.constants.Matchers.LOGOUT_URL;
 )
 @RequiredArgsConstructor
 public class SecurityConfigurationImpl implements SecurityConfiguration {
+    @Value(Properties.FRONTEND_URL)
+    private String frontendUrl;
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final LogoutHandler logoutHandler;
@@ -46,6 +50,12 @@ public class SecurityConfigurationImpl implements SecurityConfiguration {
                         .authenticated()
                 )
                 .cors(Customizer.withDefaults())
+                .headers(headers -> headers
+                        .xssProtection(Customizer.withDefaults())
+                        .contentSecurityPolicy(policy -> policy
+                                .policyDirectives(buildContentPolicyDirective())
+                        )
+                )
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -59,5 +69,9 @@ public class SecurityConfigurationImpl implements SecurityConfiguration {
                         )
                 );
         return httpSecurity.build();
+    }
+
+    private String buildContentPolicyDirective() {
+        return String.format("form-action 'self' %s; img-src 'self' %s; child-src 'none';", frontendUrl, frontendUrl);
     }
 }

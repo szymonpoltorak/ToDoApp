@@ -5,6 +5,8 @@ public final class Properties {
 
     public static final String REFRESH_PROPERTY = "${spring.security.jwt.refresh-time}";
 
+    public static final String FRONTEND_URL = "${frontend.url}";
+
     private Properties() {
     }
 }

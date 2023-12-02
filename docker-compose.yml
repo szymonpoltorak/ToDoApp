@@ -18,6 +18,7 @@ services:
         environment:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=none
+            - FRONTEND_URL=http://localhost:4200
             - SPRING_DATASOURCE_URL=jdbc:postgresql://todo-postgres:5432/todoapp
         build:
             context: todo-app-backend
