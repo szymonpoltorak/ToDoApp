@@ -32,7 +32,7 @@ class LogoutServiceTest {
     private Authentication authentication;
 
     @InjectMocks
-    private LogoutService logoutService;
+    private LogoutServiceImpl logoutService;
 
     @Test
     final void test_logout_shouldDoNothingIfAuthHeaderIsNull() {

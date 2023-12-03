@@ -1,10 +1,10 @@
 package razepl.dev.todoapp.api.auth;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,8 @@ import razepl.dev.todoapp.api.auth.interfaces.AuthService;
 import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
+import razepl.dev.todoapp.entities.attempts.LoginAttempt;
+import razepl.dev.todoapp.entities.attempts.interfaces.LoginAttemptRepository;
 import razepl.dev.todoapp.entities.user.User;
 import razepl.dev.todoapp.entities.user.interfaces.UserRepository;
 import razepl.dev.todoapp.exceptions.auth.InvalidTokenException;
@@ -24,6 +26,7 @@ import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
 import razepl.dev.todoapp.exceptions.auth.TokensUserNotFoundException;
 import razepl.dev.todoapp.exceptions.auth.UserAlreadyExistsException;
 
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Slf4j
@@ -36,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenManagerService tokenManager;
+    private final LoginAttemptRepository loginAttemptRepository;
     private final JwtService jwtService;
 
     @Override
@@ -44,12 +48,20 @@ public class AuthServiceImpl implements AuthService {
 
         String password = validateUserRegisterData(registerRequest);
 
+        LoginAttempt loginAttempt = LoginAttempt
+                .builder()
+                .attempts(0L)
+                .dateOfLock(LocalTime.MIN)
+                .build();
+        loginAttemptRepository.save(loginAttempt);
+
         User user = User
                 .builder()
                 .name(registerRequest.name())
                 .username(registerRequest.username())
                 .surname(registerRequest.surname())
                 .password(passwordEncoder.encode(password))
+                .loginAttempt(loginAttempt)
                 .build();
         userRepository.save(user);
 
@@ -64,13 +76,18 @@ public class AuthServiceImpl implements AuthService {
 
         String username = loginRequest.username();
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                username, loginRequest.password())
-        );
-
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
         );
+        if (user.isAccountNonLocked()) {
+            log.error("User is locked! User : {}", user);
+
+            throw new UsernameNotFoundException("User is locked!");
+        }
+        LoginAttempt loginAttempt = user.getLoginAttempt();
+
+        executeUserAuthenticationProcess(loginAttempt, loginRequest);
+        
         log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, user);
 
         return tokenManager.buildTokensIntoResponse(user, TokenRevokeStatus.TO_REVOKE);
@@ -106,6 +123,24 @@ public class AuthServiceImpl implements AuthService {
                 .builder()
                 .isAuthTokenValid(isAuthTokenValid)
                 .build();
+    }
+
+    private void executeUserAuthenticationProcess(LoginAttempt loginAttempt, LoginRequest loginRequest) {
+        try {
+            loginAttempt.incrementAttempts();
+
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequest.username(), loginRequest.password())
+            );
+            loginAttempt.resetAttempts();
+
+        } catch (AuthenticationException e) {
+            log.error("User login failed! User : {}", loginRequest.username());
+
+            throw new UsernameNotFoundException("User login failed!", e);
+        } finally {
+            loginAttemptRepository.save(loginAttempt);
+        }
     }
 
     private String validateUserRegisterData(RegisterRequest registerRequest) {

@@ -35,7 +35,7 @@ openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:4096
 openssl rsa -pubout -in private.pem -out public.pem
 ```
 
-* Place them inside ``todo-app-backend/src/resources/*.pem`
+* Place them inside `todo-app-backend/src/resources/*.pem`
 
 ## Technology Stack
 

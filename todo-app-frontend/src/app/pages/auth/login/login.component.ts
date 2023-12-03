@@ -19,7 +19,7 @@ import { FormFieldNames } from "@enums/auth/FormFieldNames";
 })
 export class LoginComponent implements OnInit {
     protected readonly MAX_NUM_OF_TRIES: number = 5;
-    private readonly MINIMUM_DELAY: number = 10000;
+    private readonly MINIMUM_DELAY: number = 3000;
     protected currentDelay: number = 0;
     protected numOfTries: number = 0;
     private multiplyBy: number = 1;

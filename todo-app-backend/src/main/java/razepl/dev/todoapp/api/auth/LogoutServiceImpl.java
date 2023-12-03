@@ -18,13 +18,10 @@ import static razepl.dev.todoapp.config.constants.Headers.TOKEN_HEADER;
 import static razepl.dev.todoapp.config.constants.Headers.TOKEN_START_INDEX;
 
 
-/**
- * Service class for logging user out.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LogoutService implements LogoutHandler {
+public class LogoutServiceImpl implements LogoutHandler {
     private final TokenRepository tokenRepository;
     private final TokenManagerService tokenManager;
 
