@@ -14,12 +14,19 @@
         >
         </app-password-field>
 
+        <mat-error *ngIf="numOfTries === MAX_NUM_OF_TRIES">
+            Number of tries was exceeded. Please try again after <strong>{{ currentDelay }} ms</strong>.
+        </mat-error>
+
         <div class="button-bar">
-            <button class="my-button" color="primary" mat-raised-button routerLink="/auth/register" type="button">
+            <button  class="my-button" color="primary" mat-raised-button routerLink="/auth/register" type="button">
                 Register
             </button>
 
-            <button class="my-button" color="primary" mat-raised-button type="submit">Login</button>
+            <button [disabled]="loginForm.disabled" class="my-button"
+                    color="primary" mat-raised-button type="submit">
+                Login
+            </button>
         </div>
     </form>
 </div>

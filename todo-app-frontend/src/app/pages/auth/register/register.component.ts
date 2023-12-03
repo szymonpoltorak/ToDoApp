@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormValidatorService } from "@core/validators/form-validator.service";
 import { AbstractControl, FormGroup } from "@angular/forms";
 import { RegisterRequest } from "@core/data/auth/register-request";
-import { Subject, takeUntil } from "rxjs";
+import { take } from "rxjs";
 import { AuthResponse } from "@core/data/auth/auth-response";
 import { AuthConstants } from "@enums/auth/AuthConstants";
 import { FormFieldNames } from "@enums/auth/FormFieldNames";
@@ -19,7 +19,6 @@ import { RouterPaths } from "@enums/RouterPaths";
 })
 export class RegisterComponent implements OnInit {
     registerForm !: FormGroup;
-    private destroyRegister$: Subject<void> = new Subject<void>();
 
     constructor(public formValidatorService: FormValidatorService,
                 private authService: AuthService,
@@ -38,7 +37,7 @@ export class RegisterComponent implements OnInit {
         const request: RegisterRequest = this.buildRegisterRequest();
 
         this.authService.registerUser(request)
-            .pipe(takeUntil(this.destroyRegister$))
+            .pipe(take(1))
             .subscribe((data: AuthResponse): void => {
                 if (data.authToken === AuthConstants.NO_TOKEN) {
                     return;
