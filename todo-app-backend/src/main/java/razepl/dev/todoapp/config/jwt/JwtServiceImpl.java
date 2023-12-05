@@ -12,7 +12,7 @@ import razepl.dev.todoapp.config.constants.Headers;
 import razepl.dev.todoapp.config.constants.Matchers;
 import razepl.dev.todoapp.config.constants.Properties;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
-import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
+import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
 
 import java.io.IOException;
 import java.nio.file.Files;

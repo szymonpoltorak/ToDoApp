@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.api.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,9 +12,8 @@ import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
-import razepl.dev.todoapp.api.auth.data.TokenRequest;
-import razepl.dev.todoapp.api.auth.data.TokenResponse;
 import razepl.dev.todoapp.api.auth.interfaces.AuthService;
+import razepl.dev.todoapp.api.auth.interfaces.LoginDeviceHandler;
 import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
@@ -21,10 +21,9 @@ import razepl.dev.todoapp.entities.attempts.LoginAttempt;
 import razepl.dev.todoapp.entities.attempts.interfaces.LoginAttemptRepository;
 import razepl.dev.todoapp.entities.user.User;
 import razepl.dev.todoapp.entities.user.interfaces.UserRepository;
-import razepl.dev.todoapp.exceptions.auth.InvalidTokenException;
-import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
-import razepl.dev.todoapp.exceptions.auth.TokensUserNotFoundException;
-import razepl.dev.todoapp.exceptions.auth.UserAlreadyExistsException;
+import razepl.dev.todoapp.exceptions.auth.throwable.InvalidTokenException;
+import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
+import razepl.dev.todoapp.exceptions.auth.throwable.UserAlreadyExistsException;
 
 import java.time.LocalTime;
 import java.util.Optional;
@@ -40,10 +39,11 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenManagerService tokenManager;
     private final LoginAttemptRepository loginAttemptRepository;
+    private final LoginDeviceHandler loginDeviceFilter;
     private final JwtService jwtService;
 
     @Override
-    public final AuthResponse register(RegisterRequest registerRequest) {
+    public final AuthResponse register(RegisterRequest registerRequest, HttpServletRequest request) {
         log.info("Registering user with data: \n{}", registerRequest);
 
         String password = validateUserRegisterData(registerRequest);
@@ -63,15 +63,17 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(password))
                 .loginAttempt(loginAttempt)
                 .build();
-        userRepository.save(user);
+        User newUser = userRepository.save(user);
 
-        log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, user);
+        loginDeviceFilter.addNewDeviceToUserLoggedInDevices(newUser, request);
 
-        return tokenManager.buildTokensIntoResponse(user, TokenRevokeStatus.NOT_TO_REVOKE);
+        log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, newUser);
+
+        return tokenManager.buildTokensIntoResponse(newUser, TokenRevokeStatus.NOT_TO_REVOKE);
     }
 
     @Override
-    public final AuthResponse login(LoginRequest loginRequest) {
+    public final AuthResponse login(LoginRequest loginRequest, HttpServletRequest request) {
         log.info("Logging user with data: \n{}", loginRequest);
 
         String username = loginRequest.username();
@@ -79,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
         );
-        if (user.isAccountNonLocked()) {
+        if (!user.isAccountNonLocked()) {
             log.error("User is locked! User : {}", user);
 
             throw new UsernameNotFoundException("User is locked!");
@@ -87,6 +89,8 @@ public class AuthServiceImpl implements AuthService {
         LoginAttempt loginAttempt = user.getLoginAttempt();
 
         executeUserAuthenticationProcess(loginAttempt, loginRequest);
+
+        loginDeviceFilter.addNewDeviceToUserLoggedInDevices(user, request);
         
         log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, user);
 
@@ -107,22 +111,6 @@ public class AuthServiceImpl implements AuthService {
         tokenManager.saveUsersToken(authToken, user);
 
         return tokenManager.buildTokensIntoResponse(authToken, refreshToken);
-    }
-
-    @Override
-    public final TokenResponse validateUsersTokens(TokenRequest request) {
-        log.info("Authenticating user with data:\n{}", request);
-
-        User user = userRepository.findUserByToken(request.authToken()).orElseThrow(TokensUserNotFoundException::new);
-
-        boolean isAuthTokenValid = jwtService.isTokenValid(request.authToken(), user);
-
-        log.info("Is token valid : {}\nFor user : {}", isAuthTokenValid, user);
-
-        return TokenResponse
-                .builder()
-                .isAuthTokenValid(isAuthTokenValid)
-                .build();
     }
 
     private void executeUserAuthenticationProcess(LoginAttempt loginAttempt, LoginRequest loginRequest) {

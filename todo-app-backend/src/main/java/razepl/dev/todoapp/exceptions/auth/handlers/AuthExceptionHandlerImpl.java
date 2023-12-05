@@ -1,4 +1,4 @@
-package razepl.dev.todoapp.api.auth;
+package razepl.dev.todoapp.exceptions.auth.handlers;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -12,11 +12,11 @@ import razepl.dev.todoapp.api.auth.constants.AuthMessages;
 import razepl.dev.todoapp.api.auth.data.ConstraintExceptionResponse;
 import razepl.dev.todoapp.api.auth.data.ExceptionResponse;
 import razepl.dev.todoapp.api.auth.data.TokenResponse;
-import razepl.dev.todoapp.api.auth.interfaces.AuthExceptionHandler;
-import razepl.dev.todoapp.exceptions.auth.InvalidTokenException;
-import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
-import razepl.dev.todoapp.exceptions.auth.TokensUserNotFoundException;
-import razepl.dev.todoapp.exceptions.auth.UserAlreadyExistsException;
+import razepl.dev.todoapp.exceptions.auth.handlers.interfaces.AuthExceptionHandler;
+import razepl.dev.todoapp.exceptions.auth.throwable.InvalidTokenException;
+import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
+import razepl.dev.todoapp.exceptions.auth.throwable.TokensUserNotFoundException;
+import razepl.dev.todoapp.exceptions.auth.throwable.UserAlreadyExistsException;
 
 import java.util.List;
 import java.util.stream.Collectors;

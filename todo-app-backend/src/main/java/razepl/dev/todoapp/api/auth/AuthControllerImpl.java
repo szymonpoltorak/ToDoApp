@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.api.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,25 +30,20 @@ public class AuthControllerImpl implements AuthController {
     @Override
     @PostMapping(value = AuthMappings.REGISTER_MAPPING)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public final AuthResponse registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        return authService.register(registerRequest);
+    public final AuthResponse registerUser(@Valid @RequestBody RegisterRequest registerRequest,
+                                           HttpServletRequest request) {
+        return authService.register(registerRequest, request);
     }
 
     @Override
     @PostMapping(value = AuthMappings.LOGIN_MAPPING)
-    public final AuthResponse loginUser(@RequestBody LoginRequest loginRequest) {
-        return authService.login(loginRequest);
+    public final AuthResponse loginUser(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+        return authService.login(loginRequest, request);
     }
 
     @Override
     @PostMapping(value = AuthMappings.REFRESH_MAPPING)
     public final AuthResponse refreshUserToken(@RequestParam String refreshToken) {
         return authService.refreshToken(refreshToken);
-    }
-
-    @Override
-    @PostMapping(value = AuthMappings.AUTHENTICATE_MAPPING)
-    public final TokenResponse authenticateUser(@RequestBody TokenRequest request) {
-        return authService.validateUsersTokens(request);
     }
 }

@@ -52,6 +52,6 @@ public class LoginAttempt implements AttemptController {
 
     @Override
     public final boolean isAccountNonLocked() {
-        return dateOfLock.isAfter(LocalTime.now());
+        return dateOfLock.isBefore(LocalTime.now());
     }
 }

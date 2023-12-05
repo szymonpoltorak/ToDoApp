@@ -1,4 +1,4 @@
-package razepl.dev.todoapp.exceptions.auth;
+package razepl.dev.todoapp.exceptions.auth.throwable;
 
 import java.io.Serial;
 

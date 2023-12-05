@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
 import razepl.dev.todoapp.entities.token.JwtToken;
 import razepl.dev.todoapp.entities.token.interfaces.TokenRepository;
-import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
+import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
 
 import static razepl.dev.todoapp.config.constants.Headers.AUTH_HEADER;
 import static razepl.dev.todoapp.config.constants.Headers.TOKEN_HEADER;

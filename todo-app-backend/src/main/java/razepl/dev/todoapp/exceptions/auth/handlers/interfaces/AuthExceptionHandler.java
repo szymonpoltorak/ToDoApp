@@ -1,4 +1,4 @@
-package razepl.dev.todoapp.api.auth.interfaces;
+package razepl.dev.todoapp.exceptions.auth.handlers.interfaces;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
