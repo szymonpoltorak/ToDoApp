@@ -1,4 +1,4 @@
-package razepl.dev.todoapp.api.devices;
+package razepl.dev.todoapp.api.auth.devices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import razepl.dev.todoapp.api.devices.data.LoggedDeviceResponse;
-import razepl.dev.todoapp.api.devices.interfaces.DeviceService;
+import razepl.dev.todoapp.api.auth.devices.data.LoggedDeviceResponse;
+import razepl.dev.todoapp.api.auth.devices.interfaces.DeviceService;
 import razepl.dev.todoapp.entities.devices.LoggedDevice;
 import razepl.dev.todoapp.entities.devices.interfaces.LoggedDeviceMapper;
 import razepl.dev.todoapp.entities.devices.interfaces.LoggedDeviceRepository;

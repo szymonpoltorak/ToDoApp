@@ -1,4 +1,4 @@
-package razepl.dev.todoapp.api.devices.data;
+package razepl.dev.todoapp.api.auth.devices.data;
 
 import lombok.Builder;
 

@@ -1,6 +1,6 @@
-package razepl.dev.todoapp.api.devices.interfaces;
+package razepl.dev.todoapp.api.auth.devices.interfaces;
 
-import razepl.dev.todoapp.api.devices.data.LoggedDeviceResponse;
+import razepl.dev.todoapp.api.auth.devices.data.LoggedDeviceResponse;
 import razepl.dev.todoapp.entities.user.User;
 
 import java.util.List;
