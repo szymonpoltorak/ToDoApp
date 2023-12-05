@@ -34,6 +34,7 @@ public class LoginDeviceHandlerImpl implements LoginDeviceHandler {
                 .deviceType(deviceType)
                 .dateOfLogin(LocalDate.now())
                 .timeOfLogin(LocalTime.now())
+                .user(user)
                 .build();
         log.info("Logged device: {}", loggedDevice);
 
