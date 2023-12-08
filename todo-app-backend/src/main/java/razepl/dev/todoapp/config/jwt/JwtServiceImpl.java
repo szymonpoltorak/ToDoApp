@@ -1,6 +1,7 @@
 package razepl.dev.todoapp.config.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import razepl.dev.todoapp.config.constants.Headers;
 import razepl.dev.todoapp.config.constants.Matchers;
 import razepl.dev.todoapp.config.constants.Properties;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
+import razepl.dev.todoapp.entities.token.TokenType;
 import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
 
 import java.io.IOException;
@@ -39,7 +41,7 @@ public class JwtServiceImpl implements JwtService {
     @Value(Properties.REFRESH_PROPERTY)
     private long refreshTime;
 
-    private Key privateKey;
+    private Key privateKey = null;
 
     @Override
     public final Optional<String> getUsernameFromToken(String jwtToken) {
@@ -70,9 +72,14 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public final boolean isTokenValid(String jwtToken, UserDetails userDetails) {
+        if (!isSignatureValid(jwtToken)) {
+            return false;
+        }
         Optional<String> username = getUsernameFromToken(jwtToken);
 
-        return username.filter(s -> s.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken)).isPresent();
+        return username
+                .filter(s -> s.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken))
+                .isPresent();
     }
 
     @Override
@@ -85,22 +92,25 @@ public class JwtServiceImpl implements JwtService {
         return Optional.of(authHeader.substring(Headers.TOKEN_START_INDEX));
     }
 
-    @Override
-    public final Optional<String> getJwtRefreshToken(HttpServletRequest request) {
-        String authHeader = request.getHeader(Headers.AUTH_HEADER);
+    private boolean isSignatureValid(String jwtToken) {
+        Jws<Claims> claimsJws = parseJwsClaims(jwtToken);
 
-        if (authHeader == null || !authHeader.startsWith(Headers.TOKEN_HEADER)) {
-            return Optional.empty();
+        if (!claimsJws.getHeader().get("type").equals(TokenType.JWT_BEARER_TOKEN)) {
+            return false;
         }
-        return Optional.of(authHeader.substring(Headers.TOKEN_START_INDEX));
+        return claimsJws.getHeader().getAlgorithm().equals(SignatureAlgorithm.RS512.getValue());
     }
 
     private Claims getAllClaims(String token) {
-        return Jwts.parserBuilder()
+        return parseJwsClaims(token).getBody();
+    }
+
+    private Jws<Claims> parseJwsClaims(String token) {
+        return Jwts
+                .parserBuilder()
                 .setSigningKey(buildSignInKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseClaimsJws(token);
     }
 
     private String buildToken(Map<String, Object> additionalClaims, UserDetails userDetails, long expiration) {
@@ -109,7 +119,7 @@ public class JwtServiceImpl implements JwtService {
         return Jwts.builder()
                 .setClaims(additionalClaims)
                 .setSubject(userDetails.getUsername())
-                .setHeader(Map.of("type", "JWT"))
+                .setHeader(Map.of("type", TokenType.JWT_BEARER_TOKEN))
                 .setIssuedAt(new Date(time))
                 .setExpiration(new Date(time + expiration))
                 .signWith(buildSignInKey(), SignatureAlgorithm.RS512)

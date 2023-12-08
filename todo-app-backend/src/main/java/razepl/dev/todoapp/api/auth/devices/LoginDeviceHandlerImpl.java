@@ -1,4 +1,4 @@
-package razepl.dev.todoapp.api.auth;
+package razepl.dev.todoapp.api.auth.devices;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

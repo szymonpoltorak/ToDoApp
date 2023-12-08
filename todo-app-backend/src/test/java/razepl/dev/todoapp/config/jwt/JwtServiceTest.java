@@ -100,31 +100,4 @@ class JwtServiceTest {
         // then
         assertTrue(isValid);
     }
-
-    @Test
-    final void test_getJwtRefreshToken_ValidHttpServletRequest_ReturnsToken() {
-        // given
-        String authHeader = "Bearer valid-refresh-token";
-
-        // when
-        when(mockRequest.getHeader("Authorization")).thenReturn(authHeader);
-
-        String refreshToken = jwtService.getJwtRefreshToken(mockRequest).orElse("");
-
-        // then
-        assertEquals("valid-refresh-token", refreshToken);
-    }
-
-    @Test
-    final void test_getJwtRefreshToken_InvalidHttpServletRequest_ReturnsNull() {
-        // given
-
-        // when
-        when(mockRequest.getHeader("Authorization")).thenReturn(null);
-
-        String refreshToken = jwtService.getJwtRefreshToken(mockRequest).orElse(null);
-
-        // then
-        assertNull(refreshToken);
-    }
 }

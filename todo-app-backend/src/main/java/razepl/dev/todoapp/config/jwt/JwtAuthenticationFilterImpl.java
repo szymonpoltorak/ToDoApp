@@ -42,14 +42,16 @@ public class JwtAuthenticationFilterImpl extends OncePerRequestFilter implements
         filterChain.doFilter(request, response);
     }
 
-    private void setTokenForNotAuthenticatedUser(String jwtToken, String username, @NonNull HttpServletRequest request) {
+    private void setTokenForNotAuthenticatedUser(String jwtToken, String username, HttpServletRequest request) {
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             return;
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        boolean isTokenValid = tokenRepository.findByToken(jwtToken)
-                .map(token -> !token.isExpired() && !token.isRevoked()).orElse(false);
+        boolean isTokenValid = tokenRepository
+                .findByToken(jwtToken)
+                .map(token -> !token.isExpired() && !token.isRevoked())
+                .orElse(false);
 
         if (jwtService.isTokenValid(jwtToken, userDetails) && isTokenValid) {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

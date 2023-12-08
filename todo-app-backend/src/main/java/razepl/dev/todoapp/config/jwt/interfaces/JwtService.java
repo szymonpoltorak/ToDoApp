@@ -22,6 +22,4 @@ public interface JwtService {
     Optional<String> getJwtToken(HttpServletRequest request);
 
     String generateRefreshToken(UserDetails userDetails);
-
-    Optional<String> getJwtRefreshToken(HttpServletRequest request);
 }
