@@ -25,6 +25,11 @@
                 Search
             </button>
 
+            <button (click)="changeRouteToNewView(RouterPath.SESSIONS_DIRECT)" class="menu-option" extended mat-fab>
+                <mat-icon>devices</mat-icon>
+                Sessions
+            </button>
+
             <button (click)="logoutUser()" class="menu-option" extended mat-fab>
                 <mat-icon>logout</mat-icon>
                 Logout

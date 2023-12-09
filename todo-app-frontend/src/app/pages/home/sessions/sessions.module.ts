@@ -3,6 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { SessionsRoutingModule } from './sessions-routing.module';
 import { SessionsComponent } from "./sessions.component";
+import { CollaboratorsModule } from "../collaborators/collaborators.module";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCardModule } from "@angular/material/card";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatToolbarModule } from "@angular/material/toolbar";
 
 
 @NgModule({
@@ -11,7 +19,15 @@ import { SessionsComponent } from "./sessions.component";
     ],
     imports: [
         CommonModule,
-        SessionsRoutingModule
+        SessionsRoutingModule,
+        CollaboratorsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDividerModule,
+        MatIconModule,
+        MatListModule,
+        MatSidenavModule,
+        MatToolbarModule
     ]
 })
 export class SessionsModule {

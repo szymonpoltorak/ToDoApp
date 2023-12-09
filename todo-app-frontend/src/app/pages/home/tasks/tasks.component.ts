@@ -20,7 +20,6 @@ import { data } from "autoprefixer";
     styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent implements SideMenuActions, OnInit {
-    private destroyLogout$: Subject<void> = new Subject<void>();
     private numOfPage: number = 0;
     protected notCompletedTasks!: Task[];
     protected completedTasks !: Task[];
@@ -43,7 +42,7 @@ export class TasksComponent implements SideMenuActions, OnInit {
 
     logoutUser(): void {
         this.authService.logoutUser()
-            .pipe(takeUntil(this.destroyLogout$))
+            .pipe(take(1))
             .subscribe(() => this.sideMenuService.logoutUser());
     }
 

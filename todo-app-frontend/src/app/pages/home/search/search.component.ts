@@ -1,16 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
-import {
-    debounceTime,
-    distinctUntilChanged,
-    map,
-    Observable,
-    startWith,
-    Subject,
-    switchMap,
-    take,
-    takeUntil
-} from "rxjs";
+import { debounceTime, distinctUntilChanged, map, Observable, startWith, switchMap, take } from "rxjs";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { FormControl } from "@angular/forms";
@@ -25,7 +15,6 @@ import { RouterPath } from "@enums/RouterPath";
     styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements SideMenuActions, OnInit {
-    private destroyLogout$: Subject<void> = new Subject<void>();
     suggestionControl: FormControl = new FormControl<any>("");
     suggestions$ !: Observable<string[]>;
     visibleCollaborators$ !: Observable<CollaboratorSuggestion[]>;
@@ -37,7 +26,7 @@ export class SearchComponent implements SideMenuActions, OnInit {
 
     logoutUser(): void {
         this.authService.logoutUser()
-            .pipe(takeUntil(this.destroyLogout$))
+            .pipe(take(1))
             .subscribe(() => this.sideMenuService.logoutUser());
     }
 
