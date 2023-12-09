@@ -6,7 +6,7 @@ import { AuthService } from "@core/services/auth/auth.service";
 import { User } from "@core/data/home/User";
 import { ProfileService } from "@core/services/home/profile.service";
 import { UtilService } from "@core/services/utils/util.service";
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 
 @Component({
     selector: 'app-profile',
@@ -24,22 +24,6 @@ export class ProfileComponent implements SideMenuActions, OnInit {
                 private authService: AuthService) {
     }
 
-    changeToGroupsView(): void {
-        this.sideMenuService.changeToGroupsView();
-    }
-
-    changeToProfileView(): void {
-        this.sideMenuService.changeToProfileView();
-    }
-
-    changeToCollaboratorsView(): void {
-        this.sideMenuService.changeToCollaboratorsView();
-    }
-
-    changeToSearchView(): void {
-        this.sideMenuService.changeToSearchView();
-    }
-
     logoutUser(): void {
         this.authService.logoutUser()
             .pipe(takeUntil(this.destroyLogout$))
@@ -52,11 +36,17 @@ export class ProfileComponent implements SideMenuActions, OnInit {
             .subscribe((): void => {
                 this.utilService.clearStorage();
 
-                this.utilService.navigate(RouterPaths.LOGIN_DIRECT);
+                this.utilService.navigate(RouterPath.LOGIN_DIRECT);
             });
     }
 
     ngOnInit(): void {
         this.user$ = this.profileService.getUserData();
+    }
+
+    protected readonly RouterPath = RouterPath;
+
+    changeRouteToNewView(route: RouterPath): void {
+        this.sideMenuService.changeRouteToNewView(route);
     }
 }

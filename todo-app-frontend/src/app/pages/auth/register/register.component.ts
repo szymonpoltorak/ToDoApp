@@ -10,7 +10,7 @@ import { StorageKeys } from "@enums/auth/StorageKeys";
 import { AuthService } from "@core/services/auth/auth.service";
 import { UserService } from "@core/services/utils/user.service";
 import { UtilService } from "@core/services/utils/util.service";
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 
 @Component({
     selector: 'app-register',
@@ -50,7 +50,7 @@ export class RegisterComponent implements OnInit {
 
                 this.authService.saveData(data);
 
-                this.utilService.navigate(RouterPaths.HOME_LOGIN_PATH);
+                this.utilService.navigate(RouterPath.HOME_LOGIN_PATH);
             });
     }
 

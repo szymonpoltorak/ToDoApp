@@ -5,22 +5,22 @@
         <mat-divider></mat-divider>
 
         <section class="button-column">
-            <button (click)="changeToProfileView()" class="menu-option" extended mat-fab>
+            <button (click)="changeRouteToNewView(RouterPath.PROFILE_DIRECT)" class="menu-option" extended mat-fab>
                 <mat-icon>person</mat-icon>
                 Profile
             </button>
 
-            <button (click)="changeToGroupsView()" class="menu-option" extended mat-fab>
+            <button (click)="changeRouteToNewView(RouterPath.GROUPS_DIRECT)" class="menu-option" extended mat-fab>
                 <mat-icon>list</mat-icon>
                 Groups
             </button>
 
-            <button (click)="changeToCollaboratorsView()" class="menu-option" extended mat-fab>
+            <button (click)="changeRouteToNewView(RouterPath.COLLABORATORS_DIRECT)" class="menu-option" extended mat-fab>
                 <mat-icon>group</mat-icon>
                 Collaborators
             </button>
 
-            <button (click)="changeToSearchView()" class="menu-option" extended mat-fab>
+            <button (click)="changeRouteToNewView(RouterPath.SEARCH_DIRECT)" class="menu-option" extended mat-fab>
                 <mat-icon>search</mat-icon>
                 Search
             </button>

@@ -9,7 +9,7 @@ import { AuthConstants } from "@enums/auth/AuthConstants";
 import { StorageKeys } from "@enums/auth/StorageKeys";
 import { UtilService } from "@core/services/utils/util.service";
 import { UserService } from "@core/services/utils/user.service";
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 import { FormFieldNames } from "@enums/auth/FormFieldNames";
 
 @Component({
@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
         this.authService.loginUser(request)
             .pipe(take(1))
             .subscribe((data: AuthResponse): void => {
+                console.log(data);
                 if (data.authToken === AuthConstants.NO_TOKEN) {
                     return;
                 }
@@ -58,7 +59,7 @@ export class LoginComponent implements OnInit {
                 this.authService.saveData(data);
 
                 this.utilService.addValueToStorage(StorageKeys.USERNAME, username);
-                this.utilService.navigate(RouterPaths.HOME_LOGIN_PATH);
+                this.utilService.navigate(RouterPath.HOME_LOGIN_PATH);
             });
     }
 

@@ -4,29 +4,7 @@ A simple ToDo app created for the academic course with aim of creating an app wi
 
 ## How to run it ?
 
-1. App is configured to use HTTPS protocol over http. To use it you need to do following steps.
-
-* Generate ssl self signed certificate:
-
-```bash
-keytool -genkeypair -alias app -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore app.p12 -validity 3650 -storepass 25442A472D4B6150645367566B597033733676397924423F4528482B4D625165
-```
-
-* Place your file in `todo-app-backend/src/resources/*.p12`
-
-* Check `docker-compose.yml` to contain env variable with appropriate parameters (If you are using same settings as above everything is good)
-
-* Export certificate to `.pem` file:
-
-```bash
-openssl pkcs12 -in app.p12 -out app.pem -nodes
-```
-
-* Place your .pem file to `todo-app-frontend/src/assets/`.
-
-* If you changed your name check `angular.json` to have appropriate filename.
-
-2. I use RSA private and public keys to sign jwt tokens so you need to generate them.
+1. I use RSA private and public keys to sign jwt tokens so you need to generate them.
 
 * Use the commands below to generate private key and create public key:
 

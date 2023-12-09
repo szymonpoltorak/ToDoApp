@@ -17,6 +17,7 @@ import { FormControl } from "@angular/forms";
 import { Collaborator } from "@core/data/home/Collaborator";
 import { CollaboratorSuggestion } from "@core/data/home/CollaboratorSuggestion";
 import { CollaboratorService } from "@core/services/home/collaborator.service";
+import { RouterPath } from "@enums/RouterPath";
 
 @Component({
     selector: 'app-search',
@@ -32,22 +33,6 @@ export class SearchComponent implements SideMenuActions, OnInit {
     constructor(private authService: AuthService,
                 private collaboratorService: CollaboratorService,
                 private sideMenuService: SideMenuService) {
-    }
-
-    changeToGroupsView(): void {
-        this.sideMenuService.changeToGroupsView();
-    }
-
-    changeToProfileView(): void {
-        this.sideMenuService.changeToProfileView();
-    }
-
-    changeToCollaboratorsView(): void {
-        this.sideMenuService.changeToCollaboratorsView();
-    }
-
-    changeToSearchView(): void {
-        this.sideMenuService.changeToSearchView();
     }
 
     logoutUser(): void {
@@ -93,4 +78,10 @@ export class SearchComponent implements SideMenuActions, OnInit {
                 );
             });
     }
+
+    changeRouteToNewView(route: RouterPath): void {
+        this.sideMenuService.changeRouteToNewView(route);
+    }
+
+    protected readonly RouterPath = RouterPath;
 }

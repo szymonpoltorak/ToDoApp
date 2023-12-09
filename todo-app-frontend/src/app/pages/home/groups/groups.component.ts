@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { PageEvent } from "@angular/material/paginator";
-import { Observable, of, Subject, takeUntil } from "rxjs";
+import { Observable, Subject, takeUntil } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { GroupService } from "@core/services/home/group.service";
 import { UtilService } from "@core/services/utils/util.service";
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
-import { group } from "@angular/animations";
 
 @Component({
     selector: 'app-groups',
@@ -23,22 +22,6 @@ export class GroupsComponent implements SideMenuActions, OnInit, OnDestroy {
                 private authService: AuthService,
                 private utilService: UtilService,
                 private sideMenuService: SideMenuService) {
-    }
-
-    changeToGroupsView(): void {
-        this.sideMenuService.changeToGroupsView();
-    }
-
-    changeToProfileView(): void {
-        this.sideMenuService.changeToProfileView();
-    }
-
-    changeToCollaboratorsView(): void {
-        this.sideMenuService.changeToCollaboratorsView();
-    }
-
-    changeToSearchView(): void {
-        this.sideMenuService.changeToSearchView();
     }
 
     logoutUser(): void {
@@ -59,11 +42,17 @@ export class GroupsComponent implements SideMenuActions, OnInit, OnDestroy {
         this.groupService.createNewGroup().subscribe((newGroup: Group): void => {
             this.groupService.group = newGroup;
 
-            this.utilService.navigate(RouterPaths.TASKS_DIRECT);
+            this.utilService.navigate(RouterPath.TASKS_DIRECT);
         });
     }
 
     ngOnDestroy(): void {
         this.destroyLogout$.complete();
+    }
+
+    protected readonly RouterPath = RouterPath;
+
+    changeRouteToNewView(route: RouterPath): void {
+        this.sideMenuService.changeRouteToNewView(route);
     }
 }

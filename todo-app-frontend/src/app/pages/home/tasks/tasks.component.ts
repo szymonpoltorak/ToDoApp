@@ -11,7 +11,8 @@ import { TaskRequest } from "@core/data/home/TaskRequest";
 import { TaskUpdate } from "@core/data/home/TaskUpdate";
 import { TaskService } from "@core/services/home/task.service";
 import { UtilService } from "@core/services/utils/util.service";
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
+import { data } from "autoprefixer";
 
 @Component({
     selector: 'app-tasks',
@@ -46,14 +47,6 @@ export class TasksComponent implements SideMenuActions, OnInit {
             .subscribe(() => this.sideMenuService.logoutUser());
     }
 
-    changeToGroupsView(): void {
-        this.sideMenuService.changeToGroupsView();
-    }
-
-    changeToProfileView(): void {
-        this.sideMenuService.changeToProfileView();
-    }
-
     ngOnInit(): void {
         this.group = this.groupService.group;
 
@@ -67,14 +60,6 @@ export class TasksComponent implements SideMenuActions, OnInit {
             .subscribe(data => {
                 this.completedTasks = data;
             });
-    }
-
-    changeToCollaboratorsView(): void {
-        this.sideMenuService.changeToCollaboratorsView();
-    }
-
-    changeToSearchView(): void {
-        this.sideMenuService.changeToSearchView();
     }
 
     completeEvent(event: Task): void {
@@ -110,7 +95,7 @@ export class TasksComponent implements SideMenuActions, OnInit {
             .removeGroup(this.group)
             .pipe(take(1))
             .subscribe(data => {
-                this.utilService.navigate(RouterPaths.GROUPS_DIRECT);
+                this.utilService.navigate(RouterPath.GROUPS_DIRECT);
             });
     }
 
@@ -170,4 +155,10 @@ export class TasksComponent implements SideMenuActions, OnInit {
                 this.completedTasks = this.completedTasks.filter(task => task !== event);
             });
     }
+
+    changeRouteToNewView(route: RouterPath): void {
+        this.sideMenuService.changeRouteToNewView(route);
+    }
+
+    protected readonly RouterPath = RouterPath;
 }

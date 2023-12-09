@@ -1,13 +1,11 @@
 server:
     port: 8080
     server-header: ""
-    ssl:
-        key-store-type: PKCS12
-        key-store: classpath:app.p12
-        key-store-password: ${KEY_STORE_PASSWORD}
-        key-alias: ${KEY_ALIAS}
-        enabled: true
 
+logging:
+    level:
+        root: INFO
+        org.springframework.web: INFO
 
 frontend:
     url: ${FRONTEND_URL}

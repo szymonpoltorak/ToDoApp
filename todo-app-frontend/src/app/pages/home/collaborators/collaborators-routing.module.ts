@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 import { CollaboratorsComponent } from "./collaborators.component";
 
 const routes: Routes = [
     {
-        path: RouterPaths.CURRENT_PATH,
+        path: RouterPath.CURRENT_PATH,
         component: CollaboratorsComponent
     }
 ];

@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 import { AuthGuard } from "@core/guards/auth.guard";
 
 const routes: Routes = [
     {
-        path: RouterPaths.AUTH_PATH,
+        path: RouterPath.AUTH_PATH,
         loadChildren: () => import("./pages/auth/auth.module")
             .then(module => module.AuthModule)
     },
     {
-        path: RouterPaths.HOME_PATH,
+        path: RouterPath.HOME_PATH,
         loadChildren: () => import("./pages/home/home.module")
             .then(module => module.HomeModule),
         canActivate: [AuthGuard]
     },
     {
-        path: RouterPaths.CURRENT_PATH,
+        path: RouterPath.CURRENT_PATH,
         redirectTo: "auth/login",
         pathMatch: 'full'
     },

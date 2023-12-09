@@ -6,7 +6,7 @@ public final class CorsConfig {
     public static final List<String> ALLOWED_REQUESTS = List.of("GET", "POST", "DELETE", "PATCH");
 
     public static final List<String> CORS_ADDRESSES = List.of(
-            "https://localhost:4200", "https://frontend:4200", "https://frontend:80"
+            "http://localhost:4200", "http://todo-app-frontend:4200", "http://todo-app-frontend:80"
     );
 
     public static final String CONTENT_TYPE_HEADER = "Content-Type";

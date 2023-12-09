@@ -6,6 +6,9 @@
 /out-tsc
 /bazel-out
 
+*.crt
+*.key
+
 # Node
 /node_modules
 npm-debug.log

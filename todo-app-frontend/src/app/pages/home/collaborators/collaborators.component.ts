@@ -5,6 +5,7 @@ import { SideMenuService } from "@core/services/home/side-menu.service";
 import { map, Observable, Subject, takeUntil } from "rxjs";
 import { Collaborator } from "@core/data/home/Collaborator";
 import { CollaboratorService } from "@core/services/home/collaborator.service";
+import { RouterPath } from "@enums/RouterPath";
 
 @Component({
     selector: 'app-collaborators',
@@ -19,22 +20,6 @@ export class CollaboratorsComponent implements SideMenuActions, OnInit, OnDestro
     constructor(private authService: AuthService,
                 private collaboratorService: CollaboratorService,
                 private sideMenuService: SideMenuService) {
-    }
-
-    changeToGroupsView(): void {
-        this.sideMenuService.changeToGroupsView();
-    }
-
-    changeToProfileView(): void {
-        this.sideMenuService.changeToProfileView();
-    }
-
-    changeToCollaboratorsView(): void {
-        this.sideMenuService.changeToCollaboratorsView();
-    }
-
-    changeToSearchView(): void {
-        this.sideMenuService.changeToSearchView();
     }
 
     logoutUser(): void {
@@ -59,5 +44,11 @@ export class CollaboratorsComponent implements SideMenuActions, OnInit, OnDestro
 
     ngOnDestroy(): void {
         this.destroyDeleteGroup$.complete();
+    }
+
+    protected readonly RouterPath = RouterPath;
+
+    changeRouteToNewView(route: RouterPath): void {
+        this.sideMenuService.changeRouteToNewView(route);
     }
 }
