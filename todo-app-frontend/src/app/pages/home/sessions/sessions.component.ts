@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { RouterPath } from "@enums/RouterPath";
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { SideMenuService } from "@core/services/home/side-menu.service";
-import { Observable, of, take } from "rxjs";
+import { Observable, take } from "rxjs";
 import { AuthService } from "@core/services/auth/auth.service";
 import { Session } from "@core/interfaces/home/Session";
-import { DeviceType } from "@enums/home/DeviceType";
+import { SessionService } from "@core/services/home/session.service";
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
   selector: 'app-sessions',
@@ -17,7 +18,8 @@ export class SessionsComponent implements SideMenuActions, OnInit {
     sessions$ !: Observable<Session[]>;
 
     constructor(private sideMenuService: SideMenuService,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private sessionService: SessionService) {
     }
 
     changeRouteToNewView(route: RouterPath): void {
@@ -31,24 +33,10 @@ export class SessionsComponent implements SideMenuActions, OnInit {
     }
 
     ngOnInit(): void {
-        const sessions = [
-            {
-                dateOfLogin: '2021-08-18',
-                ipAddress: "192.168.0.1",
-                deviceType: DeviceType.DESKTOP,
-                timeOfLogin: "10:00",
-            },
-            {
-                dateOfLogin: '2021-08-18',
-                ipAddress: "192.168.12.12",
-                deviceType: DeviceType.MOBILE,
-                timeOfLogin: "12:00",
-            }
-        ]
-        this.sessions$ = of(sessions);
+        this.sessions$ = this.sessionService.getSessionsOnPage(0);
     }
 
-    changePage(event: any): void {
-
+    changePage(event: PageEvent): void {
+        this.sessions$ = this.sessionService.getSessionsOnPage(event.pageIndex);
     }
 }

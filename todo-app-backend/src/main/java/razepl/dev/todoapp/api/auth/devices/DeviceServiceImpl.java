@@ -27,7 +27,7 @@ public class DeviceServiceImpl implements DeviceService {
     public final List<LoggedDeviceResponse> getLoggedDevicesOnPage(int page, User user) {
         Pageable pageable = PageRequest.of(page, DEVICES_PER_PAGE);
 
-        log.info("Getting logged devices on page : {}", page);
+        log.info("Getting logged devices on page : {} for user {}", page, user.getUsername());
 
         Page<LoggedDevice> loggedDevices = loggedDeviceRepository.findAllByUser(user, pageable);
 

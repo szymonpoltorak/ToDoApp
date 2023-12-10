@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import razepl.dev.todoapp.api.auth.devices.constants.DeviceMappings;
 import razepl.dev.todoapp.config.constants.Headers;
 import razepl.dev.todoapp.config.constants.Matchers;
 import razepl.dev.todoapp.config.constants.Properties;
@@ -90,7 +91,7 @@ public class JwtServiceImpl implements JwtService {
     public final Optional<String> getJwtToken(HttpServletRequest request) {
         String authHeader = request.getHeader(Headers.AUTH_HEADER);
 
-        if (request.getServletPath().contains(Matchers.AUTH_MAPPING) || authHeader == null || !authHeader.startsWith(Headers.TOKEN_HEADER)) {
+        if (!isValidAuthHeader(request)) {
             return Optional.empty();
         }
         return Optional.of(authHeader.substring(Headers.TOKEN_START_INDEX));
@@ -129,6 +130,18 @@ public class JwtServiceImpl implements JwtService {
                 .setExpiration(new Date(time + expiration))
                 .signWith(rsaKeyService.buildSignInKey(), SignatureAlgorithm.RS512)
                 .compact();
+    }
+
+    private boolean isValidAuthHeader(HttpServletRequest request) {
+        String authHeader = request.getHeader(Headers.AUTH_HEADER);
+
+        if (authHeader == null || !authHeader.startsWith(Headers.TOKEN_HEADER)) {
+            return false;
+        }
+        if (request.getServletPath().contains(DeviceMappings.DEVICE_MAPPING)) {
+            return true;
+        }
+        return !request.getServletPath().contains(Matchers.AUTH_MAPPING);
     }
 
     private boolean isTokenExpired(String token) {
