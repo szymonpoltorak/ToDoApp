@@ -11,11 +11,14 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { SessionComponent } from './session/session.component';
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 
 @NgModule({
     declarations: [
-        SessionsComponent
+        SessionsComponent,
+        SessionComponent
     ],
     imports: [
         CommonModule,
@@ -27,7 +30,8 @@ import { MatToolbarModule } from "@angular/material/toolbar";
         MatIconModule,
         MatListModule,
         MatSidenavModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatPaginatorModule
     ]
 })
 export class SessionsModule {

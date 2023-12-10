@@ -1,0 +1,13 @@
+.session-container {
+    display: flex;
+    gap: 3em;
+    padding: 1em;
+    align-items: center;
+}
+
+.list-option {
+    display: flex;
+    justify-content: space-between;
+    width: 20em;
+    padding: 2px;
+}

@@ -33,11 +33,11 @@ const routes: Routes = [
         loadChildren: () => import("./groups/groups.module")
             .then(module => module.GroupsModule)
     },
-    // {
-    //     path: RouterPath.SESSIONS_PATH,
-    //     loadChildren: () => import("./sessions/sessions.module")
-    //         .then(module => module.SessionsModule)
-    // }
+    {
+        path: RouterPath.SESSIONS_PATH,
+        loadChildren: () => import("./sessions/sessions.module")
+            .then(module => module.SessionsModule)
+    }
 ];
 
 @NgModule({

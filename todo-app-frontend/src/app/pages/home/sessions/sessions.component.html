@@ -15,7 +15,8 @@
                 Groups
             </button>
 
-            <button (click)="changeRouteToNewView(RouterPath.COLLABORATORS_DIRECT)" class="menu-option" extended mat-fab>
+            <button (click)="changeRouteToNewView(RouterPath.COLLABORATORS_DIRECT)" class="menu-option" extended
+                    mat-fab>
                 <mat-icon>group</mat-icon>
                 Collaborators
             </button>
@@ -46,6 +47,32 @@
     </mat-toolbar>
 
     <div class="center-container">
+        <mat-card class="sessions-container">
+            <div>
+                <mat-card-title class="center-title">
+                    Your account logins
+                </mat-card-title>
 
+                <mat-card-subtitle class="center-title">
+                    If one of the logins is not yours change your password!
+                </mat-card-subtitle>
+
+                <mat-divider class="divider"></mat-divider>
+
+                <div>
+                    <app-session [session]="session" *ngFor="let session of sessions$ | async"></app-session>
+                </div>
+            </div>
+
+            <div>
+                <mat-divider class="divider"></mat-divider>
+
+                <mat-paginator (page)="changePage($event)"
+                               [length]="(sessions$ | async)?.length"
+                               [pageSize]="20"
+                               aria-label="Select page">
+                </mat-paginator>
+            </div>
+        </mat-card>
     </div>
 </mat-drawer-container>

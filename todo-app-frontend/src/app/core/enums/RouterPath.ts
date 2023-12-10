@@ -26,6 +26,6 @@ export enum RouterPath {
     SEARCH_DIRECT = "/home/search",
     SEARCH_PATH = "search",
 
-    SESSIONS_PATH = "/sessions",
+    SESSIONS_PATH = "sessions",
     SESSIONS_DIRECT = "/home/sessions",
 }
