@@ -14,8 +14,7 @@ import razepl.dev.todoapp.api.auth.constants.AuthMappings;
 import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
-import razepl.dev.todoapp.api.auth.data.TokenRequest;
-import razepl.dev.todoapp.api.auth.data.TokenResponse;
+import razepl.dev.todoapp.api.auth.data.ResetPasswordRequest;
 import razepl.dev.todoapp.api.auth.interfaces.AuthController;
 import razepl.dev.todoapp.api.auth.interfaces.AuthService;
 
@@ -45,5 +44,17 @@ public class AuthControllerImpl implements AuthController {
     @PostMapping(value = AuthMappings.REFRESH_MAPPING)
     public final AuthResponse refreshUserToken(@RequestParam String refreshToken) {
         return authService.refreshToken(refreshToken);
+    }
+
+    @Override
+    @PostMapping(value = AuthMappings.REQUEST_RESET_PASSWORD_MAPPING)
+    public final String requestResetUsersPassword(@RequestParam String username) {
+        return authService.requestResetUsersPassword(username);
+    }
+
+    @Override
+    @PostMapping(value = AuthMappings.RESET_PASSWORD_MAPPING)
+    public final String resetUsersPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return authService.resetUsersPassword(request);
     }
 }

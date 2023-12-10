@@ -49,11 +49,6 @@ public class JwtServiceImpl implements JwtService {
     private final RsaKeyService rsaKeyService;
 
     @Override
-    public final Optional<String> getUsernameFromToken(String jwtToken) {
-        return getClaimFromToken(jwtToken, Claims::getSubject);
-    }
-
-    @Override
     public final <T> Optional<T> getClaimFromToken(String jwtToken, Function<Claims, T> claimsHandler) {
         Claims claims = getAllClaims(jwtToken);
 
@@ -80,7 +75,7 @@ public class JwtServiceImpl implements JwtService {
         if (!isSignatureValid(jwtToken)) {
             return false;
         }
-        Optional<String> username = getUsernameFromToken(jwtToken);
+        Optional<String> username = getClaimFromToken(jwtToken, Claims::getSubject);
 
         return username
                 .filter(s -> s.equals(userDetails.getUsername()) && !isTokenExpired(jwtToken))
@@ -88,7 +83,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public final Optional<String> getJwtToken(HttpServletRequest request) {
+    public final Optional<String> getJwtTokenFromRequest(HttpServletRequest request) {
         String authHeader = request.getHeader(Headers.AUTH_HEADER);
 
         if (!isValidAuthHeader(request)) {

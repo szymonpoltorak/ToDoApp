@@ -7,7 +7,9 @@ public final class AuthMappings {
 
     public static final String REFRESH_MAPPING = "/refreshToken";
 
-    public static final String AUTHENTICATE_MAPPING = "/authenticate";
+    public static final String REQUEST_RESET_PASSWORD_MAPPING = "/requestResetPassword";
+
+    public static final String RESET_PASSWORD_MAPPING = "/resetPassword";
 
     private AuthMappings() {
     }

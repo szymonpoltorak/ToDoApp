@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.api.auth;
 
+import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,7 +86,7 @@ class AuthServiceTest {
         String refreshToken = "refreshToken";
         String authToken = "authToken";
 
-        when(jwtService.getUsernameFromToken(refreshToken)).thenReturn(Optional.of("john.doe@example.com"));
+        when(jwtService.getClaimFromToken(refreshToken, Claims::getSubject)).thenReturn(Optional.of("john.doe@example.com"));
 
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(jwtService.isTokenValid(refreshToken, user)).thenReturn(true);
@@ -121,7 +122,7 @@ class AuthServiceTest {
         // given
         String refreshToken = "refreshToken";
 
-        when(jwtService.getUsernameFromToken(refreshToken)).thenReturn(Optional.of("john.doe@example.com"));
+        when(jwtService.getClaimFromToken(refreshToken, Claims::getSubject)).thenReturn(Optional.of("john.doe@example.com"));
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
 
         // when
@@ -138,7 +139,7 @@ class AuthServiceTest {
         // given
         String refreshToken = "refreshToken";
 
-        when(jwtService.getUsernameFromToken(refreshToken)).thenReturn(Optional.of("john.doe@example.com"));
+        when(jwtService.getClaimFromToken(refreshToken, Claims::getSubject)).thenReturn(Optional.of("john.doe@example.com"));
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(jwtService.isTokenValid(refreshToken, user)).thenReturn(false);
 

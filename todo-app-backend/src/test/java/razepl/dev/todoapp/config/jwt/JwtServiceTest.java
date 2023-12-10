@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.config.jwt;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,8 @@ class JwtServiceTest {
         String expectedUsername = "john.doe@gmail.com";
 
         // when
-        Optional<String> username = jwtService.getUsernameFromToken(token).orElseThrow().describeConstable();
+        Optional<String> username = jwtService.getClaimFromToken(token, Claims::getSubject)
+                .orElseThrow().describeConstable();
 
         // then
         assertEquals(expectedUsername, username.get());

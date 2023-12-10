@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.api.auth;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
+import razepl.dev.todoapp.api.auth.data.ResetPasswordRequest;
 import razepl.dev.todoapp.api.auth.interfaces.AuthService;
 import razepl.dev.todoapp.api.auth.interfaces.LoginDeviceHandler;
 import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
@@ -19,6 +21,9 @@ import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
 import razepl.dev.todoapp.entities.attempts.LoginAttempt;
 import razepl.dev.todoapp.entities.attempts.interfaces.LoginAttemptRepository;
+import razepl.dev.todoapp.entities.token.JwtToken;
+import razepl.dev.todoapp.entities.token.TokenType;
+import razepl.dev.todoapp.entities.token.interfaces.TokenRepository;
 import razepl.dev.todoapp.entities.user.User;
 import razepl.dev.todoapp.entities.user.interfaces.UserRepository;
 import razepl.dev.todoapp.exceptions.auth.throwable.InvalidTokenException;
@@ -26,14 +31,17 @@ import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
 import razepl.dev.todoapp.exceptions.auth.throwable.UserAlreadyExistsException;
 
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+    private final TokenRepository tokenRepository;
     private static final String USER_NOT_EXIST_MESSAGE = "Such user does not exist!";
     private static final String BUILDING_TOKEN_RESPONSE_MESSAGE = "Building token response for user : {}";
+    private static final long PASSWORD_REFRESH_TOKEN_TIME = 600_000L;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -91,7 +99,7 @@ public class AuthServiceImpl implements AuthService {
         executeUserAuthenticationProcess(loginAttempt, loginRequest);
 
         loginDeviceFilter.addNewDeviceToUserLoggedInDevices(user, request);
-        
+
         log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, user);
 
         return tokenManager.buildTokensIntoResponse(user, TokenRevokeStatus.TO_REVOKE);
@@ -111,6 +119,63 @@ public class AuthServiceImpl implements AuthService {
         tokenManager.saveUsersToken(authToken, user);
 
         return tokenManager.buildTokensIntoResponse(authToken, refreshToken);
+    }
+
+    @Override
+    public final String requestResetUsersPassword(String username) {
+        log.info("Resetting password for user : {}", username);
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
+        );
+        log.info("User to gain refresh link : {}", user);
+
+        String passwordRefreshToken = jwtService.generateToken(Collections.emptyMap(),
+                user, PASSWORD_REFRESH_TOKEN_TIME);
+
+        log.info("Password refresh link : https://localhost:4200/auth/resetPassword?token={}", passwordRefreshToken);
+
+        JwtToken jwtToken = JwtToken
+                .builder()
+                .token(passwordRefreshToken)
+                .user(user)
+                .tokenType(TokenType.RESET_PASSWORD_TOKEN)
+                .build();
+        log.info("Token to save : {}", jwtToken);
+
+        tokenRepository.save(jwtToken);
+
+        return username;
+    }
+
+    @Override
+    public final String resetUsersPassword(ResetPasswordRequest request) {
+        log.info("Resetting password for user with token : {}", request.resetPasswordToken());
+
+        User user = userRepository.findByUsername(request.username()).orElseThrow(
+                () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
+        );
+        log.info("User to reset password : {}", user);
+
+        JwtToken jwtToken = tokenRepository.findByTokenAndUser(request.resetPasswordToken(), user)
+                .orElseThrow(
+                        () -> new TokenDoesNotExistException("Token does not exist!")
+                );
+        log.info("Token to reset password : {}", jwtToken);
+
+        String encodedPassword = passwordEncoder.encode(request.newPassword());
+
+        log.info("Setting new password : {}", encodedPassword);
+
+        user.setPassword(encodedPassword);
+
+        log.info("Saving new user data and deleting token : {}", jwtToken);
+
+        userRepository.save(user);
+
+        tokenRepository.deleteById(jwtToken.getTokenId());
+
+        return request.username();
     }
 
     private void executeUserAuthenticationProcess(LoginAttempt loginAttempt, LoginRequest loginRequest) {
@@ -136,11 +201,11 @@ public class AuthServiceImpl implements AuthService {
 
         Optional<User> existingUser = userRepository.findByUsername(registerRequest.username());
 
-        if (existingUser.isPresent()) {
-            log.error("User already exists! Found user: {}", existingUser.get());
+        existingUser.ifPresent(user -> {
+            log.error("User already exists! Found user: {}", user);
 
             throw new UserAlreadyExistsException("User already exists!");
-        }
+        });
         return password;
     }
 
@@ -148,7 +213,7 @@ public class AuthServiceImpl implements AuthService {
         if (refreshToken == null) {
             throw new TokenDoesNotExistException("Token does not exist!");
         }
-        Optional<String> usernameOptional = jwtService.getUsernameFromToken(refreshToken);
+        Optional<String> usernameOptional = jwtService.getClaimFromToken(refreshToken, Claims::getSubject);
 
         if (usernameOptional.isEmpty()) {
             throw new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE);
