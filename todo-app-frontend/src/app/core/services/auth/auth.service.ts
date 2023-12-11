@@ -34,8 +34,11 @@ export class AuthService {
     }
 
     refreshUsersToken(refreshToken: string): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${environment.httpBackend}${AuthApiCalls.REFRESH_URL}`,
-            this.buildRefreshToken(refreshToken)).pipe(tap((response: AuthResponse) => {
+        return this.http.post<AuthResponse>(`${environment.httpBackend}${AuthApiCalls.REFRESH_URL}`, {}, {
+            params: {
+                refreshToken: refreshToken
+            }
+        }).pipe(tap((response: AuthResponse) => {
             this.saveData(response);
         }));
     }
@@ -46,9 +49,5 @@ export class AuthService {
         }
         this.utilService.addValueToStorage(StorageKeys.AUTH_TOKEN, data.authToken);
         this.utilService.addValueToStorage(StorageKeys.REFRESH_TOKEN, data.refreshToken);
-    }
-
-    private buildRefreshToken(refreshToken: string) {
-        return JSON.parse(`{"refreshToken": "${refreshToken}"}`);
     }
 }

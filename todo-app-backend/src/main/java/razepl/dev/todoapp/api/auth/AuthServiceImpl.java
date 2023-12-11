@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
         String username = loginRequest.username();
 
         User user = validateUserLoginAccount(username);
-        
+
         LoginAttempt loginAttempt = user.getLoginAttempt();
 
         authHelperService.executeUserAuthenticationProcess(loginAttempt, loginRequest);
