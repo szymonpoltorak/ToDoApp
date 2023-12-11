@@ -14,6 +14,7 @@ import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
 import razepl.dev.todoapp.api.auth.data.ResetPasswordRequest;
+import razepl.dev.todoapp.api.auth.interfaces.AuthHelperService;
 import razepl.dev.todoapp.api.auth.interfaces.AuthService;
 import razepl.dev.todoapp.api.auth.interfaces.LoginDeviceHandler;
 import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
@@ -38,39 +39,31 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    private final TokenRepository tokenRepository;
     private static final String USER_NOT_EXIST_MESSAGE = "Such user does not exist!";
     private static final String BUILDING_TOKEN_RESPONSE_MESSAGE = "Building token response for user : {}";
     private static final long PASSWORD_REFRESH_TOKEN_TIME = 600_000L;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final TokenManagerService tokenManager;
     private final LoginAttemptRepository loginAttemptRepository;
     private final LoginDeviceHandler loginDeviceFilter;
     private final JwtService jwtService;
+    private final AuthHelperService authHelperService;
 
     @Override
     public final AuthResponse register(RegisterRequest registerRequest, HttpServletRequest request) {
         log.info("Registering user with data: \n{}", registerRequest);
 
-        String password = validateUserRegisterData(registerRequest);
+        validateUserRegisterData(registerRequest);
 
         LoginAttempt loginAttempt = LoginAttempt
                 .builder()
                 .attempts(0L)
                 .dateOfLock(LocalTime.MIN)
                 .build();
-        loginAttemptRepository.save(loginAttempt);
+        LoginAttempt newLoginAttempt = loginAttemptRepository.save(loginAttempt);
 
-        User user = User
-                .builder()
-                .name(registerRequest.name())
-                .username(registerRequest.username())
-                .surname(registerRequest.surname())
-                .password(passwordEncoder.encode(password))
-                .loginAttempt(loginAttempt)
-                .build();
+        User user = authHelperService.buildRequestIntoUser(registerRequest, newLoginAttempt);
+
         User newUser = userRepository.save(user);
 
         loginDeviceFilter.addNewDeviceToUserLoggedInDevices(newUser, request);
@@ -86,17 +79,11 @@ public class AuthServiceImpl implements AuthService {
 
         String username = loginRequest.username();
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
-        );
-        if (!user.isAccountNonLocked()) {
-            log.error("User is locked! User : {}", user);
-
-            throw new UsernameNotFoundException("User is locked!");
-        }
+        User user = validateUserLoginAccount(username);
+        
         LoginAttempt loginAttempt = user.getLoginAttempt();
 
-        executeUserAuthenticationProcess(loginAttempt, loginRequest);
+        authHelperService.executeUserAuthenticationProcess(loginAttempt, loginRequest);
 
         loginDeviceFilter.addNewDeviceToUserLoggedInDevices(user, request);
 
@@ -135,15 +122,7 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("Password refresh link : https://localhost:4200/auth/resetPassword?token={}", passwordRefreshToken);
 
-        JwtToken jwtToken = JwtToken
-                .builder()
-                .token(passwordRefreshToken)
-                .user(user)
-                .tokenType(TokenType.RESET_PASSWORD_TOKEN)
-                .build();
-        log.info("Token to save : {}", jwtToken);
-
-        tokenRepository.save(jwtToken);
+        authHelperService.savePasswordResetToken(passwordRefreshToken, user);
 
         return username;
     }
@@ -157,48 +136,24 @@ public class AuthServiceImpl implements AuthService {
         );
         log.info("User to reset password : {}", user);
 
-        JwtToken jwtToken = tokenRepository.findByTokenAndUser(request.resetPasswordToken(), user)
-                .orElseThrow(
-                        () -> new TokenDoesNotExistException("Token does not exist!")
-                );
-        log.info("Token to reset password : {}", jwtToken);
-
-        String encodedPassword = passwordEncoder.encode(request.newPassword());
-
-        log.info("Setting new password : {}", encodedPassword);
-
-        user.setPassword(encodedPassword);
-
-        log.info("Saving new user data and deleting token : {}", jwtToken);
-
-        userRepository.save(user);
-
-        tokenRepository.deleteById(jwtToken.getTokenId());
+        authHelperService.executePasswordResetProcess(request, user);
 
         return request.username();
     }
 
-    private void executeUserAuthenticationProcess(LoginAttempt loginAttempt, LoginRequest loginRequest) {
-        try {
-            loginAttempt.incrementAttempts();
+    private User validateUserLoginAccount(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
+        );
+        if (!user.isAccountNonLocked()) {
+            log.error("User is locked! User : {}", user);
 
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.username(), loginRequest.password())
-            );
-            loginAttempt.resetAttempts();
-
-        } catch (AuthenticationException e) {
-            log.error("User login failed! User : {}", loginRequest.username());
-
-            throw new UsernameNotFoundException("User login failed!", e);
-        } finally {
-            loginAttemptRepository.save(loginAttempt);
+            throw new UsernameNotFoundException("User is locked!");
         }
+        return user;
     }
 
-    private String validateUserRegisterData(RegisterRequest registerRequest) {
-        String password = registerRequest.password();
-
+    private void validateUserRegisterData(RegisterRequest registerRequest) {
         Optional<User> existingUser = userRepository.findByUsername(registerRequest.username());
 
         existingUser.ifPresent(user -> {
@@ -206,7 +161,6 @@ public class AuthServiceImpl implements AuthService {
 
             throw new UserAlreadyExistsException("User already exists!");
         });
-        return password;
     }
 
     private User validateRefreshTokenData(String refreshToken) {
