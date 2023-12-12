@@ -131,14 +131,17 @@ public class AuthServiceImpl implements AuthService {
     public final String resetUsersPassword(ResetPasswordRequest request) {
         log.info("Resetting password for user with token : {}", request.resetPasswordToken());
 
-        User user = userRepository.findByUsername(request.username()).orElseThrow(
+        String username = jwtService.getClaimFromToken(request.resetPasswordToken(), Claims::getSubject)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE));
+
+        User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
         );
         log.info("User to reset password : {}", user);
 
         authHelperService.executePasswordResetProcess(request, user);
 
-        return request.username();
+        return username;
     }
 
     private User validateUserLoginAccount(String username) {

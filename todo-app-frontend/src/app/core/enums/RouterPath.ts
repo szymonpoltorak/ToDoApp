@@ -28,4 +28,7 @@ export enum RouterPath {
 
     SESSIONS_PATH = "sessions",
     SESSIONS_DIRECT = "/home/sessions",
+
+    RESET_PASSWORD_AUTH_PATH = "resetPassword",
+    RESET_PASSWORD_DIRECT= "/auth/resetPassword",
 }

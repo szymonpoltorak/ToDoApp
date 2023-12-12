@@ -39,7 +39,7 @@
                 Return
             </button>
 
-            <button class="my-button" color="primary" mat-raised-button type="submit">
+            <button class="my-button" color="primary" mat-raised-button type="submit" [disabled]="!registerForm.valid">
                 Register
             </button>
         </div>

@@ -23,7 +23,7 @@
                 Register
             </button>
 
-            <button [disabled]="loginForm.disabled" class="my-button"
+            <button [disabled]="!loginForm.valid" class="my-button"
                     color="primary" mat-raised-button type="submit">
                 Login
             </button>

@@ -17,6 +17,11 @@ const routes: Routes = [
         path: RouterPath.REGISTER_AUTH_PATH,
         loadChildren: () => import("./register/register.module")
             .then(module => module.RegisterModule)
+    },
+    {
+        path: RouterPath.RESET_PASSWORD_AUTH_PATH,
+        loadChildren: () => import("./reset-password/reset-password.module")
+            .then(module => module.ResetPasswordModule)
     }
 ];
 

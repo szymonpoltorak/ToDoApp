@@ -79,4 +79,17 @@ export class FormValidatorService {
             )
         });
     }
+
+    buildResetPasswordFormGroup(): FormGroup {
+        return this.formBuilder.group({
+            passwordInputs: this.formBuilder.group({
+                    userPassword: this.passwordControl,
+                    repeatPassword: this.repeatPasswordControl
+                },
+                {
+                    validator: this.passwordValidator.passwordMatchValidator(this.passwordName, this.repeatPassword)
+                }
+            )
+        });
+    }
 }
