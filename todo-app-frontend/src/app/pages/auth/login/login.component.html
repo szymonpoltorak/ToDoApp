@@ -18,8 +18,14 @@
             Number of tries was exceeded. Please try again after <strong>{{ currentDelay }} ms</strong>.
         </mat-error>
 
+        <div class="forgot-password-label">
+            <button routerLink="/auth/forgotPassword" mat-button type="button">
+                You forgot your password?
+            </button>
+        </div>
+
         <div class="button-bar">
-            <button  class="my-button" color="primary" mat-raised-button routerLink="/auth/register" type="button">
+            <button class="my-button" color="primary" mat-raised-button routerLink="/auth/register" type="button">
                 Register
             </button>
 
