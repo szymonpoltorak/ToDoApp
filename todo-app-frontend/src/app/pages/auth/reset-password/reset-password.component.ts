@@ -6,6 +6,8 @@ import { ResetPassword } from "@core/data/auth/reset-password";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "@core/services/auth/auth.service";
 import { take } from "rxjs";
+import { UtilService } from "@core/services/utils/util.service";
+import { RouterPath } from "@enums/RouterPath";
 
 @Component({
     selector: 'app-reset-password',
@@ -18,6 +20,7 @@ export class ResetPasswordComponent implements OnInit {
 
     constructor(public formValidatorService: FormValidatorService,
                 private activatedRoute: ActivatedRoute,
+                private utilService: UtilService,
                 private authService: AuthService) {
     }
 
@@ -25,7 +28,13 @@ export class ResetPasswordComponent implements OnInit {
         this.resetPasswordForm = this.formValidatorService.buildResetPasswordFormGroup();
         this.activatedRoute.queryParams
             .pipe(take(1))
-            .subscribe(params => this.resetPasswordToken = params['token']);
+            .subscribe(params => {
+                this.resetPasswordToken = params['token'];
+
+                if (this.resetPasswordToken == undefined || this.resetPasswordToken == "") {
+                    this.utilService.navigate(RouterPath.LOGIN_DIRECT);
+                }
+            });
     }
 
     submitForm(): void {

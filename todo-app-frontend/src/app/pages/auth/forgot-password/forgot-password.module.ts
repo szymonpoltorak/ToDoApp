@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { ForgotPasswordRoutingModule } from './forgot-password-routing.module';
 import { ForgotPasswordComponent } from "./forgot-password.component";
+import { AuthUtilsModule } from "../auth-utils/auth-utils.module";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
 
 
 @NgModule({
@@ -11,7 +14,11 @@ import { ForgotPasswordComponent } from "./forgot-password.component";
     ],
     imports: [
         CommonModule,
-        ForgotPasswordRoutingModule
+        ForgotPasswordRoutingModule,
+        AuthUtilsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule
     ]
 })
 export class ForgotPasswordModule {

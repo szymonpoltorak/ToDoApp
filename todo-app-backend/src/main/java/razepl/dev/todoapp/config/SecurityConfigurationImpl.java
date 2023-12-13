@@ -72,6 +72,6 @@ public class SecurityConfigurationImpl implements SecurityConfiguration {
     }
 
     private String buildContentPolicyDirective() {
-        return String.format("form-action 'self' %s; img-src 'self' %s; child-src 'none'; script-src 'self'", frontendUrl, frontendUrl);
+        return String.format("form-action 'self' %s; img-src 'self'; child-src 'none'; script-src 'self'", frontendUrl);
     }
 }

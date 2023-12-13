@@ -92,4 +92,10 @@ export class FormValidatorService {
             )
         });
     }
+
+    buildForgotPasswordForm(): FormGroup {
+        return this.formBuilder.group({
+            email: this.emailControl
+        });
+    }
 }
