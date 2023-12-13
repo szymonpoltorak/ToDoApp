@@ -3,6 +3,9 @@ import { FormValidatorService } from "@core/validators/form-validator.service";
 import { FormGroup } from "@angular/forms";
 import { FormFieldNames } from "@enums/auth/FormFieldNames";
 import { AuthService } from "@core/services/auth/auth.service";
+import { UtilService } from "@core/services/utils/util.service";
+import { RouterPath } from "@enums/RouterPath";
+import { take } from "rxjs";
 
 @Component({
   selector: 'app-forgot-password',
@@ -12,6 +15,7 @@ import { AuthService } from "@core/services/auth/auth.service";
 export class ForgotPasswordComponent implements OnInit {
     forgotPasswordGroup!: FormGroup;
     constructor(protected loginValidatorService: FormValidatorService,
+                private utilService: UtilService,
                 private authService: AuthService) {
     }
 
@@ -25,6 +29,9 @@ export class ForgotPasswordComponent implements OnInit {
         }
         const username: string = this.forgotPasswordGroup.get(FormFieldNames.EMAIL_FIELD)?.value;
 
-        console.log(username);
+        this.authService
+            .sendEmailWithLink(username)
+            .pipe(take(1))
+            .subscribe((response: string) => this.utilService.navigate(RouterPath.LOGIN_DIRECT));
     }
 }

@@ -43,7 +43,9 @@ export class ResetPasswordComponent implements OnInit {
         }
         const request: ResetPassword = this.buildResetPasswordRequest();
 
-        console.log(request);
+        this.authService
+            .resetPassword(request)
+            .subscribe((response: string) => this.utilService.navigate(RouterPath.LOGIN_DIRECT));
     }
 
     private buildResetPasswordRequest(): ResetPassword {
@@ -52,7 +54,7 @@ export class ResetPasswordComponent implements OnInit {
         const password = passwordGroup.get(FormFieldNames.PASSWORD_FIELD)!.value;
 
         return {
-            resetPassword: password,
+            newPassword: password,
             resetPasswordToken: this.resetPasswordToken
         };
     }

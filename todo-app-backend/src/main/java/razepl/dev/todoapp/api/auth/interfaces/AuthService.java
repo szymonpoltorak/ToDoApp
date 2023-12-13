@@ -5,6 +5,7 @@ import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
 import razepl.dev.todoapp.api.auth.data.ResetPasswordRequest;
+import razepl.dev.todoapp.api.auth.data.SimpleStringResponse;
 
 public interface AuthService {
     AuthResponse register(RegisterRequest userRequest, HttpServletRequest request);
@@ -13,8 +14,8 @@ public interface AuthService {
 
     AuthResponse refreshToken(String refreshToken);
 
-    String requestResetUsersPassword(String username);
+    SimpleStringResponse requestResetUsersPassword(String username);
 
-    String resetUsersPassword(ResetPasswordRequest request);
+    SimpleStringResponse resetUsersPassword(ResetPasswordRequest request);
 }
 

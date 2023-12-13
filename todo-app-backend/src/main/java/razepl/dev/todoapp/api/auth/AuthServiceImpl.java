@@ -14,6 +14,7 @@ import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
 import razepl.dev.todoapp.api.auth.data.ResetPasswordRequest;
+import razepl.dev.todoapp.api.auth.data.SimpleStringResponse;
 import razepl.dev.todoapp.api.auth.interfaces.AuthHelperService;
 import razepl.dev.todoapp.api.auth.interfaces.AuthService;
 import razepl.dev.todoapp.api.auth.interfaces.LoginDeviceHandler;
@@ -109,7 +110,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public final String requestResetUsersPassword(String username) {
+    public final SimpleStringResponse requestResetUsersPassword(String username) {
         log.info("Resetting password for user : {}", username);
 
         User user = userRepository.findByUsername(username).orElseThrow(
@@ -124,11 +125,11 @@ public class AuthServiceImpl implements AuthService {
 
         authHelperService.savePasswordResetToken(passwordRefreshToken, user);
 
-        return username;
+        return new SimpleStringResponse(username);
     }
 
     @Override
-    public final String resetUsersPassword(ResetPasswordRequest request) {
+    public final SimpleStringResponse resetUsersPassword(ResetPasswordRequest request) {
         log.info("Resetting password for user with token : {}", request.resetPasswordToken());
 
         String username = jwtService.getClaimFromToken(request.resetPasswordToken(), Claims::getSubject)
@@ -141,7 +142,7 @@ public class AuthServiceImpl implements AuthService {
 
         authHelperService.executePasswordResetProcess(request, user);
 
-        return username;
+        return new SimpleStringResponse(username);
     }
 
     private User validateUserLoginAccount(String username) {

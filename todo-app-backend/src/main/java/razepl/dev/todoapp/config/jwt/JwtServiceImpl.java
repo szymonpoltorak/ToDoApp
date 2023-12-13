@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import razepl.dev.todoapp.api.auth.constants.AuthMappings;
 import razepl.dev.todoapp.api.auth.devices.constants.DeviceMappings;
 import razepl.dev.todoapp.config.constants.Headers;
 import razepl.dev.todoapp.config.constants.Matchers;
@@ -32,6 +33,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -129,14 +131,20 @@ public class JwtServiceImpl implements JwtService {
 
     private boolean isValidAuthHeader(HttpServletRequest request) {
         String authHeader = request.getHeader(Headers.AUTH_HEADER);
+        String servletPath = request.getServletPath();
+        List<String> allowedMatchers = List.of(
+                DeviceMappings.DEVICE_MAPPING,
+                AuthMappings.REQUEST_RESET_PASSWORD_MATCHER,
+                AuthMappings.RESET_PASSWORD_MATCHER
+        );
 
         if (authHeader == null || !authHeader.startsWith(Headers.TOKEN_HEADER)) {
             return false;
         }
-        if (request.getServletPath().contains(DeviceMappings.DEVICE_MAPPING)) {
+        if (allowedMatchers.stream().anyMatch(servletPath::contains)) {
             return true;
         }
-        return !request.getServletPath().contains(Matchers.AUTH_MAPPING);
+        return !servletPath.contains(Matchers.AUTH_MAPPING);
     }
 
     private boolean isTokenExpired(String token) {

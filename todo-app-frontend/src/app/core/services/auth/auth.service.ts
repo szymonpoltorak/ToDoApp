@@ -9,6 +9,7 @@ import { RegisterRequest } from "@core/data/auth/register-request";
 import { AuthResponse } from "@core/data/auth/auth-response";
 import { LoginRequest } from "@core/data/auth/login-request";
 import { AuthConstants } from "@enums/auth/AuthConstants";
+import { ResetPassword } from "@core/data/auth/reset-password";
 
 @Injectable({
     providedIn: 'root'
@@ -49,5 +50,21 @@ export class AuthService {
         }
         this.utilService.addValueToStorage(StorageKeys.AUTH_TOKEN, data.authToken);
         this.utilService.addValueToStorage(StorageKeys.REFRESH_TOKEN, data.refreshToken);
+    }
+
+    sendEmailWithLink(username: string): Observable<string> {
+        return this.http.post<string>(`${environment.httpBackend}${AuthApiCalls.FORGOT_PASSWORD_URL}`, {}, {
+            params: {
+                username: username
+            }
+        }).pipe(catchError((response) => {
+            console.log(response);
+
+            return of(response);
+        }));
+    }
+
+    resetPassword(request: ResetPassword): Observable<string> {
+        return this.http.post<string>(`${environment.httpBackend}${AuthApiCalls.RESET_PASSWORD_URL}`, request);
     }
 }

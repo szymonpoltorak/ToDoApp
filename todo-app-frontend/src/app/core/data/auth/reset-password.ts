@@ -1,5 +1,5 @@
 export interface ResetPassword {
-    resetPassword: string;
+    newPassword: string;
 
     resetPasswordToken: string;
 }
