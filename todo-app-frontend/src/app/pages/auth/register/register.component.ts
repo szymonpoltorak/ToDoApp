@@ -11,6 +11,7 @@ import { AuthService } from "@core/services/auth/auth.service";
 import { UserService } from "@core/services/utils/user.service";
 import { UtilService } from "@core/services/utils/util.service";
 import { RouterPath } from "@enums/RouterPath";
+import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
 
 @Component({
     selector: 'app-register',
@@ -36,7 +37,13 @@ export class RegisterComponent implements OnInit {
             return;
         }
         const request: RegisterRequest = this.buildRegisterRequest();
+        const phone: string = this.registerForm.get("telephone")?.value;
 
+        if (phone != undefined && phone != "") {
+            console.error(JSON.parse(AuthApiCalls.ERROR_FOUND));
+
+            return;
+        }
         this.authService.registerUser(request)
             .pipe(take(1))
             .subscribe((data: AuthResponse): void => {

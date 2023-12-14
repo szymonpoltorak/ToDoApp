@@ -6,6 +6,7 @@ import { AuthService } from "@core/services/auth/auth.service";
 import { UtilService } from "@core/services/utils/util.service";
 import { RouterPath } from "@enums/RouterPath";
 import { take } from "rxjs";
+import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
 
 @Component({
   selector: 'app-forgot-password',
@@ -29,6 +30,13 @@ export class ForgotPasswordComponent implements OnInit {
         }
         const username: string = this.forgotPasswordGroup.get(FormFieldNames.EMAIL_FIELD)?.value;
 
+        const dateTimeLocal: string = this.forgotPasswordGroup.get("dateTimeLocal")?.value;
+
+        if (dateTimeLocal != undefined && dateTimeLocal != "") {
+            console.error(JSON.parse(AuthApiCalls.ERROR_FOUND));
+
+            return;
+        }
         this.authService
             .sendEmailWithLink(username)
             .pipe(take(1))

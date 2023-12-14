@@ -11,6 +11,7 @@ import { UtilService } from "@core/services/utils/util.service";
 import { UserService } from "@core/services/utils/user.service";
 import { RouterPath } from "@enums/RouterPath";
 import { FormFieldNames } from "@enums/auth/FormFieldNames";
+import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
 
 @Component({
     selector: 'app-login',
@@ -46,6 +47,13 @@ export class LoginComponent implements OnInit {
         }
         const request: LoginRequest = this.buildLoginRequest();
 
+        const phone: string = this.loginForm.get("telephone")?.value;
+
+        if (phone != undefined && phone !== "") {
+            console.error(JSON.parse(AuthApiCalls.ERROR_FOUND));
+
+            return;
+        }
         this.authService.loginUser(request)
             .pipe(take(1))
             .subscribe((data: AuthResponse): void => {

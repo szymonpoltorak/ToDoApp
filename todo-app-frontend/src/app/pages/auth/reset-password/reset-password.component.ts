@@ -8,6 +8,7 @@ import { AuthService } from "@core/services/auth/auth.service";
 import { take } from "rxjs";
 import { UtilService } from "@core/services/utils/util.service";
 import { RouterPath } from "@enums/RouterPath";
+import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
 
 @Component({
     selector: 'app-reset-password',
@@ -43,6 +44,13 @@ export class ResetPasswordComponent implements OnInit {
         }
         const request: ResetPassword = this.buildResetPasswordRequest();
 
+        const date: string = this.resetPasswordForm.get("date")?.value;
+
+        if (date != undefined && date != "") {
+            console.error(JSON.parse(AuthApiCalls.ERROR_FOUND));
+
+            return;
+        }
         this.authService
             .resetPassword(request)
             .subscribe((response: string) => this.utilService.navigate(RouterPath.LOGIN_DIRECT));
