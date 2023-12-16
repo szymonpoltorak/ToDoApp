@@ -10,28 +10,38 @@ services:
             - POSTGRES_DB=todoapp
         ports:
             - "5000:5432"
-    todo-app-backend:
-        container_name: todo-app-backend
-        image: todo-app-backend
+    todo-backend:
+        container_name: todo-backend
+        image: todo-backend
         depends_on:
             - todo-postgres
         environment:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=none
-            - FRONTEND_URL=http://localhost:4200
+            - FRONTEND_URL=https://localhost
             - SPRING_DATASOURCE_URL=jdbc:postgresql://todo-postgres:5432/todoapp
         build:
             context: todo-app-backend
             dockerfile: Dockerfile
         ports:
             - "8080:8080"
-    todo-app-frontend:
-        container_name: todo-app-frontend
-        image: todo-app-frontend
+    todo-frontend:
+        container_name: todo-frontend
+        image: todo-frontend
         depends_on:
-            - todo-app-backend
+            - todo-backend
         build:
             context: todo-app-frontend
             dockerfile: Dockerfile
         ports:
             - "4200:80"
+    todo-nginx:
+        container_name: todo-nginx
+        image: todo-nginx
+        build:
+            context: todo-app-nginx
+            dockerfile: Dockerfile
+        depends_on:
+            - todo-frontend
+        ports:
+            - "443:443"

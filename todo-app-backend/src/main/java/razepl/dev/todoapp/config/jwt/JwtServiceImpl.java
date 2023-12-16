@@ -20,17 +20,6 @@ import razepl.dev.todoapp.config.jwt.interfaces.RsaKeyService;
 import razepl.dev.todoapp.entities.token.TokenType;
 import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;

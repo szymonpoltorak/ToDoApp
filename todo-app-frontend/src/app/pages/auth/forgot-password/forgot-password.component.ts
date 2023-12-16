@@ -15,6 +15,7 @@ import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
 })
 export class ForgotPasswordComponent implements OnInit {
     forgotPasswordGroup!: FormGroup;
+
     constructor(protected loginValidatorService: FormValidatorService,
                 private utilService: UtilService,
                 private authService: AuthService) {

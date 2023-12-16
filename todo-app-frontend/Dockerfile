@@ -1,4 +1,4 @@
-FROM node:18.15-alpine as node
+FROM node:18.15-alpine as build
 
 WORKDIR /todo-app-frontend
 
@@ -12,8 +12,8 @@ RUN npm run ng build --configuration=docker
 
 FROM nginx:alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /todo-app-frontend/dist/todo-app-frontend /usr/share/nginx/html
 
-COPY --from=node /todo-app-frontend/dist/todo-app-frontend /usr/share/nginx/html
+COPY ./ssl /etc/nginx/ssl
 
-EXPOSE 80
+EXPOSE 443

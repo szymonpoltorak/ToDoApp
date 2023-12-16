@@ -41,3 +41,6 @@ gradle
 out
 generated
 *.pem
+
+todo-app-nginx/ssl/*
+!todo-app-nginx/ssl/.gitkeep

@@ -1,11 +1,12 @@
 package razepl.dev.todoapp.config.jwt;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.config.jwt.interfaces.RsaKeyService;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -14,9 +15,16 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class RsaKeyServiceImpl implements RsaKeyService {
+    private static final String PUBLIC_KEY_PATH = "public.pem";
+    private static final String PRIVATE_KEY_PATH = "private.pem";
     private Key privateKey = null;
     private Key publicKey = null;
 
@@ -39,6 +47,8 @@ public class RsaKeyServiceImpl implements RsaKeyService {
     private Key buildPublicKey() {
         String publicKeyString = readPublicKey();
 
+        log.error("Encoded key: {}", publicKeyString);
+
         return deserializePublicKey(publicKeyString);
     }
 
@@ -59,26 +69,32 @@ public class RsaKeyServiceImpl implements RsaKeyService {
     }
 
     private String readPublicKey() {
-        try {
-            return Files
-                    .readString(Path.of("src/main/resources/public.pem"))
+        try (InputStream keyStream = getClass().getClassLoader().getResourceAsStream(PUBLIC_KEY_PATH)) {
+            return new Scanner(Objects.requireNonNull(keyStream), StandardCharsets.UTF_8)
+                    .useLocale(Locale.UK)
+                    .useDelimiter("\n")
+                    .tokens()
+                    .collect(Collectors.joining("\n"))
                     .replace("-----BEGIN PUBLIC KEY-----\n", "")
-                    .replace("-----END PUBLIC KEY-----\n", "")
+                    .replace("-----END PUBLIC KEY-----", "")
                     .replace("\n", "");
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+        } catch (IOException exception) {
+            throw new IllegalArgumentException(exception);
         }
     }
 
     private String readPrivateKey() {
-        try {
-            return Files
-                    .readString(Path.of("src/main/resources/private.pem"))
+        try (InputStream keyStream = getClass().getClassLoader().getResourceAsStream(PRIVATE_KEY_PATH)) {
+            return new Scanner(Objects.requireNonNull(keyStream), StandardCharsets.UTF_8)
+                    .useLocale(Locale.UK)
+                    .useDelimiter("\n")
+                    .tokens()
+                    .collect(Collectors.joining("\n"))
                     .replace("-----BEGIN PRIVATE KEY-----\n", "")
-                    .replace("-----END PRIVATE KEY-----\n", "")
+                    .replace("-----END PRIVATE KEY-----", "")
                     .replace("\n", "");
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
+        } catch (IOException exception) {
+            throw new IllegalArgumentException(exception);
         }
     }
 
