@@ -6,8 +6,9 @@ public final class CorsConfig {
     public static final List<String> ALLOWED_REQUESTS = List.of("GET", "POST", "DELETE", "PATCH");
 
     public static final List<String> CORS_ADDRESSES = List.of(
-            "http://localhost:4200", "http://todo-frontend:4200", "http://todo-frontend:80",
-            "https://localhost", "https://todo-nginx"
+//            "http://localhost:4200", "http://todo-frontend:4200", "http://todo-frontend:80",
+//            "https://localhost:443/"
+            "*"
     );
 
     public static final String CONTENT_TYPE_HEADER = "Content-Type";

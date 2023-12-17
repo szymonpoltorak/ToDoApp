@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class RsaKeyServiceImpl implements RsaKeyService {
     private static final String PUBLIC_KEY_PATH = "public.pem";
     private static final String PRIVATE_KEY_PATH = "private.pem";
+    private static final String KEY_ALGORITHM = "RSA";
     private Key privateKey = null;
     private Key publicKey = null;
 
@@ -56,7 +57,7 @@ public class RsaKeyServiceImpl implements RsaKeyService {
         try {
             byte[] encodedKey = Base64.getDecoder().decode(publicKeyString);
 
-            return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(encodedKey));
+            return KeyFactory.getInstance(KEY_ALGORITHM).generatePublic(new X509EncodedKeySpec(encodedKey));
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new IllegalArgumentException(e);
         }
@@ -102,7 +103,7 @@ public class RsaKeyServiceImpl implements RsaKeyService {
         try {
             byte[] encodedKey = Base64.getDecoder().decode(serializedPublicKey);
 
-            return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
+            return KeyFactory.getInstance(KEY_ALGORITHM).generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new IllegalArgumentException(e);
         }

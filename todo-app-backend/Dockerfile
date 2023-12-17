@@ -12,7 +12,7 @@ RUN gradle build -x test
 
 RUN mv build/libs/todo-app-backend-0.0.1-SNAPSHOT.jar todo-app.jar
 
-FROM gradle:8.2-jdk17-alpine
+FROM openjdk:17-jdk-alpine
 
 WORKDIR /todo-app
 

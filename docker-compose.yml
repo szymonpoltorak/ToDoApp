@@ -20,6 +20,7 @@ services:
             - POSTGRES_PASSWORD=none
             - FRONTEND_URL=https://localhost
             - SPRING_DATASOURCE_URL=jdbc:postgresql://todo-postgres:5432/todoapp
+            - KEY_STORE_PASSWORD=none
         build:
             context: todo-app-backend
             dockerfile: Dockerfile
