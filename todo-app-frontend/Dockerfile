@@ -16,7 +16,7 @@ COPY --from=build /todo-app-frontend/dist/todo-app-frontend /etc/nginx/html
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY ./ssl /etc/nginx/ssl
+COPY src/assets/ssl /etc/nginx/ssl
 
 EXPOSE 80
 EXPOSE 443

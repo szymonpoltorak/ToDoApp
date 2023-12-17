@@ -43,4 +43,4 @@ generated
 *.pem
 
 todo-app-nginx/ssl/*
-!todo-app-nginx/ssl/.gitkeep
+!todo-app-nginx/ssl/gen.sh
