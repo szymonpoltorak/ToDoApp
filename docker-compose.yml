@@ -35,7 +35,7 @@ services:
             context: todo-app-frontend
             dockerfile: Dockerfile
         ports:
-            - "4200:80"
+            - "4200:443"
     todo-nginx:
         container_name: todo-nginx
         image: todo-nginx
