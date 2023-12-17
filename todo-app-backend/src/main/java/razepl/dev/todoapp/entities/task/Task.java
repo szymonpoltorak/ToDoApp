@@ -21,7 +21,6 @@ import razepl.dev.todoapp.entities.groups.Group;
 import razepl.dev.todoapp.entities.task.interfaces.Updatable;
 import razepl.dev.todoapp.entities.user.User;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static razepl.dev.todoapp.entities.collaborator.constants.CollaboratorConstants.COLLABORATOR_ID_COLUMN;

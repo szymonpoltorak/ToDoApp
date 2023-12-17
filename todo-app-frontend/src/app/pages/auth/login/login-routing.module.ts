@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 import { LoginComponent } from "./login.component";
 
 const routes: Routes = [
     {
-        path: RouterPaths.CURRENT_PATH,
+        path: RouterPath.CURRENT_PATH,
         component: LoginComponent
     },
     {
-        path: RouterPaths.REGISTER_FULL_PATH,
+        path: RouterPath.REGISTER_FULL_PATH,
         loadChildren: () => import("../register/register.module")
             .then(module => module.RegisterModule)
     }

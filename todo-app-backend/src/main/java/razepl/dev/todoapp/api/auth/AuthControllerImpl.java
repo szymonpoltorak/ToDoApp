@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.api.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,8 +14,8 @@ import razepl.dev.todoapp.api.auth.constants.AuthMappings;
 import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
-import razepl.dev.todoapp.api.auth.data.TokenRequest;
-import razepl.dev.todoapp.api.auth.data.TokenResponse;
+import razepl.dev.todoapp.api.auth.data.ResetPasswordRequest;
+import razepl.dev.todoapp.api.auth.data.SimpleStringResponse;
 import razepl.dev.todoapp.api.auth.interfaces.AuthController;
 import razepl.dev.todoapp.api.auth.interfaces.AuthService;
 
@@ -29,14 +30,15 @@ public class AuthControllerImpl implements AuthController {
     @Override
     @PostMapping(value = AuthMappings.REGISTER_MAPPING)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public final AuthResponse registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        return authService.register(registerRequest);
+    public final AuthResponse registerUser(@Valid @RequestBody RegisterRequest registerRequest,
+                                           HttpServletRequest request) {
+        return authService.register(registerRequest, request);
     }
 
     @Override
     @PostMapping(value = AuthMappings.LOGIN_MAPPING)
-    public final AuthResponse loginUser(@RequestBody LoginRequest loginRequest) {
-        return authService.login(loginRequest);
+    public final AuthResponse loginUser(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+        return authService.login(loginRequest, request);
     }
 
     @Override
@@ -46,8 +48,14 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @Override
-    @PostMapping(value = AuthMappings.AUTHENTICATE_MAPPING)
-    public final TokenResponse authenticateUser(@RequestBody TokenRequest request) {
-        return authService.validateUsersTokens(request);
+    @PostMapping(value = AuthMappings.REQUEST_RESET_PASSWORD_MAPPING)
+    public final SimpleStringResponse requestResetUsersPassword(@RequestParam String username) {
+        return authService.requestResetUsersPassword(username);
+    }
+
+    @Override
+    @PostMapping(value = AuthMappings.RESET_PASSWORD_MAPPING)
+    public final SimpleStringResponse resetUsersPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return authService.resetUsersPassword(request);
     }
 }

@@ -4,5 +4,7 @@ export const enum AuthApiCalls {
     REFRESH_URL = "/api/auth/refreshToken",
 
     ERROR_FOUND = '{"authToken": "", "refreshToken": ""}',
-    LOGOUT_URL = "/api/auth/logout"
+    LOGOUT_URL = "/api/auth/logout",
+    FORGOT_PASSWORD_URL = "/api/auth/forgotPassword",
+    RESET_PASSWORD_URL = "/api/auth/resetPassword",
 }

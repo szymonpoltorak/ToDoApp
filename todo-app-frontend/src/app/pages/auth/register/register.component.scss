@@ -35,6 +35,15 @@
     background-color: #313130;
 }
 
+.register-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    z-index: -1;
+    tab-index: -1;
+}
+
 .my-button {
     width: 100px;
     height: 50px;

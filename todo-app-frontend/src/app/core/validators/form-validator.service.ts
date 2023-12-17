@@ -58,7 +58,8 @@ export class FormValidatorService {
     buildFormGroup(): FormGroup {
         return this.formBuilder.group({
             email: this.emailControl,
-            password: this.passwordControl
+            password: this.passwordControl,
+            telephone: new FormControl("", [])
         });
     }
 
@@ -68,6 +69,7 @@ export class FormValidatorService {
                 firstName: this.nameControl,
                 lastName: this.surnameControl
             }),
+            telephone: new FormControl("", []),
             email: this.emailControl,
             passwordInputs: this.formBuilder.group({
                     userPassword: this.passwordControl,
@@ -77,6 +79,27 @@ export class FormValidatorService {
                     validator: this.passwordValidator.passwordMatchValidator(this.passwordName, this.repeatPassword)
                 }
             )
+        });
+    }
+
+    buildResetPasswordFormGroup(): FormGroup {
+        return this.formBuilder.group({
+            passwordInputs: this.formBuilder.group({
+                    userPassword: this.passwordControl,
+                    repeatPassword: this.repeatPasswordControl
+                },
+                {
+                    validator: this.passwordValidator.passwordMatchValidator(this.passwordName, this.repeatPassword)
+                }
+            ),
+            date: new FormControl("", [])
+        });
+    }
+
+    buildForgotPasswordForm(): FormGroup {
+        return this.formBuilder.group({
+            email: this.emailControl,
+            dateTimeLocal: new FormControl("", [])
         });
     }
 }

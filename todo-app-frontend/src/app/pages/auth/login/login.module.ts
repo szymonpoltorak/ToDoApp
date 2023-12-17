@@ -6,6 +6,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AuthUtilsModule } from "../auth-utils/auth-utils.module";
+import { MatDividerModule } from "@angular/material/divider";
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { AuthUtilsModule } from "../auth-utils/auth-utils.module";
         MatButtonModule,
         ReactiveFormsModule,
         AuthUtilsModule,
+        MatDividerModule,
     ],
     providers: []
 })

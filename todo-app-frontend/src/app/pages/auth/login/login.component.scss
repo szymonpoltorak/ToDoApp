@@ -1,7 +1,7 @@
 .login-form {
     min-width: 150px;
     max-width: 500px;
-    max-height: 300px;
+    max-height: 400px;
     margin-top: 200px;
     padding: 20px;
     background-color: #313130;
@@ -19,9 +19,9 @@
 }
 
 .button-bar {
-    margin: 5px;
+    margin: 3em 1.5em 1.5em 1.5em;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-content: center;
     gap: 100px;
 }
@@ -35,7 +35,27 @@
     background-color: #313130;
 }
 
+.login-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    z-index: -1;
+    tab-index: -1;
+}
+
 .my-button {
     width: 100px;
     height: 50px;
+}
+
+.forgot-password-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-divider {
+    margin-top: 1em;
+    margin-bottom: 1em;
 }

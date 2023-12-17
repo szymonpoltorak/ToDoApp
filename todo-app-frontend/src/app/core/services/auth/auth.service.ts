@@ -9,6 +9,7 @@ import { RegisterRequest } from "@core/data/auth/register-request";
 import { AuthResponse } from "@core/data/auth/auth-response";
 import { LoginRequest } from "@core/data/auth/login-request";
 import { AuthConstants } from "@enums/auth/AuthConstants";
+import { ResetPassword } from "@core/data/auth/reset-password";
 
 @Injectable({
     providedIn: 'root'
@@ -34,8 +35,11 @@ export class AuthService {
     }
 
     refreshUsersToken(refreshToken: string): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`${environment.httpBackend}${AuthApiCalls.REFRESH_URL}`,
-            this.buildRefreshToken(refreshToken)).pipe(tap((response: AuthResponse) => {
+        return this.http.post<AuthResponse>(`${environment.httpBackend}${AuthApiCalls.REFRESH_URL}`, {}, {
+            params: {
+                refreshToken: refreshToken
+            }
+        }).pipe(tap((response: AuthResponse) => {
             this.saveData(response);
         }));
     }
@@ -48,7 +52,19 @@ export class AuthService {
         this.utilService.addValueToStorage(StorageKeys.REFRESH_TOKEN, data.refreshToken);
     }
 
-    private buildRefreshToken(refreshToken: string) {
-        return JSON.parse(`{"refreshToken": "${refreshToken}"}`);
+    sendEmailWithLink(username: string): Observable<string> {
+        return this.http.post<string>(`${environment.httpBackend}${AuthApiCalls.FORGOT_PASSWORD_URL}`, {}, {
+            params: {
+                username: username
+            }
+        }).pipe(catchError((response) => {
+            console.log(response);
+
+            return of(response);
+        }));
+    }
+
+    resetPassword(request: ResetPassword): Observable<string> {
+        return this.http.post<string>(`${environment.httpBackend}${AuthApiCalls.RESET_PASSWORD_URL}`, request);
     }
 }

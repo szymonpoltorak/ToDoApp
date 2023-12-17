@@ -1,5 +1,6 @@
 package razepl.dev.todoapp.config.jwt;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,10 +32,10 @@ public class JwtAuthenticationFilterImpl extends OncePerRequestFilter implements
     public final void doFilterInternal(@NonNull HttpServletRequest request,
                                        @NonNull HttpServletResponse response,
                                        @NonNull FilterChain filterChain) throws ServletException, IOException {
-        Optional<String> token = jwtService.getJwtToken(request);
+        Optional<String> token = jwtService.getJwtTokenFromRequest(request);
 
         token.ifPresent(authToken -> {
-            Optional<String> usernameOptional = jwtService.getUsernameFromToken(authToken);
+            Optional<String> usernameOptional = jwtService.getClaimFromToken(authToken, Claims::getSubject);
 
             usernameOptional.ifPresent(username -> setTokenForNotAuthenticatedUser(authToken, username, request));
         });
@@ -42,14 +43,16 @@ public class JwtAuthenticationFilterImpl extends OncePerRequestFilter implements
         filterChain.doFilter(request, response);
     }
 
-    private void setTokenForNotAuthenticatedUser(String jwtToken, String username, @NonNull HttpServletRequest request) {
+    private void setTokenForNotAuthenticatedUser(String jwtToken, String username, HttpServletRequest request) {
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             return;
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        boolean isTokenValid = tokenRepository.findByToken(jwtToken)
-                .map(token -> !token.isExpired() && !token.isRevoked()).orElse(false);
+        boolean isTokenValid = tokenRepository
+                .findByToken(jwtToken)
+                .map(token -> !token.isExpired() && !token.isRevoked())
+                .orElse(false);
 
         if (jwtService.isTokenValid(jwtToken, userDetails) && isTokenValid) {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

@@ -16,6 +16,8 @@
             </app-name-field>
         </div>
 
+        <input class="register-input" type="tel" formControlName="telephone">
+
         <app-email-field [emailControl]="formValidatorService.emailControl"
                          formControlName="email">
         </app-email-field>
@@ -39,7 +41,7 @@
                 Return
             </button>
 
-            <button class="my-button" color="primary" mat-raised-button type="submit">
+            <button class="my-button" color="primary" mat-raised-button type="submit" [disabled]="!registerForm.valid">
                 Register
             </button>
         </div>

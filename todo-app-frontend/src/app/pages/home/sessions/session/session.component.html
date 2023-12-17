@@ -1,0 +1,27 @@
+<div class="session-container">
+    <mat-icon *ngIf="session.deviceType === DeviceType.DESKTOP">computer</mat-icon>
+
+    <mat-icon *ngIf="session.deviceType === DeviceType.MOBILE">smartphone</mat-icon>
+
+    <div class="login-info-container">
+        <div class="list-option">
+            <div>IP</div>
+
+            <div>{{ session.ipAddress }}</div>
+        </div>
+
+        <div class="list-option">
+            <div>DateOfLogin</div>
+
+            <div>{{ session.dateOfLogin }}</div>
+        </div>
+
+        <div class="list-option">
+            <div>TimeOfLogin</div>
+
+            <div>{{ session.timeOfLogin }}</div>
+        </div>
+    </div>
+</div>
+
+<mat-divider></mat-divider>

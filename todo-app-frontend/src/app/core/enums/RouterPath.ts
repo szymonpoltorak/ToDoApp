@@ -1,4 +1,4 @@
-export enum RouterPaths {
+export enum RouterPath {
     CURRENT_PATH = "",
     LOGIN_AUTH_PATH = "login",
     REGISTER_AUTH_PATH = "register",
@@ -25,4 +25,12 @@ export enum RouterPaths {
 
     SEARCH_DIRECT = "/home/search",
     SEARCH_PATH = "search",
+
+    SESSIONS_PATH = "sessions",
+    SESSIONS_DIRECT = "/home/sessions",
+
+    RESET_PASSWORD_AUTH_PATH = "resetPassword",
+    RESET_PASSWORD_DIRECT= "/auth/resetPassword",
+
+    FORGOT_PASSWORD_AUTH_PATH = "forgotPassword",
 }

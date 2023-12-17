@@ -1,22 +1,32 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 
 const routes: Routes = [
     {
-        path: RouterPaths.CURRENT_PATH,
-        redirectTo: RouterPaths.LOGIN_AUTH_PATH,
+        path: RouterPath.CURRENT_PATH,
+        redirectTo: RouterPath.LOGIN_AUTH_PATH,
         pathMatch: 'full'
     },
     {
-        path: RouterPaths.LOGIN_AUTH_PATH,
+        path: RouterPath.LOGIN_AUTH_PATH,
         loadChildren: () => import('./login/login.module')
             .then(module => module.LoginModule),
     },
     {
-        path: RouterPaths.REGISTER_AUTH_PATH,
+        path: RouterPath.REGISTER_AUTH_PATH,
         loadChildren: () => import("./register/register.module")
             .then(module => module.RegisterModule)
+    },
+    {
+        path: RouterPath.RESET_PASSWORD_AUTH_PATH,
+        loadChildren: () => import("./reset-password/reset-password.module")
+            .then(module => module.ResetPasswordModule)
+    },
+    {
+        path: RouterPath.FORGOT_PASSWORD_AUTH_PATH,
+        loadChildren: () => import("./forgot-password/forgot-password.module")
+            .then(module => module.ForgotPasswordModule)
     }
 ];
 

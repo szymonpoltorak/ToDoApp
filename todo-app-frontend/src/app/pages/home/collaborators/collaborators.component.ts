@@ -1,19 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
-import { map, Observable, Subject, takeUntil } from "rxjs";
+import { map, Observable, take } from "rxjs";
 import { Collaborator } from "@core/data/home/Collaborator";
 import { CollaboratorService } from "@core/services/home/collaborator.service";
+import { RouterPath } from "@enums/RouterPath";
 
 @Component({
     selector: 'app-collaborators',
     templateUrl: './collaborators.component.html',
     styleUrls: ['./collaborators.component.scss']
 })
-export class CollaboratorsComponent implements SideMenuActions, OnInit, OnDestroy {
-    private destroyLogout$: Subject<void> = new Subject<void>();
-    private destroyDeleteGroup$: Subject<void> = new Subject<void>();
+export class CollaboratorsComponent implements SideMenuActions, OnInit {
     collaborators$ !: Observable<Collaborator[]>;
 
     constructor(private authService: AuthService,
@@ -21,25 +20,9 @@ export class CollaboratorsComponent implements SideMenuActions, OnInit, OnDestro
                 private sideMenuService: SideMenuService) {
     }
 
-    changeToGroupsView(): void {
-        this.sideMenuService.changeToGroupsView();
-    }
-
-    changeToProfileView(): void {
-        this.sideMenuService.changeToProfileView();
-    }
-
-    changeToCollaboratorsView(): void {
-        this.sideMenuService.changeToCollaboratorsView();
-    }
-
-    changeToSearchView(): void {
-        this.sideMenuService.changeToSearchView();
-    }
-
     logoutUser(): void {
         this.authService.logoutUser()
-            .pipe(takeUntil(this.destroyLogout$))
+            .pipe(take(1))
             .subscribe(() => this.sideMenuService.logoutUser());
     }
 
@@ -53,11 +36,12 @@ export class CollaboratorsComponent implements SideMenuActions, OnInit, OnDestro
         );
 
         this.collaboratorService.removeCollaborator(event)
-            .pipe(takeUntil(this.destroyDeleteGroup$))
+            .pipe(take(1))
             .subscribe();
     }
+    protected readonly RouterPath = RouterPath;
 
-    ngOnDestroy(): void {
-        this.destroyDeleteGroup$.complete();
+    changeRouteToNewView(route: RouterPath): void {
+        this.sideMenuService.changeRouteToNewView(route);
     }
 }

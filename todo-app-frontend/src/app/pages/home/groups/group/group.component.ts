@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Group } from "@core/data/home/Group";
 import { GroupService } from "@core/services/home/group.service";
 import { UtilService } from "@core/services/utils/util.service";
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 
 @Component({
     selector: 'app-group',
@@ -19,6 +19,6 @@ export class GroupComponent {
     navigateToGroupTasks(): void {
         this.groupService.group = this.group;
 
-        this.utilService.navigate(RouterPaths.TASKS_DIRECT);
+        this.utilService.navigate(RouterPath.TASKS_DIRECT);
     }
 }

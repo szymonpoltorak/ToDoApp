@@ -2,6 +2,21 @@
 
 A simple ToDo app created for the academic course with aim of creating an app with frontend, backend and database.
 
+## How to run it ?
+
+1. I use RSA private and public keys to sign jwt tokens so you need to generate them.
+
+* Use the commands below to generate private key and create public key:
+
+```bash
+openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:4096
+openssl rsa -pubout -in private.pem -out public.pem
+```
+
+* Place them inside `todo-app-backend/src/resources/*.pem`
+
+2. Application is using `ssl` so you need appropriate certificates. In `todo-app-nginx/ssl` there is a script `gen.sh` developed by me and my friend [Igor](https://github.com/igorkedzierawski). When you use it you should have `server.crt`, `server.key` and `server.p12`. First two should be placed in `todo-app-frontend/src/assets/ssl/` and `todo-app-nginx/ssl/` and `server.p12` in `todo-app-backend/src/main/resources/`. You can modify particular values in scripts variables.
+
 ## Technology Stack
 
 1. Frontend

@@ -1,11 +1,7 @@
+import { RouterPath } from "@enums/RouterPath";
+
 export interface SideMenuActions {
-    changeToProfileView(): void;
-
-    changeToGroupsView(): void;
-
-    changeToSearchView(): void;
-
-    changeToCollaboratorsView(): void;
+    changeRouteToNewView(route: RouterPath): void;
 
     logoutUser(): void;
 }

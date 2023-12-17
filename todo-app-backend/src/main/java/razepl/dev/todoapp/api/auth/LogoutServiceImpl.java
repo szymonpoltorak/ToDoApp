@@ -11,20 +11,17 @@ import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
 import razepl.dev.todoapp.entities.token.JwtToken;
 import razepl.dev.todoapp.entities.token.interfaces.TokenRepository;
-import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
+import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
 
 import static razepl.dev.todoapp.config.constants.Headers.AUTH_HEADER;
 import static razepl.dev.todoapp.config.constants.Headers.TOKEN_HEADER;
 import static razepl.dev.todoapp.config.constants.Headers.TOKEN_START_INDEX;
 
 
-/**
- * Service class for logging user out.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LogoutService implements LogoutHandler {
+public class LogoutServiceImpl implements LogoutHandler {
     private final TokenRepository tokenRepository;
     private final TokenManagerService tokenManager;
 

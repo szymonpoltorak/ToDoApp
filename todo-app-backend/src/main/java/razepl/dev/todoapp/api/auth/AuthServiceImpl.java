@@ -1,29 +1,32 @@
 package razepl.dev.todoapp.api.auth;
 
-import jakarta.validation.Valid;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.api.auth.data.LoginRequest;
 import razepl.dev.todoapp.api.auth.data.RegisterRequest;
-import razepl.dev.todoapp.api.auth.data.TokenRequest;
-import razepl.dev.todoapp.api.auth.data.TokenResponse;
+import razepl.dev.todoapp.api.auth.data.ResetPasswordRequest;
+import razepl.dev.todoapp.api.auth.data.SimpleStringResponse;
+import razepl.dev.todoapp.api.auth.interfaces.AuthHelperService;
 import razepl.dev.todoapp.api.auth.interfaces.AuthService;
+import razepl.dev.todoapp.api.auth.interfaces.LoginDeviceHandler;
 import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
 import razepl.dev.todoapp.config.jwt.interfaces.JwtService;
 import razepl.dev.todoapp.config.jwt.interfaces.TokenManagerService;
+import razepl.dev.todoapp.entities.attempts.LoginAttempt;
+import razepl.dev.todoapp.entities.attempts.interfaces.LoginAttemptRepository;
 import razepl.dev.todoapp.entities.user.User;
 import razepl.dev.todoapp.entities.user.interfaces.UserRepository;
-import razepl.dev.todoapp.exceptions.auth.InvalidTokenException;
-import razepl.dev.todoapp.exceptions.auth.TokenDoesNotExistException;
-import razepl.dev.todoapp.exceptions.auth.TokensUserNotFoundException;
-import razepl.dev.todoapp.exceptions.auth.UserAlreadyExistsException;
+import razepl.dev.todoapp.exceptions.auth.throwable.InvalidTokenException;
+import razepl.dev.todoapp.exceptions.auth.throwable.TokenDoesNotExistException;
+import razepl.dev.todoapp.exceptions.auth.throwable.UserAlreadyExistsException;
 
+import java.time.LocalTime;
+import java.util.Collections;
 import java.util.Optional;
 
 @Slf4j
@@ -32,45 +35,52 @@ import java.util.Optional;
 public class AuthServiceImpl implements AuthService {
     private static final String USER_NOT_EXIST_MESSAGE = "Such user does not exist!";
     private static final String BUILDING_TOKEN_RESPONSE_MESSAGE = "Building token response for user : {}";
+    private static final long PASSWORD_REFRESH_TOKEN_TIME = 600_000L;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final TokenManagerService tokenManager;
+    private final LoginAttemptRepository loginAttemptRepository;
+    private final LoginDeviceHandler loginDeviceFilter;
     private final JwtService jwtService;
+    private final AuthHelperService authHelperService;
 
     @Override
-    public final AuthResponse register(RegisterRequest registerRequest) {
+    public final AuthResponse register(RegisterRequest registerRequest, HttpServletRequest request) {
         log.info("Registering user with data: \n{}", registerRequest);
 
-        String password = validateUserRegisterData(registerRequest);
+        validateUserRegisterData(registerRequest);
 
-        User user = User
+        LoginAttempt loginAttempt = LoginAttempt
                 .builder()
-                .name(registerRequest.name())
-                .username(registerRequest.username())
-                .surname(registerRequest.surname())
-                .password(passwordEncoder.encode(password))
+                .attempts(0L)
+                .dateOfLock(LocalTime.MIN)
                 .build();
-        userRepository.save(user);
+        LoginAttempt newLoginAttempt = loginAttemptRepository.save(loginAttempt);
 
-        log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, user);
+        User user = authHelperService.buildRequestIntoUser(registerRequest, newLoginAttempt);
 
-        return tokenManager.buildTokensIntoResponse(user, TokenRevokeStatus.NOT_TO_REVOKE);
+        User newUser = userRepository.save(user);
+
+        loginDeviceFilter.addNewDeviceToUserLoggedInDevices(newUser, request);
+
+        log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, newUser);
+
+        return tokenManager.buildTokensIntoResponse(newUser, TokenRevokeStatus.NOT_TO_REVOKE);
     }
 
     @Override
-    public final AuthResponse login(LoginRequest loginRequest) {
+    public final AuthResponse login(LoginRequest loginRequest, HttpServletRequest request) {
         log.info("Logging user with data: \n{}", loginRequest);
 
         String username = loginRequest.username();
 
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                username, loginRequest.password())
-        );
+        User user = validateUserLoginAccount(username);
 
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
-        );
+        LoginAttempt loginAttempt = user.getLoginAttempt();
+
+        authHelperService.executeUserAuthenticationProcess(loginAttempt, loginRequest);
+
+        loginDeviceFilter.addNewDeviceToUserLoggedInDevices(user, request);
+
         log.info(BUILDING_TOKEN_RESPONSE_MESSAGE, user);
 
         return tokenManager.buildTokensIntoResponse(user, TokenRevokeStatus.TO_REVOKE);
@@ -93,39 +103,68 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public final TokenResponse validateUsersTokens(TokenRequest request) {
-        log.info("Authenticating user with data:\n{}", request);
+    public final SimpleStringResponse requestResetUsersPassword(String username) {
+        log.info("Resetting password for user : {}", username);
 
-        User user = userRepository.findUserByToken(request.authToken()).orElseThrow(TokensUserNotFoundException::new);
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
+        );
+        log.info("User to gain refresh link : {}", user);
 
-        boolean isAuthTokenValid = jwtService.isTokenValid(request.authToken(), user);
+        String passwordRefreshToken = jwtService.generateToken(Collections.emptyMap(),
+                user, PASSWORD_REFRESH_TOKEN_TIME);
 
-        log.info("Is token valid : {}\nFor user : {}", isAuthTokenValid, user);
+        log.info("Password refresh link : https://localhost:4200/auth/resetPassword?token={}", passwordRefreshToken);
 
-        return TokenResponse
-                .builder()
-                .isAuthTokenValid(isAuthTokenValid)
-                .build();
+        authHelperService.savePasswordResetToken(passwordRefreshToken, user);
+
+        return new SimpleStringResponse(username);
     }
 
-    private String validateUserRegisterData(RegisterRequest registerRequest) {
-        String password = registerRequest.password();
+    @Override
+    public final SimpleStringResponse resetUsersPassword(ResetPasswordRequest request) {
+        log.info("Resetting password for user with token : {}", request.resetPasswordToken());
 
+        String username = jwtService.getClaimFromToken(request.resetPasswordToken(), Claims::getSubject)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE));
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
+        );
+        log.info("User to reset password : {}", user);
+
+        authHelperService.executePasswordResetProcess(request, user);
+
+        return new SimpleStringResponse(username);
+    }
+
+    private User validateUserLoginAccount(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE)
+        );
+        if (!user.isAccountNonLocked()) {
+            log.error("User is locked! User : {}", user);
+
+            throw new UsernameNotFoundException("User is locked!");
+        }
+        return user;
+    }
+
+    private void validateUserRegisterData(RegisterRequest registerRequest) {
         Optional<User> existingUser = userRepository.findByUsername(registerRequest.username());
 
-        if (existingUser.isPresent()) {
-            log.error("User already exists! Found user: {}", existingUser.get());
+        existingUser.ifPresent(user -> {
+            log.error("User already exists! Found user: {}", user);
 
             throw new UserAlreadyExistsException("User already exists!");
-        }
-        return password;
+        });
     }
 
     private User validateRefreshTokenData(String refreshToken) {
         if (refreshToken == null) {
             throw new TokenDoesNotExistException("Token does not exist!");
         }
-        Optional<String> usernameOptional = jwtService.getUsernameFromToken(refreshToken);
+        Optional<String> usernameOptional = jwtService.getClaimFromToken(refreshToken, Claims::getSubject);
 
         if (usernameOptional.isEmpty()) {
             throw new UsernameNotFoundException(USER_NOT_EXIST_MESSAGE);

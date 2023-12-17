@@ -1,3 +1,10 @@
 target
 Dockerfile
 src/main/resources.keys/*
+out/
+gradlew
+gradle
+gradlew.bat
+.idea
+.gradle
+docker-compose.yml

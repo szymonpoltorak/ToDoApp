@@ -1,22 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
-import {
-    debounceTime,
-    distinctUntilChanged,
-    map,
-    Observable,
-    startWith,
-    Subject,
-    switchMap,
-    take,
-    takeUntil
-} from "rxjs";
+import { debounceTime, distinctUntilChanged, map, Observable, startWith, switchMap, take } from "rxjs";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { FormControl } from "@angular/forms";
 import { Collaborator } from "@core/data/home/Collaborator";
 import { CollaboratorSuggestion } from "@core/data/home/CollaboratorSuggestion";
 import { CollaboratorService } from "@core/services/home/collaborator.service";
+import { RouterPath } from "@enums/RouterPath";
 
 @Component({
     selector: 'app-search',
@@ -24,7 +15,6 @@ import { CollaboratorService } from "@core/services/home/collaborator.service";
     styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements SideMenuActions, OnInit {
-    private destroyLogout$: Subject<void> = new Subject<void>();
     suggestionControl: FormControl = new FormControl<any>("");
     suggestions$ !: Observable<string[]>;
     visibleCollaborators$ !: Observable<CollaboratorSuggestion[]>;
@@ -34,25 +24,9 @@ export class SearchComponent implements SideMenuActions, OnInit {
                 private sideMenuService: SideMenuService) {
     }
 
-    changeToGroupsView(): void {
-        this.sideMenuService.changeToGroupsView();
-    }
-
-    changeToProfileView(): void {
-        this.sideMenuService.changeToProfileView();
-    }
-
-    changeToCollaboratorsView(): void {
-        this.sideMenuService.changeToCollaboratorsView();
-    }
-
-    changeToSearchView(): void {
-        this.sideMenuService.changeToSearchView();
-    }
-
     logoutUser(): void {
         this.authService.logoutUser()
-            .pipe(takeUntil(this.destroyLogout$))
+            .pipe(take(1))
             .subscribe(() => this.sideMenuService.logoutUser());
     }
 
@@ -93,4 +67,10 @@ export class SearchComponent implements SideMenuActions, OnInit {
                 );
             });
     }
+
+    changeRouteToNewView(route: RouterPath): void {
+        this.sideMenuService.changeRouteToNewView(route);
+    }
+
+    protected readonly RouterPath = RouterPath;
 }

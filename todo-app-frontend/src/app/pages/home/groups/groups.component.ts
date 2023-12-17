@@ -1,23 +1,21 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { PageEvent } from "@angular/material/paginator";
-import { Observable, of, Subject, takeUntil } from "rxjs";
+import { Observable, take } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { GroupService } from "@core/services/home/group.service";
 import { UtilService } from "@core/services/utils/util.service";
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
 import { AuthService } from "@core/services/auth/auth.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
-import { group } from "@angular/animations";
 
 @Component({
     selector: 'app-groups',
     templateUrl: './groups.component.html',
     styleUrls: ['./groups.component.scss']
 })
-export class GroupsComponent implements SideMenuActions, OnInit, OnDestroy {
+export class GroupsComponent implements SideMenuActions, OnInit {
     groups$ !: Observable<Group[]>;
-    private destroyLogout$: Subject<void> = new Subject<void>();
 
     constructor(private groupService: GroupService,
                 private authService: AuthService,
@@ -25,25 +23,9 @@ export class GroupsComponent implements SideMenuActions, OnInit, OnDestroy {
                 private sideMenuService: SideMenuService) {
     }
 
-    changeToGroupsView(): void {
-        this.sideMenuService.changeToGroupsView();
-    }
-
-    changeToProfileView(): void {
-        this.sideMenuService.changeToProfileView();
-    }
-
-    changeToCollaboratorsView(): void {
-        this.sideMenuService.changeToCollaboratorsView();
-    }
-
-    changeToSearchView(): void {
-        this.sideMenuService.changeToSearchView();
-    }
-
     logoutUser(): void {
         this.authService.logoutUser()
-            .pipe(takeUntil(this.destroyLogout$))
+            .pipe(take(1))
             .subscribe(() => this.sideMenuService.logoutUser());
     }
 
@@ -59,11 +41,12 @@ export class GroupsComponent implements SideMenuActions, OnInit, OnDestroy {
         this.groupService.createNewGroup().subscribe((newGroup: Group): void => {
             this.groupService.group = newGroup;
 
-            this.utilService.navigate(RouterPaths.TASKS_DIRECT);
+            this.utilService.navigate(RouterPath.TASKS_DIRECT);
         });
     }
+    protected readonly RouterPath = RouterPath;
 
-    ngOnDestroy(): void {
-        this.destroyLogout$.complete();
+    changeRouteToNewView(route: RouterPath): void {
+        this.sideMenuService.changeRouteToNewView(route);
     }
 }

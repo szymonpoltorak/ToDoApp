@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormValidatorService } from "@core/validators/form-validator.service";
 import { AbstractControl, FormGroup } from "@angular/forms";
 import { RegisterRequest } from "@core/data/auth/register-request";
-import { Subject, takeUntil } from "rxjs";
+import { take } from "rxjs";
 import { AuthResponse } from "@core/data/auth/auth-response";
 import { AuthConstants } from "@enums/auth/AuthConstants";
 import { FormFieldNames } from "@enums/auth/FormFieldNames";
@@ -10,7 +10,8 @@ import { StorageKeys } from "@enums/auth/StorageKeys";
 import { AuthService } from "@core/services/auth/auth.service";
 import { UserService } from "@core/services/utils/user.service";
 import { UtilService } from "@core/services/utils/util.service";
-import { RouterPaths } from "@enums/RouterPaths";
+import { RouterPath } from "@enums/RouterPath";
+import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
 
 @Component({
     selector: 'app-register',
@@ -19,7 +20,6 @@ import { RouterPaths } from "@enums/RouterPaths";
 })
 export class RegisterComponent implements OnInit {
     registerForm !: FormGroup;
-    private destroyRegister$: Subject<void> = new Subject<void>();
 
     constructor(public formValidatorService: FormValidatorService,
                 private authService: AuthService,
@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit(): void {
         this.registerForm = this.formValidatorService.buildRegisterFormGroup();
+        this.registerForm.reset();
     }
 
     submitForm(): void {
@@ -36,9 +37,15 @@ export class RegisterComponent implements OnInit {
             return;
         }
         const request: RegisterRequest = this.buildRegisterRequest();
+        const phone: string = this.registerForm.get("telephone")?.value;
 
+        if (phone != undefined && phone != "") {
+            console.error(JSON.parse(AuthApiCalls.ERROR_FOUND));
+
+            return;
+        }
         this.authService.registerUser(request)
-            .pipe(takeUntil(this.destroyRegister$))
+            .pipe(take(1))
             .subscribe((data: AuthResponse): void => {
                 if (data.authToken === AuthConstants.NO_TOKEN) {
                     return;
@@ -51,7 +58,7 @@ export class RegisterComponent implements OnInit {
 
                 this.authService.saveData(data);
 
-                this.utilService.navigate(RouterPaths.HOME_LOGIN_PATH);
+                this.utilService.navigate(RouterPath.HOME_LOGIN_PATH);
             });
     }
 

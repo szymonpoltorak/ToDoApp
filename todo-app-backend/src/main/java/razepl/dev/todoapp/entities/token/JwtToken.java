@@ -17,8 +17,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import razepl.dev.todoapp.entities.user.User;
 
+@ToString
 @Builder
 @Getter
 @Setter
@@ -42,6 +44,7 @@ public class JwtToken {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private User user;
 
     private boolean isExpired;

@@ -6,7 +6,7 @@ mvnw
 mvnw.cmd
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+*.p12
 ### STS ###
 .apt_generated
 .classpath
@@ -41,3 +41,6 @@ gradle
 out
 generated
 *.pem
+
+todo-app-nginx/ssl/*
+!todo-app-nginx/ssl/gen.sh

@@ -5,9 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import razepl.dev.todoapp.entities.attempts.LoginAttempt;
 import razepl.dev.todoapp.entities.user.interfaces.ServiceUser;
 
 import java.io.NotSerializableException;
@@ -80,6 +81,9 @@ public class User implements ServiceUser {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long userId;
 
+    @OneToOne
+    private LoginAttempt loginAttempt;
+
     @Override
     public final String getFullName() {
         return String.format("%s %s", name, surname);
@@ -102,7 +106,7 @@ public class User implements ServiceUser {
 
     @Override
     public final boolean isAccountNonLocked() {
-        return true;
+        return loginAttempt.isAccountNonLocked();
     }
 
     @Override
