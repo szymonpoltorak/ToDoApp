@@ -1,11 +1,21 @@
 server:
     port: 8080
+
     server-header: ""
+
     ssl:
         key-store-type: PKCS12
         key-store: classpath:server.p12
         key-store-password: ${KEY_STORE_PASSWORD}
         enabled: true
+
+    http2:
+        enabled: true
+
+        compression:
+            enabled: true
+            mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+            min-response-size: 1024
 
 logging:
     level:
