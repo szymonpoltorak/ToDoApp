@@ -1,89 +1,41 @@
-<mat-drawer-container autosize class="home-container">
-    <mat-drawer #drawer class="sidenav" mode="push">
-        <h1>Menu</h1>
+<section class="center-container">
+    <mat-card class="profile-container">
+        <div>
+            <mat-card-header class="profile-title-container">
+                <mat-card-title class="profile-title">Profile</mat-card-title>
+            </mat-card-header>
 
-        <mat-divider></mat-divider>
+            <mat-divider class="profile-section-separator"></mat-divider>
 
-        <section class="button-column">
-            <button (click)="changeRouteToNewView(RouterPath.PROFILE_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>person</mat-icon>
-                Profile
-            </button>
+            <mat-card-content class="profile-section-separator">
+                <mat-card-title>User Info</mat-card-title>
 
-            <button (click)="changeRouteToNewView(RouterPath.GROUPS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>list</mat-icon>
-                Groups
-            </button>
+                <mat-list *ngIf="user$ | async as user">
+                    <mat-list-item>
+                        <span matListItemTitle>Name</span>
 
-            <button (click)="changeRouteToNewView(RouterPath.COLLABORATORS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>group</mat-icon>
-                Collaborators
-            </button>
+                        <span matListItemLine>{{ user.name }}</span>
+                    </mat-list-item>
 
-            <button (click)="changeRouteToNewView(RouterPath.SEARCH_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>search</mat-icon>
-                Search
-            </button>
+                    <mat-list-item>
+                        <span matListItemTitle>Surname</span>
 
-            <button (click)="changeRouteToNewView(RouterPath.SESSIONS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>devices</mat-icon>
-                Sessions
-            </button>
+                        <span matListItemLine>{{ user.surname }}</span>
+                    </mat-list-item>
 
-            <button (click)="logoutUser()" class="menu-option" extended mat-fab>
-                <mat-icon>logout</mat-icon>
-                Logout
-            </button>
-        </section>
-    </mat-drawer>
+                    <mat-list-item>
+                        <span matListItemTitle>Username</span>
 
-    <mat-toolbar class="navbar" color="primary">
-        <button (click)="drawer.toggle()" aria-label="Menu button" class="menu-icon" mat-icon-button>
-            <mat-icon>menu</mat-icon>
+                        <span matListItemLine>{{ user.username }}</span>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </div>
+
+        <button (click)="closeAccount()" color="warn" mat-stroked-button>
+            <mat-icon>delete</mat-icon>
+
+            Delete account
         </button>
-
-        <span>ToDo</span>
-    </mat-toolbar>
-
-    <section class="center-container">
-        <mat-card class="profile-container">
-            <div>
-                <mat-card-header class="profile-title-container">
-                    <mat-card-title class="profile-title">Profile</mat-card-title>
-                </mat-card-header>
-
-                <mat-divider class="profile-section-separator"></mat-divider>
-
-                <mat-card-content class="profile-section-separator">
-                    <mat-card-title>User Info</mat-card-title>
-
-                    <mat-list *ngIf="user$ | async as user">
-                        <mat-list-item>
-                            <span matListItemTitle>Name</span>
-
-                            <span matListItemLine>{{ user.name }}</span>
-                        </mat-list-item>
-
-                        <mat-list-item>
-                            <span matListItemTitle>Surname</span>
-
-                            <span matListItemLine>{{ user.surname }}</span>
-                        </mat-list-item>
-
-                        <mat-list-item>
-                            <span matListItemTitle>Username</span>
-
-                            <span matListItemLine>{{ user.username }}</span>
-                        </mat-list-item>
-                    </mat-list>
-                </mat-card-content>
-            </div>
-
-            <button (click)="closeAccount()" color="warn" mat-stroked-button>
-                <mat-icon>delete</mat-icon>
-
-                Delete account
-            </button>
-        </mat-card>
-    </section>
-</mat-drawer-container>
+    </mat-card>
+</section>

@@ -1,16 +1,37 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Task } from "@core/data/home/Task";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Group } from "@core/data/home/Group";
 import { TaskUpdate } from "@core/data/home/TaskUpdate";
 import { Collaborator } from "@core/data/home/Collaborator";
 import { CollaboratorService } from "@core/services/home/collaborator.service";
 import { Observable } from "rxjs";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { AsyncPipe, CommonModule, NgForOf, NgIf } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatSelectModule } from "@angular/material/select";
+import { MatButtonModule } from "@angular/material/button";
 
 
 @Component({
     selector: 'app-task',
     templateUrl: './task.component.html',
+    standalone: true,
+    imports: [
+        MatExpansionModule,
+        MatCheckboxModule,
+        CommonModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatSelectModule,
+        AsyncPipe,
+        MatButtonModule
+    ],
     styleUrls: ['./task.component.scss']
 })
 export class TaskComponent implements OnInit {

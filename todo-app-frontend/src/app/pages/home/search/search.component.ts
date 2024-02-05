@@ -1,33 +1,43 @@
 import { Component, OnInit } from '@angular/core';
-import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { debounceTime, distinctUntilChanged, map, Observable, startWith, switchMap, take } from "rxjs";
 import { AuthService } from "@core/services/auth/auth.service";
-import { SideMenuService } from "@core/services/home/side-menu.service";
-import { FormControl } from "@angular/forms";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { Collaborator } from "@core/data/home/Collaborator";
 import { CollaboratorSuggestion } from "@core/data/home/CollaboratorSuggestion";
 import { CollaboratorService } from "@core/services/home/collaborator.service";
-import { RouterPath } from "@enums/RouterPath";
+import { MatCardModule } from "@angular/material/card";
+import { MatInputModule } from "@angular/material/input";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatListModule } from "@angular/material/list";
+import { CollaboratorSuggestionComponent } from "./collaborator-suggestion/collaborator-suggestion.component";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-search',
     templateUrl: './search.component.html',
+    standalone: true,
+    imports: [
+        MatCardModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatIconModule,
+        MatButtonModule,
+        MatListModule,
+        CollaboratorSuggestionComponent,
+        AsyncPipe
+    ],
     styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements SideMenuActions, OnInit {
+export class SearchComponent implements OnInit {
     suggestionControl: FormControl = new FormControl<any>("");
     suggestions$ !: Observable<string[]>;
     visibleCollaborators$ !: Observable<CollaboratorSuggestion[]>;
 
     constructor(private authService: AuthService,
-                private collaboratorService: CollaboratorService,
-                private sideMenuService: SideMenuService) {
-    }
-
-    logoutUser(): void {
-        this.authService.logoutUser()
-            .pipe(take(1))
-            .subscribe(() => this.sideMenuService.logoutUser());
+                private collaboratorService: CollaboratorService) {
     }
 
     ngOnInit(): void {
@@ -67,10 +77,4 @@ export class SearchComponent implements SideMenuActions, OnInit {
                 );
             });
     }
-
-    changeRouteToNewView(route: RouterPath): void {
-        this.sideMenuService.changeRouteToNewView(route);
-    }
-
-    protected readonly RouterPath = RouterPath;
 }

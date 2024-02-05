@@ -1,85 +1,37 @@
-<mat-drawer-container autosize class="home-container">
-    <mat-drawer #drawer class="sidenav" mode="push">
-        <h1>Menu</h1>
+<div class="center-container">
+    <mat-card class="search-container">
+        <div class="search-bar">
+            <mat-form-field class="search-input">
+                <mat-label>Find Collaborators</mat-label>
 
-        <mat-divider></mat-divider>
+                <input matInput
+                       placeholder="Example Name"
+                       type="text"
+                       [formControl]="suggestionControl"
+                       [matAutocomplete]="searchSuggestions">
 
-        <section class="button-column">
-            <button (click)="changeRouteToNewView(RouterPath.PROFILE_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>person</mat-icon>
-                Profile
-            </button>
+                <mat-autocomplete autoActiveFirstOption #searchSuggestions="matAutocomplete">
+                    <mat-option *ngFor="let suggestion of suggestions$ | async" [value]="suggestion">
+                        {{ suggestion }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
 
-            <button (click)="changeRouteToNewView(RouterPath.GROUPS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>list</mat-icon>
-                Groups
-            </button>
-
-            <button (click)="changeRouteToNewView(RouterPath.COLLABORATORS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>group</mat-icon>
-                Collaborators
-            </button>
-
-            <button (click)="changeRouteToNewView(RouterPath.SEARCH_DIRECT)" class="menu-option" extended mat-fab>
+            <button (click)="findCollaboratorByName()"
+                    type="submit"
+                    class="search-submit-button"
+                    color="primary"
+                    mat-mini-fab>
                 <mat-icon>search</mat-icon>
-                Search
             </button>
+        </div>
 
-            <button (click)="changeRouteToNewView(RouterPath.SESSIONS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>devices</mat-icon>
-                Sessions
-            </button>
-
-            <button (click)="logoutUser()" class="menu-option" extended mat-fab>
-                <mat-icon>logout</mat-icon>
-                Logout
-            </button>
-        </section>
-    </mat-drawer>
-
-    <mat-toolbar class="navbar" color="primary">
-        <button (click)="drawer.toggle()" aria-label="Menu button" class="menu-icon" mat-icon-button>
-            <mat-icon>menu</mat-icon>
-        </button>
-
-        <span>ToDo</span>
-    </mat-toolbar>
-
-    <div class="center-container">
-        <mat-card class="search-container">
-            <div class="search-bar">
-                <mat-form-field class="search-input">
-                    <mat-label>Find Collaborators</mat-label>
-
-                    <input matInput
-                           placeholder="Example Name"
-                           type="text"
-                           [formControl]="suggestionControl"
-                           [matAutocomplete]="searchSuggestions">
-
-                    <mat-autocomplete autoActiveFirstOption #searchSuggestions="matAutocomplete">
-                        <mat-option *ngFor="let suggestion of suggestions$ | async" [value]="suggestion">
-                            {{ suggestion }}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-
-                <button (click)="findCollaboratorByName()"
-                        type="submit"
-                        class="search-submit-button"
-                        color="primary"
-                        mat-mini-fab>
-                    <mat-icon>search</mat-icon>
-                </button>
-            </div>
-
-            <mat-list>
-                <app-collaborator-suggestion *ngFor="let collaborator of visibleCollaborators$ | async"
-                                             (addCollaboratorEvent)="addNewCollaborator($event)"
-                                             [isAlreadyCollaborator]="false"
-                                             [collaborator]="collaborator">
-                </app-collaborator-suggestion>
-            </mat-list>
-        </mat-card>
-    </div>
-</mat-drawer-container>
+        <mat-list>
+            <app-collaborator-suggestion *ngFor="let collaborator of visibleCollaborators$ | async"
+                                         (addCollaboratorEvent)="addNewCollaborator($event)"
+                                         [isAlreadyCollaborator]="false"
+                                         [collaborator]="collaborator">
+            </app-collaborator-suggestion>
+        </mat-list>
+    </mat-card>
+</div>

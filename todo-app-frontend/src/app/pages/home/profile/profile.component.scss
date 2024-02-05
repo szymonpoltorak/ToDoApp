@@ -1,5 +1,3 @@
-@import "../sidebar";
-
 .profile-container {
     display: flex;
     flex-direction: column;
@@ -24,3 +22,8 @@
     margin-bottom: 20px;
 }
 
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

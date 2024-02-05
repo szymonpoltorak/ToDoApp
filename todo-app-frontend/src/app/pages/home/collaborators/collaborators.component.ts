@@ -6,10 +6,21 @@ import { map, Observable, take } from "rxjs";
 import { Collaborator } from "@core/data/home/Collaborator";
 import { CollaboratorService } from "@core/services/home/collaborator.service";
 import { RouterPath } from "@enums/RouterPath";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
+import { CollaboratorComponent } from "./collaborator/collaborator.component";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
     selector: 'app-collaborators',
     templateUrl: './collaborators.component.html',
+    standalone: true,
+    imports: [
+        MatCardModule,
+        MatListModule,
+        CollaboratorComponent,
+        AsyncPipe
+    ],
     styleUrls: ['./collaborators.component.scss']
 })
 export class CollaboratorsComponent implements SideMenuActions, OnInit {

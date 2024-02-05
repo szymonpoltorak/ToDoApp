@@ -1,10 +1,14 @@
-@import "../sidebar";
-
 .tasks-container {
     margin-top: 2em;
     min-width: 70em;
     min-height: 52em;
     padding: 2em;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .group-header {

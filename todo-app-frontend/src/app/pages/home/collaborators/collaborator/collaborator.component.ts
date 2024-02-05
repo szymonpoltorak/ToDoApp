@@ -1,9 +1,20 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Collaborator } from "@core/data/home/Collaborator";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
+import { NgIf } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
     selector: 'app-collaborator',
     templateUrl: './collaborator.component.html',
+    standalone: true,
+    imports: [
+        MatIconModule,
+        MatListModule,
+        NgIf,
+        MatButtonModule
+    ],
     styleUrls: ['./collaborator.component.scss']
 })
 export class CollaboratorComponent {

@@ -3,23 +3,43 @@ import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
 import { GroupService } from "@core/services/home/group.service";
 import { SideMenuService } from "@core/services/home/side-menu.service";
 import { AuthService } from "@core/services/auth/auth.service";
-import { Observable, Subject, take, takeUntil } from "rxjs";
+import { Observable, take } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { Task } from "@core/data/home/Task";
-import { FormBuilder, FormControl, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { TaskRequest } from "@core/data/home/TaskRequest";
 import { TaskUpdate } from "@core/data/home/TaskUpdate";
 import { TaskService } from "@core/services/home/task.service";
 import { UtilService } from "@core/services/utils/util.service";
 import { RouterPath } from "@enums/RouterPath";
-import { data } from "autoprefixer";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { CommonModule } from "@angular/common";
+import { MatDividerModule } from "@angular/material/divider";
+import { TaskComponent } from "./task/task.component";
 
 @Component({
     selector: 'app-tasks',
     templateUrl: './tasks.component.html',
+    standalone: true,
+    imports: [
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatExpansionModule,
+        ReactiveFormsModule,
+        CommonModule,
+        FormsModule,
+        MatDividerModule,
+        TaskComponent
+    ],
     styleUrls: ['./tasks.component.scss']
 })
-export class TasksComponent implements SideMenuActions, OnInit {
+export class TasksComponent implements OnInit {
     private numOfPage: number = 0;
     protected notCompletedTasks!: Task[];
     protected completedTasks !: Task[];
@@ -36,14 +56,7 @@ export class TasksComponent implements SideMenuActions, OnInit {
                 private authService: AuthService,
                 private formBuilder: FormBuilder,
                 private utilService: UtilService,
-                private taskService: TaskService,
-                private sideMenuService: SideMenuService) {
-    }
-
-    logoutUser(): void {
-        this.authService.logoutUser()
-            .pipe(take(1))
-            .subscribe(() => this.sideMenuService.logoutUser());
+                private taskService: TaskService) {
     }
 
     ngOnInit(): void {
@@ -154,10 +167,4 @@ export class TasksComponent implements SideMenuActions, OnInit {
                 this.completedTasks = this.completedTasks.filter(task => task !== event);
             });
     }
-
-    changeRouteToNewView(route: RouterPath): void {
-        this.sideMenuService.changeRouteToNewView(route);
-    }
-
-    protected readonly RouterPath = RouterPath;
 }

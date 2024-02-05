@@ -1,124 +1,76 @@
-<mat-drawer-container autosize class="home-container">
-    <mat-drawer #drawer class="sidenav" mode="push">
-        <h1>Menu</h1>
+<div class="center-container">
+    <mat-card class="tasks-container">
+        <div class="group-header-container">
+            <div class="group-header">
+                <mat-card-title>{{ group.groupName }}</mat-card-title>
 
-        <mat-divider></mat-divider>
-
-        <section class="button-column">
-            <button (click)="changeRouteToNewView(RouterPath.PROFILE_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>person</mat-icon>
-                Profile
-            </button>
-
-            <button (click)="changeRouteToNewView(RouterPath.GROUPS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>list</mat-icon>
-                Groups
-            </button>
-
-            <button (click)="changeRouteToNewView(RouterPath.COLLABORATORS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>group</mat-icon>
-                Collaborators
-            </button>
-
-            <button (click)="changeRouteToNewView(RouterPath.SEARCH_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>search</mat-icon>
-                Search
-            </button>
-
-            <button (click)="changeRouteToNewView(RouterPath.SESSIONS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>devices</mat-icon>
-                Sessions
-            </button>
-
-            <button (click)="logoutUser()" class="menu-option" extended mat-fab>
-                <mat-icon>logout</mat-icon>
-                Logout
-            </button>
-        </section>
-    </mat-drawer>
-
-    <mat-toolbar class="navbar" color="primary">
-        <button (click)="drawer.toggle()" aria-label="Menu button" class="menu-icon" mat-icon-button>
-            <mat-icon>menu</mat-icon>
-        </button>
-
-        <span>ToDo</span>
-    </mat-toolbar>
-
-    <div class="center-container">
-        <mat-card class="tasks-container">
-            <div class="group-header-container">
-                <div class="group-header">
-                    <mat-card-title>{{ group.groupName }}</mat-card-title>
-
-                    <button (click)="editGroupName()" mat-mini-fab color="primary">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </div>
-
-                <form *ngIf="isEditingGroupName" class="edit-group-name-container" (ngSubmit)="submitNewGroupName()">
-                    <mat-form-field class="edit-name-input">
-                        <mat-label>Your new group name</mat-label>
-
-                        <mat-error *ngIf="editGroupControl.hasError('required')">
-                            NewName is <strong>required</strong>
-                        </mat-error>
-
-                        <input [formControl]="editGroupControl" matInput>
-                    </mat-form-field>
-
-                    <button type="submit" mat-mini-fab color="primary">
-                        <mat-icon>check</mat-icon>
-                    </button>
-                </form>
+                <button (click)="editGroupName()" mat-mini-fab color="primary">
+                    <mat-icon>edit</mat-icon>
+                </button>
             </div>
 
-            <mat-divider class="container-divider"></mat-divider>
+            <form *ngIf="isEditingGroupName" class="edit-group-name-container" (ngSubmit)="submitNewGroupName()">
+                <mat-form-field class="edit-name-input">
+                    <mat-label>Your new group name</mat-label>
 
-            <mat-accordion class="headers-align">
-                <app-task *ngFor="let notCompletedTask of notCompletedTasks"
-                          (completeEvent)="completeEvent($event)"
-                          (deleteTaskEvent)="deleteTaskFromNotCompleted($event)"
-                          (updateTask)="editNotCompletedTask($event)"
-                          [group]="group"
-                          [task]="notCompletedTask">
-                </app-task>
-            </mat-accordion>
+                    <mat-error *ngIf="editGroupControl.hasError('required')">
+                        NewName is <strong>required</strong>
+                    </mat-error>
 
-            <mat-divider class="container-divider"></mat-divider>
+                    <input [formControl]="editGroupControl" matInput>
+                </mat-form-field>
 
-            <h3>Completed</h3>
+                <button type="submit" mat-mini-fab color="primary">
+                    <mat-icon>check</mat-icon>
+                </button>
+            </form>
+        </div>
 
-            <mat-accordion class="headers-align">
-                <app-task *ngFor="let completedTask of completedTasks"
-                          (completeEvent)="unCompleteEvent($event)"
-                          (deleteTaskEvent)="deleteTaskFromCompleted($event)"
-                          [group]="group"
-                          [task]="completedTask">
-                </app-task>
-            </mat-accordion>
-        </mat-card>
-    </div>
+        <mat-divider class="container-divider"></mat-divider>
 
-    <div class="center-container">
-        <form (ngSubmit)="addNewTask()" class="new-task-form-container">
-            <mat-form-field class="new-task-input">
-                <mat-label>Enter new task</mat-label>
+        <mat-accordion class="headers-align">
+            <app-task *ngFor="let notCompletedTask of notCompletedTasks"
+                      (completeEvent)="completeEvent($event)"
+                      (deleteTaskEvent)="deleteTaskFromNotCompleted($event)"
+                      (updateTask)="editNotCompletedTask($event)"
+                      [group]="group"
+                      [task]="notCompletedTask">
+            </app-task>
+        </mat-accordion>
 
-                <input [formControl]="newTaskControl" matInput placeholder="Your task name">
+        <mat-divider class="container-divider"></mat-divider>
 
-                <mat-error *ngIf="newTaskControl.hasError('required')">
-                    Task title is <strong>required</strong>
-                </mat-error>
-            </mat-form-field>
+        <h3>Completed</h3>
 
-            <button type="submit" mat-mini-fab color="primary">
-                <mat-icon>add</mat-icon>
-            </button>
-        </form>
-    </div>
+        <mat-accordion class="headers-align">
+            <app-task *ngFor="let completedTask of completedTasks"
+                      (completeEvent)="unCompleteEvent($event)"
+                      (deleteTaskEvent)="deleteTaskFromCompleted($event)"
+                      [group]="group"
+                      [task]="completedTask">
+            </app-task>
+        </mat-accordion>
+    </mat-card>
+</div>
 
-    <button (click)="removeCurrentGroup()" class="remove-group-button" color="warn" mat-fab>
-        <mat-icon>delete</mat-icon>
-    </button>
-</mat-drawer-container>
+<div class="center-container">
+    <form (ngSubmit)="addNewTask()" class="new-task-form-container">
+        <mat-form-field class="new-task-input">
+            <mat-label>Enter new task</mat-label>
+
+            <input [formControl]="newTaskControl" matInput placeholder="Your task name">
+
+            <mat-error *ngIf="newTaskControl.hasError('required')">
+                Task title is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <button type="submit" mat-mini-fab color="primary">
+            <mat-icon>add</mat-icon>
+        </button>
+    </form>
+</div>
+
+<button (click)="removeCurrentGroup()" class="remove-group-button" color="warn" mat-fab>
+    <mat-icon>delete</mat-icon>
+</button>

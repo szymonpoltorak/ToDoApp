@@ -7,6 +7,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { HomeComponent } from './pages/home/home.component';
 import { AuthInterceptor } from "@core/interceptors/auth.interceptor";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatIconModule } from "@angular/material/icon";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatToolbarModule } from "@angular/material/toolbar";
 
 @NgModule({
     declarations: [
@@ -17,7 +24,14 @@ import { AuthInterceptor } from "@core/interceptors/auth.interceptor";
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        HttpClientModule
+        HttpClientModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatGridListModule,
+        MatIconModule,
+        MatPaginatorModule,
+        MatSidenavModule,
+        MatToolbarModule
     ],
     providers: [
         {
