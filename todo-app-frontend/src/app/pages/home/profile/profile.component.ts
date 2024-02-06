@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SideMenuService } from "@core/services/home/side-menu.service";
-import { Observable, of, take } from "rxjs";
+import { filter, map, Observable, of, take } from "rxjs";
 import { User } from "@core/data/home/User";
 import { ProfileService } from "@core/services/home/profile.service";
 import { UtilService } from "@core/services/utils/util.service";
@@ -26,10 +25,41 @@ import { MatButtonModule } from "@angular/material/button";
     styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-    user$: Observable<User> = of({ name: "Jan", surname: "Kowalski", username: "jan@example.com" });
+    user$: Observable<User> = of(
+        {
+            name: "Jan",
+            surname: "Kowalski",
+            username: "jan@example.com",
+            socials: [
+                {
+                    socialAccountId: 0,
+                    socialName: "JacekGoogle",
+                    socialPlatform: "Google",
+                    socialLink: "jacek@google.com"
+                },
+                {
+                    socialAccountId: 1,
+                    socialName: "JacekFacebook",
+                    socialPlatform: "Facebook",
+                    socialLink: "jacek@facebook.com"
+                },
+                {
+                    socialAccountId: 2,
+                    socialName: "JacekGoogle",
+                    socialPlatform: "Google",
+                    socialLink: "jacek@google.com"
+                },
+                {
+                    socialAccountId: 3,
+                    socialName: "JacekFacebook",
+                    socialPlatform: "Facebook",
+                    socialLink: "jacek@facebook.com"
+                }
+            ]
+        }
+    );
 
-    constructor(private sideMenuService: SideMenuService,
-                private profileService: ProfileService,
+    constructor(private profileService: ProfileService,
                 private utilService: UtilService) {
     }
 
@@ -45,5 +75,9 @@ export class ProfileComponent implements OnInit {
 
     ngOnInit(): void {
         this.user$ = this.profileService.getUserData();
+    }
+
+    removeAccount(socialAccountId: number): void {
+        this.user$ = this.profileService.removeSocialAccount(socialAccountId);
     }
 }

@@ -3,7 +3,9 @@ package razepl.dev.todoapp.api.profile;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import razepl.dev.todoapp.api.profile.data.SocialAccountRequest;
 import razepl.dev.todoapp.api.profile.data.SocialAccountResponse;
 import razepl.dev.todoapp.api.profile.data.UserResponse;
@@ -77,9 +79,13 @@ public class ProfileServiceImpl implements ProfileService {
                 .build();
         log.info("Created social account : {}", socialAccount);
 
+        if (socialAccountRepository.existsByUserAndSocialPlatform(user, socialAccount.getSocialPlatform())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "You already have this account linked!");
+        }
         socialAccountRepository.save(socialAccount);
 
-        return userMapper.toUserResponse(user);
+        return getUserData(user);
     }
 
     @Override
@@ -93,6 +99,6 @@ public class ProfileServiceImpl implements ProfileService {
 
         socialAccountRepository.deleteById(socialAccountId);
 
-        return userMapper.toUserResponse(user);
+        return getUserData(user);
     }
 }

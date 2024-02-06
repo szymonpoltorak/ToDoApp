@@ -7,10 +7,10 @@
 
             <mat-divider class="profile-section-separator"></mat-divider>
 
-            <mat-card-content class="profile-section-separator">
+            <mat-card-content *ngIf="user$ | async as user" class="profile-section-separator">
                 <mat-card-title>User Info</mat-card-title>
 
-                <mat-list *ngIf="user$ | async as user">
+                <mat-list>
                     <mat-list-item>
                         <span matListItemTitle>Name</span>
 
@@ -27,6 +27,23 @@
                         <span matListItemTitle>Username</span>
 
                         <span matListItemLine>{{ user.username }}</span>
+                    </mat-list-item>
+                </mat-list>
+
+                <mat-card-title>Social Accounts</mat-card-title>
+
+                <mat-list>
+                    <mat-list-item *ngFor="let social of user.socials">
+                        <span matListItemMeta>{{ social.socialPlatform }}</span>
+
+                        <span matListItemTitle>{{ social.socialName }}</span>
+
+                        <span matListItemLine>{{ social.socialLink }}</span>
+
+                        <button matListItemMeta mat-mini-fab
+                                color="warn" (click)="removeAccount(social.socialAccountId)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
                     </mat-list-item>
                 </mat-list>
             </mat-card-content>

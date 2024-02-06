@@ -10,6 +10,38 @@
     border-radius: 5%;
 }
 
+.login-button {
+    width: 100%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding: 1em;
+}
+
+.sign-up-label {
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+@mixin hover-link-effect {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.forgot-password-link {
+    display: flex;
+    justify-content: end;
+    color: white;
+}
+
+.sign-up-label:hover {
+    @include hover-link-effect;
+}
+
+.forgot-password-link:hover {
+    @include hover-link-effect;
+}
+
 .email-header {
     margin: 5px 5px 15px 5px;
     color: white;

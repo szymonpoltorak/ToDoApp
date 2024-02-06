@@ -18,4 +18,13 @@ export class ProfileService {
     closeAccount(): Observable<User> {
         return this.httpClient.delete<User>(`${environment.httpBackend}/api/home/profile/closeAccount`);
     }
+
+    removeSocialAccount(socialAccountId: number): Observable<User> {
+        return this.httpClient.delete<User>(`${environment.httpBackend}/api/home/profile/removeSocialAccount`,
+            {
+                params: {
+                    socialAccountId: socialAccountId
+                }
+            });
+    }
 }

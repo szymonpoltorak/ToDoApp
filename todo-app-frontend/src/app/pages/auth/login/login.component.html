@@ -20,21 +20,17 @@
             Number of tries was exceeded. Please try again after <strong>{{ currentDelay }} ms</strong>.
         </mat-error>
 
-        <div class="forgot-password-label">
-            <button routerLink="/auth/forgotPassword" mat-button type="button">
-                You forgot your password?
-            </button>
-        </div>
+        <span class="forgot-password-link" routerLink="/auth/forgotPassword">
+            Forgot your password?
+        </span>
 
-        <div class="button-bar">
-            <button class="my-button" color="primary" mat-raised-button routerLink="/auth/register" type="button">
-                Register
-            </button>
+        <button [disabled]="!loginForm.valid" class="login-button"
+                color="primary" mat-raised-button type="submit">
+            Login
+        </button>
 
-            <button [disabled]="!loginForm.valid" class="my-button"
-                    color="primary" mat-raised-button type="submit">
-                Login
-            </button>
-        </div>
+        <span class="sign-up-label" routerLink="/auth/register">
+            If you do not have account sign up!
+        </span>
     </form>
 </div>

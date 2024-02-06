@@ -15,7 +15,8 @@ mvnw.cmd
 .settings
 .springBeans
 .sts4-cache
-
+*.crt
+*.key
 ### IntelliJ IDEA ###
 .idea
 *.iws

@@ -42,6 +42,11 @@ const routes: Routes = [
                 path: RouterPath.SESSIONS_PATH,
                 loadComponent: () => import("./sessions/sessions.component")
                     .then(module => module.SessionsComponent)
+            },
+            {
+                path: RouterPath.SOCIALS_PATH,
+                loadComponent: () => import("./socials/socials.component")
+                    .then(module => module.SocialsComponent)
             }
         ]
     }
