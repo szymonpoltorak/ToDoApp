@@ -12,7 +12,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatListModule } from "@angular/material/list";
 import { CollaboratorSuggestionComponent } from "./collaborator-suggestion/collaborator-suggestion.component";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 
 @Component({
     selector: 'app-search',
@@ -27,7 +27,8 @@ import { AsyncPipe } from "@angular/common";
         MatButtonModule,
         MatListModule,
         CollaboratorSuggestionComponent,
-        AsyncPipe
+        AsyncPipe,
+        CommonModule
     ],
     styleUrls: ['./search.component.scss']
 })

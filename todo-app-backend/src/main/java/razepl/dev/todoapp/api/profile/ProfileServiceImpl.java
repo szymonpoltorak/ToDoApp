@@ -17,6 +17,9 @@ import razepl.dev.todoapp.entities.social.interfaces.SocialAccountRepository;
 import razepl.dev.todoapp.entities.token.interfaces.TokenRepository;
 import razepl.dev.todoapp.entities.user.User;
 import razepl.dev.todoapp.entities.user.interfaces.UserRepository;
+import razepl.dev.todoapp.exceptions.profile.SocialAccountDoesNotExistException;
+import razepl.dev.todoapp.exceptions.profile.SocialLinkDoesNotMatchPlatformException;
+import razepl.dev.todoapp.exceptions.profile.SocialPlatformAlreadyAddedException;
 
 import java.util.List;
 
@@ -79,9 +82,11 @@ public class ProfileServiceImpl implements ProfileService {
                 .build();
         log.info("Created social account : {}", socialAccount);
 
+        if (!socialAccount.getSocialLink().contains(socialAccount.getSocialPlatform().toString().toLowerCase())) {
+            throw new SocialLinkDoesNotMatchPlatformException("Link should contain platform name!");
+        }
         if (socialAccountRepository.existsByUserAndSocialPlatform(user, socialAccount.getSocialPlatform())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "You already have this account linked!");
+            throw new SocialPlatformAlreadyAddedException("You already have this account linked!");
         }
         socialAccountRepository.save(socialAccount);
 
@@ -93,7 +98,7 @@ public class ProfileServiceImpl implements ProfileService {
         log.info("Removing social account : {} from user : {}", socialAccountId, user);
 
         SocialAccount socialAccount = socialAccountRepository.findBySocialAccountIdAndUser(socialAccountId, user)
-                .orElseThrow();
+                .orElseThrow(() -> new SocialAccountDoesNotExistException("Such social account does not exist!"));
 
         log.info("Found social account : {}", socialAccount);
 
