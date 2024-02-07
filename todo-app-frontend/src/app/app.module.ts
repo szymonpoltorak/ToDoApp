@@ -14,6 +14,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { ErrorInterceptor } from "@core/interceptors/error.interceptor";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
     declarations: [
@@ -31,12 +33,18 @@ import { MatToolbarModule } from "@angular/material/toolbar";
         MatIconModule,
         MatPaginatorModule,
         MatSidenavModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatSnackBarModule
     ],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorInterceptor,
             multi: true
         }
     ],

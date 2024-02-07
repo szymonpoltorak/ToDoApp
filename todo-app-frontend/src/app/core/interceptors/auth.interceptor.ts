@@ -8,8 +8,6 @@ import {
     HttpStatusCode
 } from '@angular/common/http';
 import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from 'rxjs';
-import { Router } from "@angular/router";
-import { UserService } from "@core/services/utils/user.service";
 import { UtilService } from "@core/services/utils/util.service";
 import { AuthService } from "@core/services/auth/auth.service";
 import { StorageKeys } from "@enums/auth/StorageKeys";
@@ -21,9 +19,7 @@ export class AuthInterceptor implements HttpInterceptor {
     private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
 
-    constructor(private router: Router,
-                private userService: UserService,
-                private utilService: UtilService,
+    constructor(private utilService: UtilService,
                 private authService: AuthService) {
     }
 
@@ -38,7 +34,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
                     return this.refreshUsersTokenIfPossible(request, next);
                 }
-                return throwError(error);
+                return throwError(() => error);
             })
         );
     }
