@@ -29,8 +29,26 @@
             Login
         </button>
 
-        <span class="sign-up-label" routerLink="/auth/register">
-            If you do not have account sign up!
-        </span>
+        <p class="sign-up-label">
+            Don't have an account?&nbsp;<span class="login-accent" routerLink="/auth/register">Signup here.</span>
+        </p>
+
+        <div class="or-divider">
+            <div class="line"></div>
+            Or
+            <div class="line"></div>
+        </div>
+
+        <div class="button-bar">
+            <button mat-raised-button type="button">
+                <ng-icon name="bootstrapGithub"></ng-icon>
+                Login with Github
+            </button>
+
+            <button mat-raised-button type="button" color="primary">
+                <ng-icon name="bootstrapGoogle"></ng-icon>
+                Login with Google
+            </button>
+        </div>
     </form>
 </div>

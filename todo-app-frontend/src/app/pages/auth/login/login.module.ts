@@ -7,6 +7,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AuthUtilsModule } from "../auth-utils/auth-utils.module";
 import { MatDividerModule } from "@angular/material/divider";
+import { NgIconsModule } from "@ng-icons/core";
+import { bootstrapGithub, bootstrapGoogle } from "@ng-icons/bootstrap-icons";
 
 
 @NgModule({
@@ -21,6 +23,10 @@ import { MatDividerModule } from "@angular/material/divider";
         ReactiveFormsModule,
         AuthUtilsModule,
         MatDividerModule,
+        NgIconsModule.withIcons({
+            bootstrapGoogle,
+            bootstrapGithub
+        })
     ],
     providers: []
 })
