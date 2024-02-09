@@ -1,4 +1,4 @@
-FROM node:18.15-alpine as build
+FROM node:18.15-alpine AS build
 
 WORKDIR /todo-app-frontend
 

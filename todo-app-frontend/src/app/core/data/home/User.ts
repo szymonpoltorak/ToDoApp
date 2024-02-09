@@ -4,5 +4,5 @@ export interface User {
     name: string;
     surname: string;
     username: string;
-    socials: SocialAccount[];
+    socialAccounts: SocialAccount[];
 }

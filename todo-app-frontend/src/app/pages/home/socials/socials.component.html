@@ -9,7 +9,7 @@
                 <mat-select formControlName="socialPlatform"
                             name="socialPlatform">
                     <mat-option *ngFor="let socialPlatform of Object.values(SocialPlatform)"
-                                value="{{ socialPlatform }}">
+                                value="{{ socialPlatform.toUpperCase() }}">
                         {{ socialPlatform }}
                     </mat-option>
                 </mat-select>

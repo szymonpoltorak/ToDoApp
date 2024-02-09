@@ -1,6 +1,6 @@
 export enum SocialPlatform {
-    GITHUB = "Github",
-    TWITTER = "Twitter",
-    GOOGLE = "Google",
-    FACEBOOK = "Facebook"
+    GITHUB = "GITHUB",
+    TWITTER = "TWITTER",
+    GOOGLE = "GOOGLE",
+    FACEBOOK = "FACEBOOK"
 }

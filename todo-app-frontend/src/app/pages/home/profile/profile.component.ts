@@ -26,39 +26,7 @@ import { SocialPlatform } from "@enums/home/SocialPlatform";
     styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-    user$: Observable<User> = of(
-        {
-            name: "Jan",
-            surname: "Kowalski",
-            username: "jan@example.com",
-            socials: [
-                {
-                    socialAccountId: 0,
-                    socialName: "JacekGoogle",
-                    socialPlatform: SocialPlatform.GITHUB,
-                    socialLink: "jacek@github.com"
-                },
-                {
-                    socialAccountId: 1,
-                    socialName: "JacekFacebook",
-                    socialPlatform: SocialPlatform.TWITTER,
-                    socialLink: "jacek@twitter.com"
-                },
-                {
-                    socialAccountId: 2,
-                    socialName: "JacekGoogle",
-                    socialPlatform: SocialPlatform.GOOGLE,
-                    socialLink: "jacek@google.com"
-                },
-                {
-                    socialAccountId: 3,
-                    socialName: "JacekFacebook",
-                    socialPlatform: SocialPlatform.FACEBOOK,
-                    socialLink: "jacek@facebook.com"
-                }
-            ]
-        }
-    );
+    user$ !: Observable<User>;
 
     constructor(private profileService: ProfileService,
                 private utilService: UtilService) {

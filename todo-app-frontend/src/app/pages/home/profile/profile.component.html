@@ -30,10 +30,12 @@
                     </mat-list-item>
                 </mat-list>
 
-                <mat-card-title *ngIf="user.socials.length !== 0">Social Accounts</mat-card-title>
+                <mat-card-title>Social Accounts</mat-card-title>
 
-                <mat-list *ngIf="user.socials.length !== 0">
-                    <mat-list-item *ngFor="let social of user.socials">
+                <mat-card-subtitle *ngIf="!user.socialAccounts">No socials added yet!</mat-card-subtitle>
+
+                <mat-list *ngIf="user.socialAccounts">
+                    <mat-list-item *ngFor="let social of user.socialAccounts">
                         <span matListItemMeta>{{ social.socialPlatform }}</span>
 
                         <span matListItemTitle>{{ social.socialName }}</span>

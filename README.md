@@ -60,21 +60,19 @@ openssl rsa -pubout -in private.pem -out public.pem
 * Login
 
 <div align="center">
-    <img src="screenshots/login-correct.png" alt="Login">
-</div>
-
-<div align="center">
-    <img src="screenshots/login-error.png" alt="Login-Error">
+    <img src="screenshots/1.png" alt="Login">
 </div>
 
 * Register
 
 <div align="center">
-    <img src="screenshots/register-correct.png" alt="Regsiter">
+    <img src="screenshots/2.png" alt="Regsiter">
 </div>
 
+* Forgot password
+
 <div align="center">
-    <img src="screenshots/register-error.png" alt="Register-Error">
+    <img src="screenshots/3.png" alt="Login-Error">
 </div>
 
 * Groups
@@ -141,3 +139,14 @@ openssl rsa -pubout -in private.pem -out public.pem
     <img src="screenshots/finished-task.png" alt="finished-task">
 </div>
 
+* Sessions
+
+<div align="center">
+    <img src="screenshots/7.png" alt="Login-Error">
+</div>
+
+* Add socials
+
+<div align="center">
+    <img src="screenshots/8.png" alt="Login-Error">
+</div>
