@@ -12,6 +12,7 @@ import { UserService } from "@core/services/utils/user.service";
 import { RouterPath } from "@enums/RouterPath";
 import { FormFieldNames } from "@enums/auth/FormFieldNames";
 import { AuthApiCalls } from "@enums/auth/AuthApiCalls";
+import { environment } from "@environments/environment";
 
 @Component({
     selector: 'app-login',
@@ -96,5 +97,13 @@ export class LoginComponent implements OnInit {
         loginRequest.password = this.loginForm.get(FormFieldNames.LOGIN_PASSWORD)!.value;
 
         return loginRequest;
+    }
+
+    redirectToGoogleOauth(): void {
+        window.location.href = `${ environment.httpBackend }/oauth2/authorization/google`;
+    }
+
+    redirectToGithubOauth(): void {
+        window.location.href = `${ environment.httpBackend }/oauth2/authorization/github`;
     }
 }

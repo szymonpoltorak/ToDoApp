@@ -16,6 +16,11 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: RouterPath.OAUTH_PATH,
+        loadChildren: () => import("./pages/oauth/oauth.module")
+            .then(module => module.OAuthModule)
+    },
+    {
         path: RouterPath.CURRENT_PATH,
         redirectTo: "auth/login",
         pathMatch: 'full'

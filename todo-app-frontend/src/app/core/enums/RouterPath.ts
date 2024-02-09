@@ -36,4 +36,5 @@ export enum RouterPath {
 
     SOCIALS_PATH = "socials",
     SOCIALS_DIRECT = "/home/socials",
+    OAUTH_PATH = "oauth",
 }

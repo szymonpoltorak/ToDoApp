@@ -40,12 +40,12 @@
         </div>
 
         <div class="button-bar">
-            <button mat-raised-button type="button">
+            <button mat-raised-button type="button" (click)="redirectToGithubOauth()">
                 <ng-icon name="bootstrapGithub"></ng-icon>
                 Login with Github
             </button>
 
-            <button mat-raised-button type="button" color="primary">
+            <button mat-raised-button type="button" color="primary" (click)="redirectToGoogleOauth()">
                 <ng-icon name="bootstrapGoogle"></ng-icon>
                 Login with Google
             </button>

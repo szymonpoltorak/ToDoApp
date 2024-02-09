@@ -12,7 +12,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import razepl.dev.todoapp.config.constants.Properties;
@@ -35,6 +42,10 @@ public class SecurityConfigurationImpl implements SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final LogoutHandler logoutHandler;
+    private final OAuth2UserService<OAuth2UserRequest, OAuth2User> oauthService;
+    private final AuthenticationFailureHandler authFailureHandler;
+    private final AuthenticationSuccessHandler authSuccessHandler;
+    private final OAuth2UserService<OidcUserRequest, OidcUser> oidcService;
 
     @Bean
     @Override
@@ -61,6 +72,15 @@ public class SecurityConfigurationImpl implements SecurityConfiguration {
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth -> oauth
+                        .userInfoEndpoint(
+                                info -> info
+                                        .oidcUserService(oidcService)
+                                        .userService(oauthService)
+                        )
+                        .failureHandler(authFailureHandler)
+                        .successHandler(authSuccessHandler)
+                )
                 .logout(logout -> logout
                         .logoutUrl(LOGOUT_URL)
                         .addLogoutHandler(logoutHandler)
