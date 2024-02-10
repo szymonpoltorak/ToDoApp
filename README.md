@@ -46,7 +46,7 @@ openssl rsa -pubout -in private.pem -out public.pem
 * Architecture diagram:
 
 <div align="center">
-    <img src="docs/architecture.drawio.png" alt="Architecture">
+    <img src="docs/architecture.png" alt="Architecture">
 </div>
 
 * Database:
