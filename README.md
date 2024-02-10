@@ -1,6 +1,6 @@
 # ToDo App
 
-A simple ToDo app created for the academic course with aim of creating an app with frontend, backend and database.
+A simple ToDo app created for the academic course with aim of creating an app with frontend, backend and database. It has support for Https, PWA and is using reverse proxy.
 
 ## How to run it ?
 
@@ -21,6 +21,7 @@ openssl rsa -pubout -in private.pem -out public.pem
 
 1. Frontend
 *	Angular 16.2.0,
+*   Angular PWA,
 *	TypeScript 5.1.3,
 *	Angular Material 16.2.8,
 *	Scss 0.2.4,
@@ -31,6 +32,8 @@ openssl rsa -pubout -in private.pem -out public.pem
 *	Java 17,
 *	Spring Boot 3.14,
 *	Spring Data JPA,
+*   OAuth2,
+*   Jwt,
 *	Gradle Groovy,
 *	PostgreSQL,
 *	MapStruct,
