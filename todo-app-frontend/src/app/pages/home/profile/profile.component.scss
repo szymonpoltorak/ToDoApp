@@ -1,12 +1,12 @@
-@import "../sidebar";
-
 .profile-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin-top: 5em;
     width: 600px;
-    height: 500px;
+    min-height: 500px;
+    max-height: 800px;
+    margin-bottom: 3em;
 }
 
 .profile-title {
@@ -24,3 +24,8 @@
     margin-bottom: 20px;
 }
 
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

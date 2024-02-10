@@ -7,6 +7,10 @@ public final class ProfileMappings {
 
     public static final String CLOSE_ACCOUNT_MAPPING = "closeAccount";
 
+    public static final String ADD_SOCIAL_ACCOUNT_MAPPING = "addSocialAccount";
+
+    public static final String REMOVE_SOCIAL_ACCOUNT_MAPPING = "removeSocialAccount";
+
     private ProfileMappings() {
     }
 }

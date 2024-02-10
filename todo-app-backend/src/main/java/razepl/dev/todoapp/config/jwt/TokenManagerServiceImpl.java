@@ -1,6 +1,7 @@
 package razepl.dev.todoapp.config.jwt;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import razepl.dev.todoapp.api.auth.data.AuthResponse;
 import razepl.dev.todoapp.config.constants.TokenRevokeStatus;
@@ -10,6 +11,7 @@ import razepl.dev.todoapp.entities.token.JwtToken;
 import razepl.dev.todoapp.entities.token.TokenType;
 import razepl.dev.todoapp.entities.token.interfaces.TokenRepository;
 import razepl.dev.todoapp.entities.user.User;
+import razepl.dev.todoapp.entities.user.interfaces.UserRepository;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TokenManagerServiceImpl implements TokenManagerService {
     private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
     private final JwtService jwtService;
 
     @Override
@@ -55,6 +58,22 @@ public class TokenManagerServiceImpl implements TokenManagerService {
             token.setExpired(true);
         });
         tokenRepository.saveAll(userTokens);
+    }
+
+    @Override
+    public final void revokeUserTokens(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        revokeUserTokens(user);
+    }
+
+    @Override
+    public final void saveUsersToken(String jwtToken, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        saveUsersToken(jwtToken, user);
     }
 
     private AuthResponse buildResponse(String authToken, String refreshToken) {

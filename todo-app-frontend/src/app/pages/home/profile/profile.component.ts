@@ -1,31 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
-import { SideMenuService } from "@core/services/home/side-menu.service";
 import { Observable, of, take } from "rxjs";
-import { AuthService } from "@core/services/auth/auth.service";
 import { User } from "@core/data/home/User";
 import { ProfileService } from "@core/services/home/profile.service";
 import { UtilService } from "@core/services/utils/util.service";
 import { RouterPath } from "@enums/RouterPath";
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
+import { AsyncPipe, CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
+import { SocialPlatform } from "@enums/home/SocialPlatform";
 
 @Component({
     selector: 'app-profile',
     templateUrl: './profile.component.html',
+    standalone: true,
+    imports: [
+        MatCardModule,
+        MatListModule,
+        AsyncPipe,
+        MatIconModule,
+        CommonModule,
+        MatButtonModule
+    ],
     styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements SideMenuActions, OnInit {
-    user$: Observable<User> = of({ name: "Jan", surname: "Kowalski", username: "jan@example.com" });
+export class ProfileComponent implements OnInit {
+    user$ !: Observable<User>;
 
-    constructor(private sideMenuService: SideMenuService,
-                private profileService: ProfileService,
-                private utilService: UtilService,
-                private authService: AuthService) {
-    }
-
-    logoutUser(): void {
-        this.authService.logoutUser()
-            .pipe(take(1))
-            .subscribe(() => this.sideMenuService.logoutUser());
+    constructor(private profileService: ProfileService,
+                private utilService: UtilService) {
     }
 
     closeAccount(): void {
@@ -42,9 +46,7 @@ export class ProfileComponent implements SideMenuActions, OnInit {
         this.user$ = this.profileService.getUserData();
     }
 
-    protected readonly RouterPath = RouterPath;
-
-    changeRouteToNewView(route: RouterPath): void {
-        this.sideMenuService.changeRouteToNewView(route);
+    removeAccount(socialAccountId: number): void {
+        this.user$ = this.profileService.removeSocialAccount(socialAccountId);
     }
 }

@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { NameFieldComponent } from './name-field/name-field.component';
+import { MatIconModule } from "@angular/material/icon";
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { NameFieldComponent } from './name-field/name-field.component';
         FormsModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatIconModule
     ]
 })
 export class AuthUtilsModule {

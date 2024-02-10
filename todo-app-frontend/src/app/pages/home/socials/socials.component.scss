@@ -1,0 +1,30 @@
+@mixin input-margin {
+    margin-bottom: 1.5em;
+}
+
+.title-label {
+    @include input-margin;
+}
+
+.add-social-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3em;
+}
+
+.data-input {
+    @include input-margin;
+    width: 20em;
+}
+
+.social-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-container {
+    display: flex;
+    justify-content: center;
+    margin: 2em;
+}

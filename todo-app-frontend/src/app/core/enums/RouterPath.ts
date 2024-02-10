@@ -33,4 +33,8 @@ export enum RouterPath {
     RESET_PASSWORD_DIRECT= "/auth/resetPassword",
 
     FORGOT_PASSWORD_AUTH_PATH = "forgotPassword",
+
+    SOCIALS_PATH = "socials",
+    SOCIALS_DIRECT = "/home/socials",
+    OAUTH_PATH = "oauth",
 }

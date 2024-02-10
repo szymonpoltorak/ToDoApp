@@ -1,0 +1,73 @@
+<div class="content-container">
+    <mat-card class="add-social-container">
+        <mat-card-title class="title-label">Add your social account</mat-card-title>
+
+        <form class="social-form" [formGroup]="socialFormGroup" (ngSubmit)="addNewSocialAccount()">
+            <mat-form-field class="data-input">
+                <mat-label>Choose an option</mat-label>
+
+                <mat-select formControlName="socialPlatform"
+                            name="socialPlatform">
+                    <mat-option *ngFor="let socialPlatform of Object.values(SocialPlatform)"
+                                value="{{ socialPlatform.toUpperCase() }}">
+                        {{ socialPlatform }}
+                    </mat-option>
+                </mat-select>
+
+                <mat-hint>Choose your social platform</mat-hint>
+
+                <mat-error *ngIf="socialFormGroup.controls['socialPlatform'].hasError('required')">
+                    You have to choose one social platform to add!
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="data-input">
+                <mat-label>Social Name</mat-label>
+
+                <input formControlName="socialName" type="text"
+                       matInput placeholder="Jacek Kowalski">
+
+                <mat-hint>Enter your social name</mat-hint>
+
+                <mat-error *ngIf="socialFormGroup.controls['socialName'].hasError('required')">
+                    You have to give your social name!
+                </mat-error>
+
+                <mat-error *ngIf="socialFormGroup.controls['socialName'].hasError('minlength')">
+                    Social name to be at least 2 characters long.
+                </mat-error>
+
+                <mat-error *ngIf="socialFormGroup.controls['socialName'].hasError('maxlength')">
+                    Social name can be of max 30 characters long.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="data-input">
+                <mat-label>Social Link</mat-label>
+
+                <input formControlName="socialLink" type="text"
+                       matInput placeholder="https://www.github.com/jacekkowalski">
+
+                <mat-hint>Enter link to your account</mat-hint>
+
+                <mat-error *ngIf="socialFormGroup.controls['socialLink'].hasError('required')">
+                    You have to give your social link!
+                </mat-error>
+
+                <mat-error *ngIf="socialFormGroup.controls['socialLink'].hasError('minlength')">
+                    Social link to be at least 2 characters long.
+                </mat-error>
+
+                <mat-error *ngIf="socialFormGroup.controls['socialLink'].hasError('maxlength')">
+                    Social link can be of max 30 characters long.
+                </mat-error>
+            </mat-form-field>
+
+            <button type="submit" mat-raised-button
+                    color="primary" [disabled]="socialFormGroup.invalid">
+                <mat-icon>add</mat-icon>
+                Add new account
+            </button>
+        </form>
+    </mat-card>
+</div>

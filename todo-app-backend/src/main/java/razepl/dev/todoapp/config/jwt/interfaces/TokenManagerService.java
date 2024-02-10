@@ -12,5 +12,9 @@ public interface TokenManagerService {
 
     void revokeUserTokens(User user);
 
+    void revokeUserTokens(String username);
+
+    void saveUsersToken(String jwtToken, String username);
+
     void saveUsersToken(String jwtToken, User user);
 }

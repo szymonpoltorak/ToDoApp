@@ -1,5 +1,3 @@
-@import "../sidebar";
-
 .sessions-container {
     display: flex;
     flex-direction: column;
@@ -16,6 +14,12 @@
 }
 
 .center-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-container {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,32 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { SideMenuActions } from "@core/interfaces/home/SideMenuActions";
-import { PageEvent } from "@angular/material/paginator";
-import { Observable, take } from "rxjs";
+import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { Observable } from "rxjs";
 import { Group } from "@core/data/home/Group";
 import { GroupService } from "@core/services/home/group.service";
 import { UtilService } from "@core/services/utils/util.service";
 import { RouterPath } from "@enums/RouterPath";
 import { AuthService } from "@core/services/auth/auth.service";
-import { SideMenuService } from "@core/services/home/side-menu.service";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { GroupComponent } from "./group/group.component";
+import { MatDividerModule } from "@angular/material/divider";
+import { AsyncPipe, CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
     selector: 'app-groups',
     templateUrl: './groups.component.html',
+    standalone: true,
+    imports: [
+        MatGridListModule,
+        GroupComponent,
+        MatDividerModule,
+        MatPaginatorModule,
+        AsyncPipe,
+        CommonModule,
+        MatIconModule,
+        MatButtonModule
+    ],
     styleUrls: ['./groups.component.scss']
 })
-export class GroupsComponent implements SideMenuActions, OnInit {
+export class GroupsComponent implements  OnInit {
     groups$ !: Observable<Group[]>;
 
     constructor(private groupService: GroupService,
                 private authService: AuthService,
-                private utilService: UtilService,
-                private sideMenuService: SideMenuService) {
-    }
-
-    logoutUser(): void {
-        this.authService.logoutUser()
-            .pipe(take(1))
-            .subscribe(() => this.sideMenuService.logoutUser());
+                private utilService: UtilService) {
     }
 
     changePage(event: PageEvent): void {
@@ -43,10 +51,5 @@ export class GroupsComponent implements SideMenuActions, OnInit {
 
             this.utilService.navigate(RouterPath.TASKS_DIRECT);
         });
-    }
-    protected readonly RouterPath = RouterPath;
-
-    changeRouteToNewView(route: RouterPath): void {
-        this.sideMenuService.changeRouteToNewView(route);
     }
 }

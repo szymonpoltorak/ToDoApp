@@ -1,13 +1,51 @@
 .login-form {
     min-width: 150px;
     max-width: 500px;
-    max-height: 400px;
-    margin-top: 200px;
+    max-height: 450px;
+    margin-top: 150px;
     padding: 20px;
     background-color: #313130;
     width: 100%;
     border: 2px #414140 solid;
     border-radius: 5%;
+}
+
+.login-button {
+    width: 100%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding: 1em;
+}
+
+.sign-up-label {
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+@mixin hover-link-effect {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.forgot-password-link {
+    display: flex;
+    justify-content: flex-end;
+    color: #7c1ca4;
+    font-weight: bold;
+}
+
+.login-accent {
+    color: #7c1ca4;
+    font-weight: bold;
+}
+
+.login-accent:hover {
+    @include hover-link-effect;
+}
+
+.forgot-password-link:hover {
+    @include hover-link-effect;
 }
 
 .email-header {
@@ -18,8 +56,22 @@
     justify-content: center;
 }
 
+.or-divider {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.line {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    margin: 1em;
+}
+
 .button-bar {
-    margin: 3em 1.5em 1.5em 1.5em;
     display: flex;
     justify-content: space-between;
     align-content: center;

@@ -20,20 +20,34 @@
             Number of tries was exceeded. Please try again after <strong>{{ currentDelay }} ms</strong>.
         </mat-error>
 
-        <div class="forgot-password-label">
-            <button routerLink="/auth/forgotPassword" mat-button type="button">
-                You forgot your password?
-            </button>
+        <span class="forgot-password-link" routerLink="/auth/forgotPassword">
+            Forgot your password?
+        </span>
+
+        <button [disabled]="!loginForm.valid" class="login-button"
+                color="primary" mat-raised-button type="submit">
+            Login
+        </button>
+
+        <p class="sign-up-label">
+            Don't have an account?&nbsp;<span class="login-accent" routerLink="/auth/register">Signup here.</span>
+        </p>
+
+        <div class="or-divider">
+            <div class="line"></div>
+            Or
+            <div class="line"></div>
         </div>
 
         <div class="button-bar">
-            <button class="my-button" color="primary" mat-raised-button routerLink="/auth/register" type="button">
-                Register
+            <button mat-raised-button type="button" (click)="redirectToGithubOauth()">
+                <ng-icon name="bootstrapGithub"></ng-icon>
+                Login with Github
             </button>
 
-            <button [disabled]="!loginForm.valid" class="my-button"
-                    color="primary" mat-raised-button type="submit">
-                Login
+            <button mat-raised-button type="button" color="primary" (click)="redirectToGoogleOauth()">
+                <ng-icon name="bootstrapGoogle"></ng-icon>
+                Login with Google
             </button>
         </div>
     </form>

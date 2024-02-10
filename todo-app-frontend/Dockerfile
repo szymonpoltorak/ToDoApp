@@ -1,4 +1,4 @@
-FROM node:18.15-alpine as build
+FROM node:18.15-alpine AS build
 
 WORKDIR /todo-app-frontend
 
@@ -19,4 +19,5 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY src/assets/ssl /etc/nginx/ssl
 
 EXPOSE 80
+
 EXPOSE 443

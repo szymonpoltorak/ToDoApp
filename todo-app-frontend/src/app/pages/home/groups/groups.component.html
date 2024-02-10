@@ -1,69 +1,21 @@
-<mat-drawer-container autosize class="home-container">
-    <mat-drawer #drawer class="sidenav" mode="push">
-        <h1>Menu</h1>
+<mat-grid-list cols="4" rowHeight="224px">
+    <mat-grid-tile *ngFor="let group of groups$ | async" class="grid-item">
+        <app-group [group]="group"></app-group>
+    </mat-grid-tile>
+</mat-grid-list>
 
-        <mat-divider></mat-divider>
+<button (click)="addNewGroup()" class="add-group-button" color="accent" mat-fab>
+    <mat-icon>add</mat-icon>
+</button>
 
-        <section class="button-column">
-            <button (click)="changeRouteToNewView(RouterPath.PROFILE_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>person</mat-icon>
-                Profile
-            </button>
+<div class="separator"></div>
 
-            <button (click)="changeRouteToNewView(RouterPath.GROUPS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>list</mat-icon>
-                Groups
-            </button>
+<div class="paginator">
+    <mat-divider></mat-divider>
 
-            <button (click)="changeRouteToNewView(RouterPath.COLLABORATORS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>group</mat-icon>
-                Collaborators
-            </button>
-
-            <button (click)="changeRouteToNewView(RouterPath.SEARCH_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>search</mat-icon>
-                Search
-            </button>
-
-            <button (click)="changeRouteToNewView(RouterPath.SESSIONS_DIRECT)" class="menu-option" extended mat-fab>
-                <mat-icon>devices</mat-icon>
-                Sessions
-            </button>
-
-            <button (click)="logoutUser()" class="menu-option" extended mat-fab>
-                <mat-icon>logout</mat-icon>
-                Logout
-            </button>
-        </section>
-    </mat-drawer>
-
-    <mat-toolbar class="navbar" color="primary">
-        <button (click)="drawer.toggle()" aria-label="Menu button" class="menu-icon" mat-icon-button>
-            <mat-icon>menu</mat-icon>
-        </button>
-
-        <span>ToDo</span>
-    </mat-toolbar>
-
-    <mat-grid-list cols="4" rowHeight="224px">
-        <mat-grid-tile *ngFor="let group of groups$ | async" class="grid-item">
-            <app-group [group]="group"></app-group>
-        </mat-grid-tile>
-    </mat-grid-list>
-
-    <button (click)="addNewGroup()" class="add-group-button" color="accent" mat-fab>
-        <mat-icon>add</mat-icon>
-    </button>
-
-    <div class="separator"></div>
-
-    <div class="paginator">
-        <mat-divider></mat-divider>
-
-        <mat-paginator (page)="changePage($event)"
-                       [length]="(groups$ | async)?.length"
-                       [pageSize]="16"
-                       aria-label="Select page">
-        </mat-paginator>
-    </div>
-</mat-drawer-container>
+    <mat-paginator (page)="changePage($event)"
+                   [length]="(groups$ | async)?.length"
+                   [pageSize]="16"
+                   aria-label="Select page">
+    </mat-paginator>
+</div>
